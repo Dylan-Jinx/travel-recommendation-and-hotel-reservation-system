@@ -27,6 +27,8 @@
         <modelmapper-version>2.3.9</modelmapper-version>
         <io.springfox.swagger-version>3.0.0</io.springfox.swagger-version>
         <io.minio-version>8.3.8</io.minio-version>
+        <useragentutils-version>1.20</useragentutils-version>
+        <oshi-version>3.9.1</oshi-version>
     </properties>
     <dependencies>
         <dependency>
@@ -58,7 +60,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.oshi</groupId>
+            <artifactId>oshi-core</artifactId>
+            <version>${oshi-version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>${useragentutils-version}</version>
+        </dependency>
         <!--Mybatis-Plus引入-->
         <dependency>
             <groupId>com.baomidou</groupId>
