@@ -1,0 +1,74 @@
+package ${package.Controller};
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
+import se.xmut.trahrs.common.ApiResponse;
+import $!{package.Service}.$!{table.serviceName};
+import ${package.Entity}.${entity};
+
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    final Logger logger = LoggerFactory.getLogger(${table.controllerName}.class);
+    @Autowired
+    private ${table.serviceName} ${table.entityPath}Service;
+
+    @PostMapping
+    public ApiResponse save(@RequestBody ${entity} ${table.entityPath}) {
+        return ApiResponse.ok(${table.entityPath}Service.saveOrUpdate(${table.entityPath}));
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse delete(@PathVariable Integer id) {
+        return ApiResponse.ok(${table.entityPath}Service.removeById(id));
+    }
+
+    @GetMapping
+    public ApiResponse findAll() {
+        return ApiResponse.ok(${table.entityPath}Service.list());
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse findOne(@PathVariable Integer id) {
+        return ApiResponse.ok(${table.entityPath}Service.list());
+    }
+
+    @GetMapping("/page")
+    public ApiResponse findPage(@RequestParam Integer pageNum,
+                                @RequestParam Integer pageSize) {
+        return ApiResponse.ok(${table.entityPath}Service.page(new Page<>(pageNum, pageSize)));
+    }
+
+}
+
+#end

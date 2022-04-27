@@ -18,11 +18,13 @@ public class TestApi {
 
     @GetMapping
     public ApiResponse apiTest(){
+        logger.info("execute openapi apiTest");
         return ApiResponse.ok("success");
     }
 
     @GetMapping("/{indic}")
     public ApiResponse apiPathIndic(@PathVariable("indic")String inDic){
+        logger.info("execute openapi apiPathIndic");
         return ApiResponse.ok(inDic);
     }
 }

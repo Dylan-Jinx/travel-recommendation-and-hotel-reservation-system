@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="se.xmut.trahrs.mapper.OtherRoleInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="se.xmut.trahrs.entity.OtherRoleInfo">
+        <id column="id" property="id" />
+        <result column="role_id" property="roleId" />
+        <result column="phone" property="phone" />
+        <result column="role_pwd" property="rolePwd" />
+        <result column="role_name" property="roleName" />
+        <result column="relation_id" property="relationId" />
+        <result column="create_time" property="createTime" />
+        <result column="last_login_time" property="lastLoginTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, role_id, phone, role_pwd, role_name, relation_id, create_time, last_login_time
+    </sql>
+
+</mapper>
