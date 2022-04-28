@@ -1,24 +1,19 @@
 package se.xmut.trahrs;
 
-import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
 import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
-import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
 
-import java.util.Collections;
+import java.util.HashMap;
 
 public class CodeGenerator {
 
     private static final String PREFIX = "";
     private static final String MODULE_NAME = "";
-    //要生成的表名
-    private static final String[] TABLES= {"想生成代码的表名"};
     private static final String DATABASE_URL = "jdbc:mysql://42.192.5.34/trahrs?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
     private static final String DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DATABASE_USERNAME = "root";
@@ -34,6 +29,12 @@ public class CodeGenerator {
     public static void main(String[] args) {
         final String parentPath = System.getProperty("user.dir")+"/src/main";
         final String projectPath = parentPath+"/java";
+        final String packagePath = "/se/xmut/trahrs/";
+        final HashMap<OutputFile, String> pathInfoMap = new HashMap<>();
+        pathInfoMap.put(OutputFile.entity,projectPath+packagePath+"/domain/model");
+        pathInfoMap.put(OutputFile.xml,parentPath+"/resources/mapper");
+        pathInfoMap.put(OutputFile.controller,projectPath+packagePath+"/api/");
+
         FastAutoGenerator.create(DATA_CONFIG_BUILDER)
                 .globalConfig(builder -> {
                     builder.enableSwagger()
@@ -43,18 +44,19 @@ public class CodeGenerator {
                 })
         .packageConfig(builder -> {
             builder.parent(BASE_PACKAGE)
-                    .pathInfo(Collections.singletonMap(OutputFile.xml,parentPath+"/resources/mapper"));
+                    .entity("domain.model")
+                    .controller("api")
+                    .xml(".domain.model")
+                    .pathInfo(pathInfoMap);
         })
         .strategyConfig(builder -> {
             builder.addExclude()
                     .mapperBuilder().enableBaseColumnList().enableBaseResultMap()
                     .serviceBuilder().formatServiceFileName("%sService")
                     .controllerBuilder().enableRestStyle()
-                    .entityBuilder().columnNaming(NamingStrategy.underline_to_camel).naming(NamingStrategy.underline_to_camel)
+                    .entityBuilder().enableChainModel().columnNaming(NamingStrategy.underline_to_camel).naming(NamingStrategy.underline_to_camel)
                     .enableLombok();
-        })
-//                .templateEngine(new VelocityTemplateEngine())
-                .execute();
+        }).execute();
 
 
     }

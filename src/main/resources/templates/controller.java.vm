@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
+import se.xmut.trahrs.log.annotation.WebLog;
 import $!{package.Service}.$!{table.serviceName};
 import ${package.Entity}.${entity};
 
@@ -43,26 +44,31 @@ public class ${table.controllerName} {
     @Autowired
     private ${table.serviceName} ${table.entityPath}Service;
 
+    @WebLog(description = "添加$!{table.comment}")
     @PostMapping
     public ApiResponse save(@RequestBody ${entity} ${table.entityPath}) {
         return ApiResponse.ok(${table.entityPath}Service.saveOrUpdate(${table.entityPath}));
     }
 
+    @WebLog(description = "用id删除$!{table.comment}")
     @DeleteMapping("/{id}")
     public ApiResponse delete(@PathVariable Integer id) {
         return ApiResponse.ok(${table.entityPath}Service.removeById(id));
     }
 
+    @WebLog(description = "查询全部$!{table.comment}")
     @GetMapping
     public ApiResponse findAll() {
         return ApiResponse.ok(${table.entityPath}Service.list());
     }
 
+    @WebLog(description = "用id查找$!{table.comment}")
     @GetMapping("/{id}")
     public ApiResponse findOne(@PathVariable Integer id) {
         return ApiResponse.ok(${table.entityPath}Service.list());
     }
 
+    @WebLog(description = "分页$!{table.comment}")
     @GetMapping("/page")
     public ApiResponse findPage(@RequestParam Integer pageNum,
                                 @RequestParam Integer pageSize) {
