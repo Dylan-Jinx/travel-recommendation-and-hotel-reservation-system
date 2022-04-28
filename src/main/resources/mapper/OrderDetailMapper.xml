@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="se.xmut.trahrs.mapper.OrderDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="se.xmut.trahrs.domain.model.OrderDetail">
+        <id column="id" property="id" />
+        <result column="customer_id" property="customerId" />
+        <result column="order_num" property="orderNum" />
+        <result column="order_content" property="orderContent" />
+        <result column="order_price" property="orderPrice" />
+        <result column="order_status" property="orderStatus" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, customer_id, order_num, order_content, order_price, order_status, create_time
+    </sql>
+
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="se.xmut.trahrs.mapper.SysLogininforMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="se.xmut.trahrs.domain.model.SysLogininfor">
+        <id column="info_id" property="infoId" />
+        <result column="login_name" property="loginName" />
+        <result column="ipaddr" property="ipaddr" />
+        <result column="login_location" property="loginLocation" />
+        <result column="browser" property="browser" />
+        <result column="os" property="os" />
+        <result column="msg" property="msg" />
+        <result column="login_time" property="loginTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        info_id, login_name, ipaddr, login_location, browser, os, msg, login_time
+    </sql>
+
+</mapper>

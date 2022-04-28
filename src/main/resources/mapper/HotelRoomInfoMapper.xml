@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="se.xmut.trahrs.mapper.HotelRoomInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="se.xmut.trahrs.domain.model.HotelRoomInfo">
+        <id column="id" property="id" />
+        <result column="hotel_id" property="hotelId" />
+        <result column="room_id" property="roomId" />
+        <result column="room_type_id" property="roomTypeId" />
+        <result column="img_url" property="imgUrl" />
+        <result column="remain_count" property="remainCount" />
+        <result column="price" property="price" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, hotel_id, room_id, room_type_id, img_url, remain_count, price
+    </sql>
+
+</mapper>

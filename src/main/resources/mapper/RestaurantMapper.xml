@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="se.xmut.trahrs.mapper.RestaurantMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="se.xmut.trahrs.domain.model.Restaurant">
+        <id column="id" property="id" />
+        <result column="restaurant_id" property="restaurantId" />
+        <result column="restaurant_name" property="restaurantName" />
+        <result column="restaurant_area" property="restaurantArea" />
+        <result column="restaurant_price" property="restaurantPrice" />
+        <result column="restaurant_info" property="restaurantInfo" />
+        <result column="view_count" property="viewCount" />
+        <result column="create_time" property="createTime" />
+        <result column="open_time" property="openTime" />
+        <result column="location" property="location" />
+        <result column="check_status" property="checkStatus" />
+        <result column="img_url" property="imgUrl" />
+        <result column="scale" property="scale" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, restaurant_id, restaurant_name, restaurant_area, restaurant_price, restaurant_info, view_count, create_time, open_time, location, check_status, img_url, scale
+    </sql>
+
+</mapper>
