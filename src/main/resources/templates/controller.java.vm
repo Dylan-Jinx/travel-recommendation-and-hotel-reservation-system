@@ -65,7 +65,7 @@ public class ${table.controllerName} {
     @WebLog(description = "用id查找$!{table.comment}")
     @GetMapping("/{id}")
     public ApiResponse findOne(@PathVariable Integer id) {
-        return ApiResponse.ok(${table.entityPath}Service.list());
+        return ApiResponse.ok(${table.entityPath}Service.getById(id));
     }
 
     @WebLog(description = "分页$!{table.comment}")
