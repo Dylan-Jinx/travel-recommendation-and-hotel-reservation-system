@@ -10,7 +10,6 @@ import se.xmut.trahrs.exception.CreateTempFileFailedException;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.time.ZonedDateTime;
 import java.util.Base64;
 import java.util.Map;
@@ -20,8 +19,8 @@ public class MinioUtils {
     private static final String PORT = "9000";
     private static final String ACCESSKEY = "minioadmin";
     private static final String SECRETKEY = "cSLxZqgpn2$DcHxb4Kx&SD@msZZOPG6s7UpF@hPYcMywsyLW5nhw9QZabsSlz0gb";
-    private static final Long FILESIZELOWLIMIT = 10 * 1024L;
-    private static final Long FILESIZEHIGHLIMIT = 1024 * 1024 * 1024L;
+    private static final Long FILESIZELOWLIMIT = 1024L;
+    private static final Long FILESIZEHIGHLIMIT = 1024 * 1024 * 10240L;
 
     private static MinioClient getMinioClient() {
         MinioClient minioClient = MinioClient.builder()
@@ -136,9 +135,4 @@ public class MinioUtils {
             throw new BucketNotFoundException("The bucket information could not be found");
         }
     }
-
-//    public static void main(String[] args) throws Exception {
-//
-//        System.out.println(MinioUtils.getResUrl("pythonfinalproject", "user_icon/admin_login.png"));
-//    }
 }

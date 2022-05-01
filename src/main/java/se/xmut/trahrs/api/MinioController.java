@@ -2,7 +2,6 @@ package se.xmut.trahrs.api;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
-import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +42,10 @@ public class MinioController {
                                   @RequestParam("bucketName") String bucketName) throws Exception {
         String fileName = file.getOriginalFilename();
         String objectname = generatorObjectName(fileName);
-        boolean result = MinioUtils.uploadFile(file,bucketName,objectname,"multipart/form-data");
+        String contentType = FileUtil.getMimeType(fileName);
+
+
+        boolean result = MinioUtils.uploadFile(file,bucketName,objectname,contentType);
         if (result) {
             Map<String,String> minioReturnParamMap = new HashMap<>();
             minioReturnParamMap.put("resUrl",objectname);
@@ -58,5 +60,4 @@ public class MinioController {
         String extName = FileUtil.extName(fileName);
         return objectName+"."+extName;
     }
-
 }
