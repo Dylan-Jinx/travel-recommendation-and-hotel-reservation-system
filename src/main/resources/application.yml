@@ -14,8 +14,9 @@ spring:
       matching-strategy: ant_path_matcher
   servlet:
     multipart:
-      max-file-size: 2048MB
+      max-file-size: 4096MB
       file-size-threshold: 4096MB
+      max-request-size: 4096MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://42.192.5.34/trahrs?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC

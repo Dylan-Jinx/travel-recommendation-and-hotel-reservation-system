@@ -1,7 +1,6 @@
 package se.xmut.trahrs.log.aspect;
 
-import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
+import cn.hutool.json.JSONUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -59,7 +58,7 @@ public class WebLogAspect { private final static Logger logger = LoggerFactory.g
         // 打印请求的 IP
         logger.info("IP : {}", request.getRemoteAddr());
         // 打印请求入参
-        logger.info("Request Args : {}", new Gson().toJson(JSONObject.toJSONString(joinPoint.getArgs())));
+        logger.info("Request Args : {}", JSONUtil.toJsonStr(joinPoint.getArgs().clone()));
     }
 
     /**
@@ -85,7 +84,7 @@ public class WebLogAspect { private final static Logger logger = LoggerFactory.g
         long startTime = System.currentTimeMillis();
         Object result = proceedingJoinPoint.proceed();
         //打印出参数
-        logger.info("Response Args : {}", new Gson().toJson(JSONObject.toJSONString(proceedingJoinPoint.getArgs())));
+        logger.info("Response Args : {}", JSONUtil.toJsonStr(proceedingJoinPoint.getArgs().clone()));
         // 执行耗时
         logger.info("Time-Consuming : {} ms", System.currentTimeMillis() - startTime);
         doAfter();
