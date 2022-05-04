@@ -44,3 +44,5 @@ buildNumber.properties
 
 !src/main/resources/application.yml
 !.gitignore
+!settings.xml
+!Dockerfile
