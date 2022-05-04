@@ -43,3 +43,4 @@ buildNumber.properties
 .classpath
 
 !src/main/resources/application.yml
+!.gitignore
