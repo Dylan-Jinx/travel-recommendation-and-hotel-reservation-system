@@ -21,7 +21,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://42.192.5.34/trahrs?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
     username: root
-    password: a13850526746
+    password: Aa8629327q=
 
 # mybatis-plus配置
 mybatis-plus:
