@@ -1,10 +1,13 @@
 package se.xmut.trahrs.api;
 
+import cn.hutool.core.util.IdUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
@@ -30,8 +33,11 @@ public class SysDictTypeController {
     private SysDictTypeService sysDictTypeService;
 
     @WebLog(description = "添加字典类型表")
-    @PostMapping
+    @PostMapping("/save")
     public ApiResponse save(@RequestBody SysDictType sysDictType) {
+        sysDictType.setDictType(IdUtil.simpleUUID());
+        sysDictType.setCreateBy("breeze");
+        sysDictType.setCreateTime(LocalDateTime.now());
         return ApiResponse.ok(sysDictTypeService.saveOrUpdate(sysDictType));
     }
 
