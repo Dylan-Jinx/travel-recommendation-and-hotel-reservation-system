@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
 import com.baomidou.mybatisplus.generator.config.querys.MySqlQuery;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
+import se.xmut.trahrs.util.YamlUtil;
 
 import java.util.HashMap;
 
@@ -14,10 +15,10 @@ public class CodeGenerator {
 
     private static final String PREFIX = "";
     private static final String MODULE_NAME = "";
-    private static final String DATABASE_URL = "jdbc:mysql://42.192.5.34/trahrs?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
+    private static final String DATABASE_URL = YamlUtil.getStringByYaml("Mysql.url");
     private static final String DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String DATABASE_USERNAME = "root";
-    private static final String DATABASE_PASSWORD = "a13850526746";
+    private static final String DATABASE_USERNAME = YamlUtil.getStringByYaml("Mysql.root");
+    private static final String DATABASE_PASSWORD = YamlUtil.getStringByYaml("Mysql.mysql_password");
     private static final String BASE_PACKAGE = "se.xmut.trahrs";
     private static final DataSourceConfig.Builder DATA_CONFIG_BUILDER=
             new DataSourceConfig.Builder(DATABASE_URL,DATABASE_USERNAME,DATABASE_PASSWORD)
