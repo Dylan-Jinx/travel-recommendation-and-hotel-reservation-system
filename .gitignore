@@ -46,3 +46,4 @@ src/main/resources/application.yml
 .gitignore
 settings.xml
 Dockerfile
+src/main/resources/sensitive-word.txt

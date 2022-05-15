@@ -1,5 +1,10 @@
 package se.xmut.trahrs.api;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
+import se.xmut.trahrs.domain.dto.HotelCommentDto;
+import se.xmut.trahrs.filter.SensitiveFilter;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.HotelCommentService;
 import se.xmut.trahrs.domain.model.HotelComment;
@@ -28,11 +35,50 @@ public class HotelCommentController {
     final Logger logger = LoggerFactory.getLogger(HotelCommentController.class);
     @Autowired
     private HotelCommentService hotelCommentService;
+    @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
+    private SensitiveFilter sensitiveFilter;
 
     @WebLog(description = "添加酒店评论")
     @PostMapping
-    public ApiResponse save(@RequestBody HotelComment hotelComment) {
-        return ApiResponse.ok(hotelCommentService.saveOrUpdate(hotelComment));
+    public ApiResponse save(@RequestBody HotelCommentDto hotelCommentDto) {
+
+        HotelComment hotelComment = modelMapper.map(hotelCommentDto,HotelComment.class);
+        hotelComment.setCommentId(IdUtil.objectId());
+        hotelComment.setCommentTime(LocalDateTimeUtil.now());
+        //0就是没有举报
+        hotelComment.setReportStatus(0);
+
+        String content = hotelComment.getContent();
+        if(!StringUtils.isBlank(content)){
+            content = sensitiveFilter.filter(content);
+            hotelComment.setContent(content);
+        }
+
+        return ApiResponse.ok("操作成功",hotelCommentService.save(hotelComment));
+    }
+
+    @WebLog(description = "举报评论内容")
+    @PutMapping("/reportContent")
+    public ApiResponse reportContent(@RequestParam("comment_id") String commentId){
+        QueryWrapper<HotelComment> hotelCommentQueryWrapper = new QueryWrapper<>();
+        hotelCommentQueryWrapper.eq("comment_id",commentId);
+        HotelComment hotelComment = new HotelComment();
+        //1就是有人举报
+        hotelComment.setReportStatus(1);
+        hotelCommentService.update(hotelComment,hotelCommentQueryWrapper);
+        return ApiResponse.ok("操作成功");
+    }
+
+    @WebLog(description = "被举报的酒店评论")
+    @GetMapping("/findReportComment")
+    public ApiResponse findReportComment(@RequestParam Integer pageNum,
+                                @RequestParam Integer pageSize) {
+        QueryWrapper<HotelComment> hotelCommentQueryWrapper = new QueryWrapper<>();
+        hotelCommentQueryWrapper.eq("report_status",1);
+
+        return ApiResponse.ok(hotelCommentService.page(new Page<>(pageNum, pageSize), hotelCommentQueryWrapper));
     }
 
     @WebLog(description = "用id删除酒店评论")
