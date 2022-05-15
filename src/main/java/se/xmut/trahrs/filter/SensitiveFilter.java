@@ -12,9 +12,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 @Component
 public class SensitiveFilter {
@@ -109,7 +108,7 @@ class PrefixTree {
 
     private boolean isKeywordEnd = false;
 
-    private Map<Character, PrefixTree> subNode = new ConcurrentHashMap<>();
+    private Map<Character, PrefixTree> subNode = new ConcurrentSkipListMap<>();
 
     public boolean isKeywordEnd() {
         return isKeywordEnd;

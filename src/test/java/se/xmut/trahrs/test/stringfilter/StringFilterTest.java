@@ -20,8 +20,6 @@ public class StringFilterTest {
     private SensitiveFilter sensitiveFilter;
     @Test
     public void textFilterTest() throws Exception{
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
         final String text = "我很喜欢你这个傻逼六四时间啊pornPorn真的是cjd一个大cdj傻瓜，我真的有cjdjdjcjdpdjsdp点无语你这" +
                 "嫖娼个大傻步，但是逼傻了我。我很喜欢你这个傻逼六四时间啊pornPorn真的是cjd一个大cdj傻瓜，我真的有cjdjdjcjdpdjsdp点无语" +
                 "你这嫖娼个大傻步，但是逼傻了我。我很喜欢你这个傻逼六四时间啊pornPorn真的是cjd一个大cdj傻瓜，我真的有cjdjdjcjdpdjsdp点无" +
@@ -134,10 +132,22 @@ public class StringFilterTest {
                 "                \"                \\\"个大傻步，但是逼傻了我。我很喜欢你这个傻逼六四时间啊pornPorn真的是cjd一个大cdj傻瓜，我真的有cjdjdjcjdpdjsdp点无语你这嫖娼个大傻步，但是\\\" +\\n\" +\n" +
                 "                \"                \\\"逼傻了我。我很喜欢你这个傻逼六四时间啊pornPorn真的是cjd一个大cdj傻瓜，我真的有cjdjdjcjdpdjsdp点无语你这嫖娼个大傻步，但是逼傻了我。我很喜欢你\\\" +\\n\" +\n" +
                 "                \"                \\\"这个傻逼六四时间啊pornPorn真的是cjd一个大cdj傻瓜，我真的有cjdjdjcjdpdjsdp点无语你这嫖娼个大傻步，但是逼傻了我。";
-        sensitiveFilter = new SensitiveFilter();
-        logger.info(sensitiveFilter.filter(text));
-        stopWatch.stop();
-        logger.info("当前程序运行时间为："+ stopWatch.getTotalTimeSeconds());
+
+
+        for (int i = 0; i < 100; i++) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    StopWatch stopWatch = new StopWatch();
+                    stopWatch.start();
+                    sensitiveFilter = new SensitiveFilter();
+//                    logger.info(sensitiveFilter.filter(text));
+                    stopWatch.stop();
+                    logger.info("当前程序运行时间为："+ stopWatch.getTotalTimeSeconds());
+                }
+            });
+            thread.start();
+        }
     }
 
 }

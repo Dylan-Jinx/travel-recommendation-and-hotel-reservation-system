@@ -47,3 +47,4 @@ src/main/resources/application.yml
 settings.xml
 Dockerfile
 src/main/resources/sensitive-word.txt
+src/main/resources/sensitive-word.txt
