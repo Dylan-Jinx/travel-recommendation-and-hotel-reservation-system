@@ -48,7 +48,7 @@ public class HotelInfo implements Serializable {
     private Float scale;
 
     @ApiModelProperty("点击次数")
-    private Long viewCount;
+    private Integer viewCount;
 
     @ApiModelProperty("区域代码")
     private Integer area;
