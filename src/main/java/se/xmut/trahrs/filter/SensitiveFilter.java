@@ -17,11 +17,9 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 @Component
 public class SensitiveFilter {
-    private static final Logger logger = LoggerFactory.getLogger(SensitiveFilter.class);
 
-    //用来替代敏感词
+    private static final Logger logger = LoggerFactory.getLogger(SensitiveFilter.class);
     private static final String REPLACECHARCTER = "***";
-    //前缀树的根节点
     private static final PrefixTree rootNode = new PrefixTree();
 
     @PostConstruct
@@ -125,4 +123,5 @@ class PrefixTree {
     public PrefixTree getSubNode(Character key) {
         return subNode.get(key);
     }
+
 }
