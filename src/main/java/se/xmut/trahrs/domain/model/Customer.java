@@ -43,16 +43,16 @@ public class Customer implements Serializable {
     private String customerPwd;
 
     @ApiModelProperty("性别")
-    private Integer gender;
+    private String gender;
 
     @ApiModelProperty("年龄")
-    private Integer age;
+    private String age;
 
     @ApiModelProperty("职业")
-    private Integer professsion;
+    private String professsion;
 
     @ApiModelProperty("地区（这里使用区域代码）")
-    private Integer area;
+    private String area;
 
     @ApiModelProperty("用户头像")
     private String avatar;
