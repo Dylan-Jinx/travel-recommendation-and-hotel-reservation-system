@@ -47,7 +47,7 @@ public class CarouselController {
 
         Integer sort=carousel.getSort();   // 轮播图的位置
         String imgUrl=carousel.getImgUrl(); // 获取更新的图片的路径
-
+        
         UpdateWrapper<Carousel> updateWrapper=new UpdateWrapper<>();
         updateWrapper.eq("sort",sort);
 
