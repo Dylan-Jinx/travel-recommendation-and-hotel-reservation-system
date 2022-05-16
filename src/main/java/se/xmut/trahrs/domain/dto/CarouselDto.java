@@ -11,5 +11,5 @@ public class CarouselDto {
 
     @ApiModelProperty("排序")
     private Integer sort;
-    
+
 }
