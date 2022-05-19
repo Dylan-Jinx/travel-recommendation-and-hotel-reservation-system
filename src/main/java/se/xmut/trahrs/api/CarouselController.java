@@ -1,7 +1,6 @@
 package se.xmut.trahrs.api;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -10,8 +9,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
-import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.CarouselDto;
@@ -44,11 +41,12 @@ public class CarouselController {
     public ApiResponse save(@RequestBody CarouselDto carouselDto) {
 
         Carousel carousel=modelMapper.map(carouselDto,Carousel.class);
-
+        
         Integer sort=carousel.getSort();   // 轮播图的位置
         String imgUrl=carousel.getImgUrl(); // 获取更新的图片的路径
-        
+
         UpdateWrapper<Carousel> updateWrapper=new UpdateWrapper<>();
+
         updateWrapper.eq("sort",sort);
 
         carousel.setImgUrl(imgUrl);
@@ -57,6 +55,7 @@ public class CarouselController {
         carouselService.update(carousel,updateWrapper);
 
         return ApiResponse.ok("轮播图插入成功");
+
     }
 
     @WebLog(description = "用id删除公告轮播图")
