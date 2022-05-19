@@ -10,7 +10,7 @@
         <result column="phone" property="phone" />
         <result column="customer_pwd" property="customerPwd" />
         <result column="gender" property="gender" />
-        <result column="age" property="age" />
+        <result column="identity" property="identity" />
         <result column="professsion" property="professsion" />
         <result column="area" property="area" />
         <result column="avatar" property="avatar" />
@@ -22,7 +22,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, customer_id, customer_name, phone, customer_pwd, gender, age, professsion, area, avatar, create_time, last_login_time, last_login_ip, remove_flag
+        id, customer_id, customer_name, phone, customer_pwd, gender, identity, professsion, area, avatar, create_time, last_login_time, last_login_ip, remove_flag
     </sql>
 
 </mapper>

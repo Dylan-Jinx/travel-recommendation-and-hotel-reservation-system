@@ -3,7 +3,6 @@ package se.xmut.trahrs.domain.model;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 作者
- * @since 2022-04-29
+ * @since 2022-05-19
  */
 @Getter
 @Setter
@@ -36,29 +35,47 @@ public class Scene implements Serializable {
     @ApiModelProperty("景点名称")
     private String sceneName;
 
-    @ApiModelProperty("景点所在地区（地区代码）")
-    private Integer sceneArea;
+    @ApiModelProperty("英文名")
+    private String sceneEnglishName;
 
-    @ApiModelProperty("景区游玩费用")
-    private Double scenePrice;
+    @ApiModelProperty("标签")
+    private String sceneTag;
 
-    @ApiModelProperty("酒店信息介绍")
-    private String sceneInfo;
+    @ApiModelProperty("经度")
+    private String sceneLongitude;
 
-    @ApiModelProperty("点击次数")
-    private Long viewCount;
+    @ApiModelProperty("纬度")
+    private String sceneLatitude;
 
-    @ApiModelProperty("创建时间")
-    private LocalDateTime createTime;
+    @ApiModelProperty("评价分数")
+    private Double sceneCommentLevel;
+
+    @ApiModelProperty("成人票")
+    private Integer sceneHumanPrice;
+
+    @ApiModelProperty("老人票")
+    private Integer sceneOldmanPrice;
+
+    @ApiModelProperty("儿童票")
+    private Integer sceneChildrenPrice;
+
+    @ApiModelProperty("建议游玩时间")
+    private String advicePlayTime;
 
     @ApiModelProperty("开放时间")
     private String openTime;
 
-    @ApiModelProperty("实际位置")
-    private String location;
+    @ApiModelProperty("介绍")
+    private String sceneIntro;
 
-    @ApiModelProperty("审核状态")
-    private Integer checkStatus;
+    @ApiModelProperty("优惠政策")
+    private String scenePreferential;
+
+    @ApiModelProperty("展示图片")
+    private String sceneShowImg;
+
+    @ApiModelProperty("特点")
+    private String sceneTrait;
 
 
 }

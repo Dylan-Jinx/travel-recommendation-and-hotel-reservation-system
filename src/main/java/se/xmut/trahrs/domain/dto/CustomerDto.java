@@ -21,8 +21,8 @@ public class CustomerDto implements Serializable {
     @ApiModelProperty("性别")
     private String gender;
 
-    @ApiModelProperty("年龄")
-    private String age;
+    @ApiModelProperty("身份证号")
+    private String identity;
 
     @ApiModelProperty("职业")
     private String professsion;

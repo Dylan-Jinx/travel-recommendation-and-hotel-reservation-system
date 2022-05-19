@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 作者
- * @since 2022-04-29
+ * @since 2022-05-19
  */
 @Getter
 @Setter
@@ -45,8 +45,8 @@ public class Customer implements Serializable {
     @ApiModelProperty("性别")
     private String gender;
 
-    @ApiModelProperty("年龄")
-    private String age;
+    @ApiModelProperty("身份证")
+    private String identity;
 
     @ApiModelProperty("职业")
     private String professsion;
