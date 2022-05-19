@@ -17,7 +17,7 @@ public class CodeGenerator {
     private static final String MODULE_NAME = "";
     private static final String DATABASE_URL = YamlUtil.getStringByYaml("Mysql.url");
     private static final String DATABASE_DRIVER = "com.mysql.cj.jdbc.Driver";
-    private static final String DATABASE_USERNAME = YamlUtil.getStringByYaml("Mysql.root");
+    private static final String DATABASE_USERNAME = YamlUtil.getStringByYaml("Mysql.mysql_user");
     private static final String DATABASE_PASSWORD = YamlUtil.getStringByYaml("Mysql.mysql_password");
     private static final String BASE_PACKAGE = "se.xmut.trahrs";
     private static final DataSourceConfig.Builder DATA_CONFIG_BUILDER=

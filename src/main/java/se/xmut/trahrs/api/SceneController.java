@@ -19,7 +19,7 @@ import se.xmut.trahrs.domain.model.Scene;
  * </p>
  *
  * @author 作者
- * @since 2022-05-02
+ * @since 2022-05-19
  */
 @RestController
 @RequestMapping("/scene")

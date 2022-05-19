@@ -7,19 +7,25 @@
         <id column="id" property="id" />
         <result column="scene_id" property="sceneId" />
         <result column="scene_name" property="sceneName" />
-        <result column="scene_area" property="sceneArea" />
-        <result column="scene_price" property="scenePrice" />
-        <result column="scene_info" property="sceneInfo" />
-        <result column="view_count" property="viewCount" />
-        <result column="create_time" property="createTime" />
+        <result column="scene_english_name" property="sceneEnglishName" />
+        <result column="scene_tag" property="sceneTag" />
+        <result column="scene_longitude" property="sceneLongitude" />
+        <result column="scene_latitude" property="sceneLatitude" />
+        <result column="scene_comment_level" property="sceneCommentLevel" />
+        <result column="scene_human_price" property="sceneHumanPrice" />
+        <result column="scene_oldman_price" property="sceneOldmanPrice" />
+        <result column="scene_children_price" property="sceneChildrenPrice" />
+        <result column="advice_play_time" property="advicePlayTime" />
         <result column="open_time" property="openTime" />
-        <result column="location" property="location" />
-        <result column="check_status" property="checkStatus" />
+        <result column="scene_intro" property="sceneIntro" />
+        <result column="scene_preferential" property="scenePreferential" />
+        <result column="scene_show_img" property="sceneShowImg" />
+        <result column="scene_trait" property="sceneTrait" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, scene_id, scene_name, scene_area, scene_price, scene_info, view_count, create_time, open_time, location, check_status
+        id, scene_id, scene_name, scene_english_name, scene_tag, scene_longitude, scene_latitude, scene_comment_level, scene_human_price, scene_oldman_price, scene_children_price, advice_play_time, open_time, scene_intro, scene_preferential, scene_show_img, scene_trait
     </sql>
 
 </mapper>
