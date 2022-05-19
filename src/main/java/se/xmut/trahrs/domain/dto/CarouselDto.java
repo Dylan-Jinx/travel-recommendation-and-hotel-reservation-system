@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 public class CarouselDto {
 
-    @ApiModelProperty("排序")
-    private Integer sort;
+
+    @ApiModelProperty("图片路径")
+    private String imgUrl;
+
 
 }
