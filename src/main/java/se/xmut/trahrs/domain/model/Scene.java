@@ -1,6 +1,7 @@
 package se.xmut.trahrs.domain.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -11,21 +12,20 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 景点信息
+ * 
  * </p>
  *
  * @author 作者
- * @since 2022-05-19
+ * @since 2022-05-20
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-@ApiModel(value = "Scene对象", description = "景点信息")
+@ApiModel(value = "Scene对象", description = "")
 public class Scene implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
@@ -33,49 +33,67 @@ public class Scene implements Serializable {
     private String sceneId;
 
     @ApiModelProperty("景点名称")
-    private String sceneName;
+    @TableField("`name`")
+    private String name;
 
-    @ApiModelProperty("英文名")
-    private String sceneEnglishName;
+    @ApiModelProperty("景点位置（经纬度）")
+    private String location;
 
-    @ApiModelProperty("标签")
-    private String sceneTag;
+    @ApiModelProperty("类型")
+    @TableField("`type`")
+    private String type;
 
-    @ApiModelProperty("经度")
-    private String sceneLongitude;
+    @ApiModelProperty("省")
+    private String pName;
 
-    @ApiModelProperty("纬度")
-    private String sceneLatitude;
+    @ApiModelProperty("市")
+    private String cityName;
 
-    @ApiModelProperty("评价分数")
-    private Double sceneCommentLevel;
+    @ApiModelProperty("区域")
+    private String adName;
 
-    @ApiModelProperty("成人票")
-    private Integer sceneHumanPrice;
+    @ApiModelProperty("具体地址")
+    private String address;
 
-    @ApiModelProperty("老人票")
-    private Integer sceneOldmanPrice;
+    @ApiModelProperty("省代码")
+    private String pCode;
 
-    @ApiModelProperty("儿童票")
-    private Integer sceneChildrenPrice;
+    @ApiModelProperty("城市代码")
+    private String cityCode;
 
-    @ApiModelProperty("建议游玩时间")
-    private String advicePlayTime;
+    @ApiModelProperty("区域代码")
+    private String adCode;
 
     @ApiModelProperty("开放时间")
-    private String openTime;
+    private String opentimeWeek;
 
-    @ApiModelProperty("介绍")
-    private String sceneIntro;
+    @ApiModelProperty("电话")
+    private String tel;
 
-    @ApiModelProperty("优惠政策")
-    private String scenePreferential;
+    @ApiModelProperty("活动标签")
+    private String recTag;
+
+    @ApiModelProperty("分类标签")
+    private String keyTag;
+
+    @ApiModelProperty("消费")
+    private Integer cost;
+
+    @ApiModelProperty("别名")
+    private String alias;
+
+    private String naviPoiid;
+
+    private String entrLocation;
+
+    private String exitLocation;
+
+    private String gridCode;
 
     @ApiModelProperty("展示图片")
-    private String sceneShowImg;
+    private String photos;
 
-    @ApiModelProperty("特点")
-    private String sceneTrait;
+    private Double rating;
 
 
 }

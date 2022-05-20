@@ -6,26 +6,33 @@
     <resultMap id="BaseResultMap" type="se.xmut.trahrs.domain.model.Scene">
         <id column="id" property="id" />
         <result column="scene_id" property="sceneId" />
-        <result column="scene_name" property="sceneName" />
-        <result column="scene_english_name" property="sceneEnglishName" />
-        <result column="scene_tag" property="sceneTag" />
-        <result column="scene_longitude" property="sceneLongitude" />
-        <result column="scene_latitude" property="sceneLatitude" />
-        <result column="scene_comment_level" property="sceneCommentLevel" />
-        <result column="scene_human_price" property="sceneHumanPrice" />
-        <result column="scene_oldman_price" property="sceneOldmanPrice" />
-        <result column="scene_children_price" property="sceneChildrenPrice" />
-        <result column="advice_play_time" property="advicePlayTime" />
-        <result column="open_time" property="openTime" />
-        <result column="scene_intro" property="sceneIntro" />
-        <result column="scene_preferential" property="scenePreferential" />
-        <result column="scene_show_img" property="sceneShowImg" />
-        <result column="scene_trait" property="sceneTrait" />
+        <result column="name" property="name" />
+        <result column="location" property="location" />
+        <result column="type" property="type" />
+        <result column="p_name" property="pName" />
+        <result column="city_name" property="cityName" />
+        <result column="ad_name" property="adName" />
+        <result column="address" property="address" />
+        <result column="p_code" property="pCode" />
+        <result column="city_code" property="cityCode" />
+        <result column="ad_code" property="adCode" />
+        <result column="opentime_week" property="opentimeWeek" />
+        <result column="tel" property="tel" />
+        <result column="rec_tag" property="recTag" />
+        <result column="key_tag" property="keyTag" />
+        <result column="cost" property="cost" />
+        <result column="alias" property="alias" />
+        <result column="navi_poiid" property="naviPoiid" />
+        <result column="entr_location" property="entrLocation" />
+        <result column="exit_location" property="exitLocation" />
+        <result column="grid_code" property="gridCode" />
+        <result column="photos" property="photos" />
+        <result column="rating" property="rating" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, scene_id, scene_name, scene_english_name, scene_tag, scene_longitude, scene_latitude, scene_comment_level, scene_human_price, scene_oldman_price, scene_children_price, advice_play_time, open_time, scene_intro, scene_preferential, scene_show_img, scene_trait
+        id, scene_id, `name`, location, `type`, p_name, city_name, ad_name, address, p_code, city_code, ad_code, opentime_week, tel, rec_tag, key_tag, cost, alias, navi_poiid, entr_location, exit_location, grid_code, photos, rating
     </sql>
 
 </mapper>

@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 酒店信息 服务实现类
+ *  服务实现类
  * </p>
  *
  * @author 作者
- * @since 2022-04-29
+ * @since 2022-05-20
  */
 @Service
 public class HotelInfoServiceImpl extends ServiceImpl<HotelInfoMapper, HotelInfo> implements HotelInfoService {
