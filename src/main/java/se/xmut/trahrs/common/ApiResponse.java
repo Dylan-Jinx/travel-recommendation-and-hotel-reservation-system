@@ -2,10 +2,11 @@ package se.xmut.trahrs.common;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 @Data
-public class ApiResponse {
+public class ApiResponse implements Serializable {
     private Integer code;
     private String errorMsg;
     private Object data;
@@ -14,6 +15,10 @@ public class ApiResponse {
         this.code = code;
         this.errorMsg = errorMsg;
         this.data = data;
+    }
+
+    public ApiResponse(){
+
     }
 
     public static ApiResponse ok() {
