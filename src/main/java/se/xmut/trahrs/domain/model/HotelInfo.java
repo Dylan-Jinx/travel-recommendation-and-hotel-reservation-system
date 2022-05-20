@@ -1,10 +1,10 @@
 package se.xmut.trahrs.domain.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -13,22 +13,21 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 酒店信息
+ * 
  * </p>
  *
  * @author 作者
- * @since 2022-04-29
+ * @since 2022-05-20
  */
 @Getter
 @Setter
 @Accessors(chain = true)
 @TableName("hotel_info")
-@ApiModel(value = "HotelInfo对象", description = "酒店信息")
+@ApiModel(value = "HotelInfo对象", description = "")
 public class HotelInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
@@ -36,31 +35,67 @@ public class HotelInfo implements Serializable {
     private String hotelId;
 
     @ApiModelProperty("酒店名称")
-    private String hotelName;
+    @TableField("`name`")
+    private String name;
 
-    @ApiModelProperty("酒店介绍")
-    private String hotelInfo;
-
-    @ApiModelProperty("联系电话")
-    private String phone;
-
-    @ApiModelProperty("酒店评分")
-    private Float scale;
-
-    @ApiModelProperty("点击次数")
-    private Integer viewCount;
-
-    @ApiModelProperty("区域代码")
-    private Integer area;
-
-    @ApiModelProperty("具体地点")
+    @ApiModelProperty("酒店位置（经纬度）")
     private String location;
 
-    @ApiModelProperty("创建时间")
-    private LocalDateTime createTime;
+    @ApiModelProperty("类型")
+    @TableField("`type`")
+    private String type;
 
-    @ApiModelProperty("酒店图片路径")
-    private String imgUrl;
+    @ApiModelProperty("省")
+    private String pName;
+
+    @ApiModelProperty("市")
+    private String cityName;
+
+    @ApiModelProperty("区域")
+    private String adName;
+
+    @ApiModelProperty("具体地址")
+    private String address;
+
+    @ApiModelProperty("省代码")
+    private String pCode;
+
+    @ApiModelProperty("城市代码")
+    private String cityCode;
+
+    @ApiModelProperty("区域代码")
+    private String adCode;
+
+    @ApiModelProperty("开放时间")
+    private String opentimeWeek;
+
+    @ApiModelProperty("电话")
+    private String tel;
+
+    @ApiModelProperty("活动标签")
+    private String recTag;
+
+    @ApiModelProperty("分类标签")
+    private String keyTag;
+
+    @ApiModelProperty("消费")
+    private Integer cost;
+
+    @ApiModelProperty("别名")
+    private String alias;
+
+    private String naviPoiid;
+
+    private String entrLocation;
+
+    private String exitLocation;
+
+    private String gridCode;
+
+    @ApiModelProperty("展示图片")
+    private String photos;
+
+    private Double rating;
 
 
 }

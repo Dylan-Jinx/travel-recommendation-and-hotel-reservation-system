@@ -6,20 +6,33 @@
     <resultMap id="BaseResultMap" type="se.xmut.trahrs.domain.model.HotelInfo">
         <id column="id" property="id" />
         <result column="hotel_id" property="hotelId" />
-        <result column="hotel_name" property="hotelName" />
-        <result column="hotel_info" property="hotelInfo" />
-        <result column="phone" property="phone" />
-        <result column="scale" property="scale" />
-        <result column="view_count" property="viewCount" />
-        <result column="area" property="area" />
+        <result column="name" property="name" />
         <result column="location" property="location" />
-        <result column="create_time" property="createTime" />
-        <result column="img_url" property="imgUrl" />
+        <result column="type" property="type" />
+        <result column="p_name" property="pName" />
+        <result column="city_name" property="cityName" />
+        <result column="ad_name" property="adName" />
+        <result column="address" property="address" />
+        <result column="p_code" property="pCode" />
+        <result column="city_code" property="cityCode" />
+        <result column="ad_code" property="adCode" />
+        <result column="opentime_week" property="opentimeWeek" />
+        <result column="tel" property="tel" />
+        <result column="rec_tag" property="recTag" />
+        <result column="key_tag" property="keyTag" />
+        <result column="cost" property="cost" />
+        <result column="alias" property="alias" />
+        <result column="navi_poiid" property="naviPoiid" />
+        <result column="entr_location" property="entrLocation" />
+        <result column="exit_location" property="exitLocation" />
+        <result column="grid_code" property="gridCode" />
+        <result column="photos" property="photos" />
+        <result column="rating" property="rating" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, hotel_id, hotel_name, hotel_info, phone, scale, view_count, area, location, create_time, img_url
+        id, hotel_id, `name`, location, `type`, p_name, city_name, ad_name, address, p_code, city_code, ad_code, opentime_week, tel, rec_tag, key_tag, cost, alias, navi_poiid, entr_location, exit_location, grid_code, photos, rating
     </sql>
 
 </mapper>

@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 景点信息 服务实现类
+ *  服务实现类
  * </p>
  *
  * @author 作者
- * @since 2022-05-19
+ * @since 2022-05-20
  */
 @Service
 public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements SceneService {
