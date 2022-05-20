@@ -26,9 +26,14 @@ public class GaoDeMapUtilsTest {
 
     @Test
     public void getNearbyHotelInfos() throws GaoDeException {
-        List<HotelInfo> list = gaoDeMapUtils.getNearbyHotelInfos(null, "118.06702,24.444695", 1000, 1);
+        List<HotelInfo> list = gaoDeMapUtils.getNearbyInfos(null, "118.06702,24.444695", 1000, 1);
         for (HotelInfo hotelInfo : list){
             System.out.println(hotelInfo);
         }
+    }
+
+    @Test
+    public void getLocationToDistance(){
+        System.out.println(gaoDeMapUtils.locationToDistance(116.368904, 39.923423, 116.387271, 39.922501));
     }
 }
