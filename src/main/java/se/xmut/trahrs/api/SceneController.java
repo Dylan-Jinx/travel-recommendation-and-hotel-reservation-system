@@ -1,5 +1,6 @@
 package se.xmut.trahrs.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -58,6 +59,16 @@ public class SceneController {
     public ApiResponse findPage(@RequestParam Integer pageNum,
                                 @RequestParam Integer pageSize) {
         return ApiResponse.ok(sceneService.page(new Page<>(pageNum, pageSize)));
+    }
+
+    @WebLog(description = "查询评分高的景点分页")
+    @GetMapping("/ratingPage")
+    public ApiResponse findRatingPage(@RequestParam Integer pageNum,
+                                @RequestParam Integer pageSize) {
+        QueryWrapper<Scene> sceneQueryWrapper = new QueryWrapper<>();
+        sceneQueryWrapper.isNotNull("rating");
+        sceneQueryWrapper.orderByDesc("rating");
+        return ApiResponse.ok(sceneService.getBaseMapper().selectPage(new Page<>(pageNum, pageSize), sceneQueryWrapper));
     }
 
 }
