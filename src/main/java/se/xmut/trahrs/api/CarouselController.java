@@ -38,11 +38,11 @@ public class CarouselController {
 
     @WebLog(description = "添加公告轮播图")
     @PostMapping("/save")
-    public ApiResponse save(@RequestBody CarouselDto carouselDto,@RequestParam("save") Integer sort) {
+    public ApiResponse save(@RequestBody CarouselDto carouselDto) {
 
         Carousel carousel=modelMapper.map(carouselDto,Carousel.class);
         
-
+        Integer  sort=carousel.getSort();
         String imgUrl=carousel.getImgUrl(); // 获取更新的图片的路径
         UpdateWrapper<Carousel> updateWrapper=new UpdateWrapper<>();
         updateWrapper.eq("sort",sort);

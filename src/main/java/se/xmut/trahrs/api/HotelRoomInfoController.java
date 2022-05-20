@@ -1,13 +1,16 @@
 package se.xmut.trahrs.api;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
+import se.xmut.trahrs.domain.dto.HotelRoomInfoDto;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.HotelRoomInfoService;
 import se.xmut.trahrs.domain.model.HotelRoomInfo;
@@ -29,9 +32,18 @@ public class HotelRoomInfoController {
     @Autowired
     private HotelRoomInfoService hotelRoomInfoService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @WebLog(description = "添加酒店房间信息")
-    @PostMapping
-    public ApiResponse save(@RequestBody HotelRoomInfo hotelRoomInfo) {
+    @PostMapping("/addRoomInfo")
+    public ApiResponse save(@RequestBody HotelRoomInfoDto hotelRoomInfoDto) {
+        HotelRoomInfo hotelRoomInfo= modelMapper.map(hotelRoomInfoDto,HotelRoomInfo.class);
+
+
+
+
+
         return ApiResponse.ok(hotelRoomInfoService.saveOrUpdate(hotelRoomInfo));
     }
 

@@ -13,5 +13,7 @@ public class CarouselDto {
     @ApiModelProperty("图片路径")
     private String imgUrl;
 
+    @ApiModelProperty("排序")
+    private Integer sort;
 
 }
