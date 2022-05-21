@@ -86,12 +86,6 @@ public class HotelInfoController {
 
     @WebLog(description = "分页")
     @GetMapping("/page")
-//    @Cacheable(
-//
-//            key = "#pageNum+'_'+#pageSize",
-//            cacheName = "hotel_page",
-//            capacity = 100
-//    )
     public ApiResponse findPage(@RequestParam Integer pageNum,
                                 @RequestParam Integer pageSize) {
         return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize)));
