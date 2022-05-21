@@ -14,6 +14,9 @@ public class HotelInfoDto implements Serializable {
     @ApiModelProperty("酒店名称")
     private String name;
 
+    @ApiModelProperty("酒店id")
+    private String hotelId;
+
     @ApiModelProperty("类型")
     @TableField("`type`")
     private String type;

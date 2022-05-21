@@ -3,6 +3,7 @@ package se.xmut.trahrs.api;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,8 +101,21 @@ public class HotelInfoController {
         return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize), hotelInfoQueryWrapper));
     }
 
+    @WebLog(description = "酒店信息更新")
+    @PutMapping("/update")
+    public ApiResponse hotel_update(@RequestBody HotelInfoDto hotelInfoDto){
+        HotelInfo hotelInfo=modelMapper.map(hotelInfoDto,HotelInfo.class);
 
+        String hotel_id=hotelInfo.getHotelId();
+        UpdateWrapper<HotelInfo> hotelInfoUpdateWrapper=new UpdateWrapper<>();
+        hotelInfoUpdateWrapper
+                .eq("hotel_id",hotel_id);
 
+        hotelInfoService.update(hotelInfo,hotelInfoUpdateWrapper);
+
+        return ApiResponse.ok("更新成功");
+
+    }
 
 
 }

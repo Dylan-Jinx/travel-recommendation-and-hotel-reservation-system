@@ -1,5 +1,8 @@
 package se.xmut.trahrs.api;
 
+import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,11 +43,26 @@ public class HotelRoomInfoController {
     public ApiResponse save(@RequestBody HotelRoomInfoDto hotelRoomInfoDto) {
         HotelRoomInfo hotelRoomInfo= modelMapper.map(hotelRoomInfoDto,HotelRoomInfo.class);
 
+        Integer remainCount=hotelRoomInfo.getRemainCount();
+        Integer roomTypeId=hotelRoomInfo.getRoomTypeId();
+
+        UpdateWrapper<HotelRoomInfo> hotelRoomInfoUpdateWrapper=new UpdateWrapper<>();
+        hotelRoomInfoUpdateWrapper
+                .eq("room_type_id",roomTypeId);
+
+        HotelRoomInfo updateHotelRoomInfo=new HotelRoomInfo();
 
 
+        if(remainCount <= 0){
+            return ApiResponse.ok("添加失败，没有剩余的房间数");
+        }
 
+        hotelRoomInfo.setRoomId(IdUtil.objectId());
+        hotelRoomInfoService.save(hotelRoomInfo);
+        updateHotelRoomInfo.setRemainCount(remainCount-1);
+        hotelRoomInfoService.update(updateHotelRoomInfo,hotelRoomInfoUpdateWrapper);
 
-        return ApiResponse.ok(hotelRoomInfoService.saveOrUpdate(hotelRoomInfo));
+        return ApiResponse.ok("房间信息添加成功");
     }
 
     @WebLog(description = "用id删除酒店房间信息")
@@ -71,6 +89,19 @@ public class HotelRoomInfoController {
                                 @RequestParam Integer pageSize) {
         return ApiResponse.ok(hotelRoomInfoService.page(new Page<>(pageNum, pageSize)));
     }
+    @WebLog(description = "根据房间类型查找")
+    @GetMapping("/findByRoomTypeId")
+    public ApiResponse findByRoomTypeId(@RequestParam Integer roomTypeId) {
+        QueryWrapper<HotelRoomInfo> hotelRoomInfoQueryWrapper=new QueryWrapper<>();
+        hotelRoomInfoQueryWrapper
+                .eq("room_type_id",roomTypeId);
+
+        List<HotelRoomInfo> hotelRoomInfoList = hotelRoomInfoService.list(hotelRoomInfoQueryWrapper);
+
+        return ApiResponse.ok("查找成功",hotelRoomInfoList);
+    }
+
+
 
 }
 
