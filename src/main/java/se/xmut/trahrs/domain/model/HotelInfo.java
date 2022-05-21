@@ -97,5 +97,4 @@ public class HotelInfo implements Serializable {
 
     private Double rating;
 
-
 }

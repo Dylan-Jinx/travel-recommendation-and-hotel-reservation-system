@@ -5,6 +5,7 @@ import se.xmut.trahrs.mapper.HotelInfoMapper;
 import se.xmut.trahrs.service.HotelInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import springfox.documentation.annotations.Cacheable;
 
 /**
  * <p>
