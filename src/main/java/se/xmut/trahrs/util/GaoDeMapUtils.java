@@ -7,9 +7,6 @@ import cn.hutool.json.JSONUtil;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
-import org.locationtech.proj4j.CRSFactory;
-import org.locationtech.proj4j.CoordinateReferenceSystem;
-import org.locationtech.proj4j.CoordinateTransformFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,8 +22,8 @@ import java.util.List;
 @Component
 public class GaoDeMapUtils {
 
-    private final static String key = YamlUtil.getStringByYaml("GaoDe.key");
-    private final static String nearbyUrlV5 = "https://restapi.amap.com/v5/place/around?";
+    private final static String KEY = YamlUtil.getStringByYaml("GaoDe.key");
+    private final static String NEARBY_URL_V5 = "https://restapi.amap.com/v5/place/around?";
     private String type = "宾馆酒店";
     @Autowired
     private ModelMapper modelMapper;
@@ -40,16 +37,15 @@ public class GaoDeMapUtils {
      * @throws GaoDeException
      */
     public List<HotelInfo> getNearbyInfos(String types, String location, Integer radius, Integer page_num) throws GaoDeException {
-        StringBuilder url = new StringBuilder(nearbyUrlV5);
+        StringBuilder url = new StringBuilder(NEARBY_URL_V5);
         if(types != null && types.length()>0){
             type = types;
         }
-        url.append("key=").append(key)
+        url.append("key=").append(KEY)
                 .append("&types=").append(type)
                 .append("&location=").append(location)
                 .append("&radius=").append(radius)
                 .append("&page_size=25").append("&page_num=").append(page_num);
-        System.out.println(url);
 
         String res = HttpUtil.get(url.toString());
         JSONObject json = JSONUtil.parseObj(res);
@@ -89,8 +85,8 @@ public class GaoDeMapUtils {
         CoordinateUtil.Coordinate wgsP2 = CoordinateUtil.gcj02ToWgs84(p2Lng, p2Lat);
 
         //转高斯
-        double[] gaussP1 = wgs84_To_Gauss6(wgsP1.getLng(), wgsP1.getLat());
-        double[] gaussP2 = wgs84_To_Gauss6(wgsP2.getLng(), wgsP2.getLat());
+        double[] gaussP1 = wgs84ToGauss6(wgsP1.getLng(), wgsP1.getLat());
+        double[] gaussP2 = wgs84ToGauss6(wgsP2.getLng(), wgsP2.getLat());
 
         Point p1 = geometryFactory.createPoint(new Coordinate(gaussP1[0], gaussP1[1]));
         Point p2 = geometryFactory.createPoint(new Coordinate(gaussP2[0], gaussP2[1]));
@@ -104,7 +100,7 @@ public class GaoDeMapUtils {
      * @param lat
      * @return
      */
-    public double[] wgs84_To_Gauss6(double lng, double lat) {
+    public double[] wgs84ToGauss6(double lng, double lat) {
         int projNo = 0;
         //高斯6带
         int zoneWide = 6;

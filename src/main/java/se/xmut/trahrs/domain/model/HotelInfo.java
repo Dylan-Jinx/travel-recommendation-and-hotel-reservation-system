@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,8 +20,7 @@ import lombok.experimental.Accessors;
  * @author 作者
  * @since 2022-05-20
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
 @TableName("hotel_info")
 @ApiModel(value = "HotelInfo对象", description = "")
