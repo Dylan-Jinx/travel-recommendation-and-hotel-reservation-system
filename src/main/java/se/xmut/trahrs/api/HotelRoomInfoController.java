@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
+import se.xmut.trahrs.domain.dto.HotelInfoDto;
 import se.xmut.trahrs.domain.dto.HotelRoomInfoDto;
+import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.HotelRoomInfoService;
 import se.xmut.trahrs.domain.model.HotelRoomInfo;
@@ -101,6 +103,25 @@ public class HotelRoomInfoController {
         return ApiResponse.ok("查找成功",hotelRoomInfoList);
     }
 
+    @WebLog(description = "酒店房间信息更新")
+    @PutMapping("/update")
+    public ApiResponse hotelRoom_update(@RequestBody HotelRoomInfoDto hotelRoomInfoDto){
+
+        HotelRoomInfo hotelRoomInfo=modelMapper.map(hotelRoomInfoDto,HotelRoomInfo.class);
+
+        String hotelId=hotelRoomInfo.getHotelId();
+        String roomId=hotelRoomInfo.getRoomId();
+
+        UpdateWrapper<HotelRoomInfo> hotelRoomInfoUpdateWrapper=new UpdateWrapper<>();
+        hotelRoomInfoUpdateWrapper
+                .eq("hotel_id",hotelId)
+                .eq("room_id",roomId);
+
+        hotelRoomInfoService.update(hotelRoomInfo,hotelRoomInfoUpdateWrapper);
+
+        return ApiResponse.ok("更新成功");
+
+    }
 
 
 }

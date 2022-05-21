@@ -12,6 +12,8 @@ public class HotelRoomInfoDto {
     @ApiModelProperty("酒店id")
     private String hotelId;
 
+    @ApiModelProperty("房间id")
+    private String roomId;
 
     @ApiModelProperty("类型id")
     private Integer roomTypeId;
