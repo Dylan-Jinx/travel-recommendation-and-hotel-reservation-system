@@ -19,11 +19,20 @@ import java.util.Map;
 public interface SceneService extends IService<Scene> {
 
     /**
-     * 获取附近酒店
+     * 获取景点列表中距离和最近的酒店
      * @param list 用户选择想去的景点
      * @param radius 单位米
-     * @return 返回的酒店集合由距离从近到远排序，k酒店，v到这些景点的距离和
+     * @return 返回的酒店集合由距离从近到远排序，obj[]中0存酒店 1存距离和
      * @throws GaoDeException
      */
-    public Map<HotelInfo, Double> getNearestHotel(List<Scene> list, double radius) throws GaoDeException;
+    public List<Object[]> getNearestHotel(List<Scene> list, double radius) throws GaoDeException;
+
+    /**
+     * 根据景点查询酒店
+     * @param scene 景点
+     * @param radius 范围
+     * @return 查询集 obj[]中0存对象 1存距离
+     * @throws GaoDeException
+     */
+    public List<Object[]> getNearbyHotelByScene(Scene scene, double radius) throws GaoDeException;
 }

@@ -4,7 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.concurrent.TimeUnit;
@@ -30,5 +31,43 @@ public class RedisTest {
         System.out.println(redisTemplate.opsForValue().get("key2"));
         System.out.println("-----------------");
 
+    }
+
+    @org.junit.Test
+    public void testHash() {
+        redisTemplate.opsForHash().put("test:hash", "id", 1);
+        redisTemplate.opsForHash().put("test:hash", "username", "test");
+        System.out.println(redisTemplate.opsForHash().get("test:hash", "id"));
+        System.out.println(redisTemplate.opsForHash().get("test:hash", "username"));
+    }
+
+    @org.junit.Test
+    public void testBoundOperation(){
+        BoundListOperations operations = redisTemplate.boundListOps("test:ids");
+        System.out.println(operations.index(0));
+        System.out.println(operations.leftPush(101));
+        System.out.println(operations.leftPush(101));
+        System.out.println(operations.range(0, 2));
+    }
+
+    @org.junit.Test
+    public void testTransactional(){
+        Object obj = redisTemplate.execute(new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+                BoundSetOperations op = redisTemplate.boundSetOps("test:tx");
+
+                operations.multi();
+
+                op.add("陈柏宇");
+                op.add("马锦源");
+                op.add("吴锦新");
+
+                System.out.println(op.members());
+
+                return operations.exec();
+            }
+        });
+        System.out.println(obj);
     }
 }

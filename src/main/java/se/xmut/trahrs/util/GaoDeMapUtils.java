@@ -11,9 +11,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.xmut.trahrs.domain.model.HotelInfo;
+import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.exception.GaoDeException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author breeze
