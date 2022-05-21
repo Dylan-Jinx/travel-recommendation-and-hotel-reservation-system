@@ -60,7 +60,7 @@ public class HotelCommentController {
     }
 
     @WebLog(description = "举报评论内容")
-    @PutMapping("/reportContent")
+    @PutMapping
     public ApiResponse reportContent(@RequestParam("comment_id") String commentId){
         QueryWrapper<HotelComment> hotelCommentQueryWrapper = new QueryWrapper<>();
         hotelCommentQueryWrapper.eq("comment_id",commentId);
@@ -95,7 +95,7 @@ public class HotelCommentController {
 
     @WebLog(description = "用id查找酒店评论")
     @GetMapping("/{id}")
-    public ApiResponse findOne(@PathVariable Integer id) {
+    public ApiResponse findOne(@PathVariable("id") Integer id) {
         return ApiResponse.ok(hotelCommentService.getById(id));
     }
 
@@ -105,6 +105,14 @@ public class HotelCommentController {
                                 @RequestParam Integer pageSize) {
         return ApiResponse.ok(hotelCommentService.page(new Page<>(pageNum, pageSize)));
     }
-
+    @WebLog(description = "根据评论内容模糊查询")
+    @GetMapping("/like")
+    public ApiResponse findContent(@RequestParam Integer pageNum,
+                                   @RequestParam Integer pageSize,
+                                   @RequestParam String content){
+        QueryWrapper<HotelComment> hotelCommentQueryWrapper=new QueryWrapper<>();
+        hotelCommentQueryWrapper.like("content",content);
+        return ApiResponse.ok(hotelCommentService.page(new Page<>(pageNum, pageSize),hotelCommentQueryWrapper));
+    }
 }
 

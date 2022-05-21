@@ -12,11 +12,13 @@
         <result column="report_status" property="reportStatus" />
         <result column="create_time" property="createTime" />
         <result column="flag" property="flag" />
+        <result column="scene_id" property="sceneId" />
+        <result column="hotel_id" property="hotelId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, comment_id, customer_id, content, ip, report_status, create_time, flag
+        id, comment_id, customer_id, content, ip, report_status, create_time, flag,scene_id,hotel_id
     </sql>
 
 </mapper>

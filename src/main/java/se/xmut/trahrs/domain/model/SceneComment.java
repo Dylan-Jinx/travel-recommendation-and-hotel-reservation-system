@@ -38,6 +38,9 @@ public class SceneComment implements Serializable {
     @ApiModelProperty("用户id")
     private String customerId;
 
+    @ApiModelProperty("景点id")
+    private String sceneId;
+
     @ApiModelProperty("评论内容")
     private String content;
 
