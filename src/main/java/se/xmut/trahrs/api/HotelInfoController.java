@@ -1,16 +1,16 @@
 package se.xmut.trahrs.api;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-
+import org.springframework.web.bind.annotation.*;
 import se.xmut.trahrs.common.ApiResponse;
-import se.xmut.trahrs.log.annotation.WebLog;
-import se.xmut.trahrs.service.HotelInfoService;
 import se.xmut.trahrs.domain.model.HotelInfo;
+import se.xmut.trahrs.log.annotation.WebLog;
+import se.xmut.trahrs.manager.RedisService;
+import se.xmut.trahrs.manager.cache.annoation.Cacheable;
+import se.xmut.trahrs.service.HotelInfoService;
 
 
 /**
@@ -28,6 +28,8 @@ public class HotelInfoController {
     final Logger logger = LoggerFactory.getLogger(HotelInfoController.class);
     @Autowired
     private HotelInfoService hotelInfoService;
+    @Autowired
+    private RedisService redisService;
 
     @WebLog(description = "添加")
     @PostMapping
@@ -48,6 +50,7 @@ public class HotelInfoController {
     }
 
     @WebLog(description = "用id查找")
+    @Cacheable(cacheName = "hotelinfo", key = "#id", capacity = 3, log = true)
     @GetMapping("/{id}")
     public ApiResponse findOne(@PathVariable Integer id) {
         return ApiResponse.ok(hotelInfoService.getById(id));
@@ -55,6 +58,12 @@ public class HotelInfoController {
 
     @WebLog(description = "分页")
     @GetMapping("/page")
+//    @Cacheable(
+//
+//            key = "#pageNum+'_'+#pageSize",
+//            cacheName = "hotel_page",
+//            capacity = 100
+//    )
     public ApiResponse findPage(@RequestParam Integer pageNum,
                                 @RequestParam Integer pageSize) {
         return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize)));
