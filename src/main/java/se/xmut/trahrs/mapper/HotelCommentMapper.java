@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author 作者
  * @since 2022-04-29
  */
+
 public interface HotelCommentMapper extends BaseMapper<HotelComment> {
 
 }
