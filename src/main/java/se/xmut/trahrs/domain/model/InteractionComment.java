@@ -48,5 +48,9 @@ public class InteractionComment implements Serializable {
 
     private Integer flag;
 
+    private String sceneId;
+
+    private String hotelId;
+
 
 }
