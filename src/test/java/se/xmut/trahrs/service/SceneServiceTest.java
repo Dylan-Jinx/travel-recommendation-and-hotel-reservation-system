@@ -91,7 +91,7 @@ class SceneServiceTest {
 
     @Test
     public void getNearestHotel() {
-        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000);
+        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000.0);
         for (HotelInfoVo objs:nearestHotel) {
             System.out.println(objs+" "+objs.getSumDistance());
         }
@@ -102,7 +102,7 @@ class SceneServiceTest {
         Scene scene = new Scene();
         scene.setName("鼓浪屿");
         scene.setLocation("118.06702,24.444695");
-        List<HotelInfoVo> list = sceneService.getNearbyHotelByScene(scene, 1000);
+        List<HotelInfoVo> list = sceneService.getNearbyHotelByScene(scene, 1000.0);
         for (HotelInfoVo objs:list) {
             System.out.println(objs+" "+objs.getSumDistance());
         }
@@ -111,7 +111,7 @@ class SceneServiceTest {
 
     @Test
     public void testSceneNearbyHotelWithComprehensiveRecommendation(){
-        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000);
+        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000.0);
         List<HotelInfoVo> crHotel = sceneService.getSceneNearbyHotelWithComprehensiveRecommendation(nearestHotel);
         for (HotelInfoVo objs:crHotel) {
             System.out.println(objs+" "+objs.getSumDistance()+" "+objs.getComprehensiveRating());
@@ -120,7 +120,7 @@ class SceneServiceTest {
 
     @Test
     public void testGetNearbyHotelHighestRatingRecommendation(){
-        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000);
+        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000.0);
         List<HotelInfoVo> hrrHotel = sceneService.getSceneNearbyHotelWithHighestRatingRecommendation(nearestHotel);
         for (HotelInfoVo objs:hrrHotel) {
             System.out.println(objs+" "+objs.getSumDistance()+" "+objs.getRating());
@@ -129,7 +129,7 @@ class SceneServiceTest {
 
     @Test
     public void testGetNearbyHotelLowestRatingRecommendation(){
-        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000);
+        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000.0);
         List<HotelInfoVo> hrrHotel = sceneService.getSceneNearbyHotelWithLowestRatingRecommendation(nearestHotel);
         for (HotelInfoVo objs:hrrHotel) {
             System.out.println(objs+" "+objs.getSumDistance()+" "+objs.getRating());

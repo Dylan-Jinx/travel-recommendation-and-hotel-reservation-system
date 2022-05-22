@@ -38,7 +38,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     private ModelMapper modelMapper;
 
     @Override
-    public List<HotelInfoVo> getNearestHotel(List<Scene> list, double radius) {
+    public List<HotelInfoVo> getNearestHotel(List<Scene> list, Double radius) {
 
         List<HotelInfoVo> ans = new ArrayList<>();
         Set<HotelInfo> hotelInfos = new HashSet<>();
@@ -75,7 +75,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     }
 
     @Override
-    public List<HotelInfoVo> getNearbyHotelByScene(Scene scene, double radius) {
+    public List<HotelInfoVo> getNearbyHotelByScene(Scene scene, Double radius) {
 
         List<HotelInfoVo> ans = new ArrayList<>();
 
@@ -141,6 +141,18 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     @Override
     public List<HotelInfoVo> getSceneNearbyHotelWithLowestRatingRecommendation(List<HotelInfoVo> nearestHotel) {
         nearestHotel.sort(Comparator.comparing(HotelInfoVo::getRating, Comparator.nullsLast(Double::compareTo)));
+        return nearestHotel;
+    }
+
+    @Override
+    public List<HotelInfoVo> getSceneNearbyHotelWithHighestPriceRecommendation(List<HotelInfoVo> nearestHotel) {
+        nearestHotel.sort(Comparator.comparing(HotelInfoVo::getCost, Comparator.nullsFirst(Integer::compareTo)).reversed());
+        return nearestHotel;
+    }
+
+    @Override
+    public List<HotelInfoVo> getSceneNearbyHotelWithLowestPriceRecommendation(List<HotelInfoVo> nearestHotel) {
+        nearestHotel.sort(Comparator.comparing(HotelInfoVo::getCost, Comparator.nullsLast(Integer::compareTo)));
         return nearestHotel;
     }
 }
