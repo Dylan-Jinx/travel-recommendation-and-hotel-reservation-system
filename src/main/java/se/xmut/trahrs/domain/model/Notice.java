@@ -41,7 +41,8 @@ public class Notice implements Serializable {
     @ApiModelProperty("公告类型")
     private Integer noticeType;
 
-    private String soft;
+    @ApiModelProperty("公告排序")
+    private Integer sort;
 
     @ApiModelProperty("公告状态")
     private Integer noticeStatus;

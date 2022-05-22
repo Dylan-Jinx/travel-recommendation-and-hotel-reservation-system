@@ -1,4 +1,4 @@
-package se.xmut.trahrs.test.gaoDe;
+package se.xmut.trahrs.test.GaoDe;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
