@@ -35,4 +35,31 @@
         id, hotel_id, `name`, location, `type`, p_name, city_name, ad_name, address, p_code, city_code, ad_code, opentime_week, tel, rec_tag, key_tag, cost, alias, navi_poiid, entr_location, exit_location, grid_code, photos, rating
     </sql>
 
+    <sql id="coordinateRange">
+        SUBSTRING_INDEX(location,',',1) &lt;= #{maxLng} and
+        SUBSTRING_INDEX(location,',',1) >= #{minLng} and
+        SUBSTRING_INDEX(location,',',-1) &lt;= #{maxLat} and
+        SUBSTRING_INDEX(location,',',-1) >= #{minLat}
+    </sql>
+    <select id="findNearbyHotel" resultType="se.xmut.trahrs.domain.model.HotelInfo">
+        select * from hotel_info
+        <where>
+            <include refid="coordinateRange"></include>
+        </where>
+    </select>
+
+    <select id="findAvgRatingInRange" resultType="double">
+        select avg(rating) from hotel_info
+        <where>
+            name in
+            <foreach collection="list"
+                     item="name"
+                     open="("
+                     separator=","
+                     close=")">
+                #{name}
+            </foreach>
+        </where>
+    </select>
+
 </mapper>

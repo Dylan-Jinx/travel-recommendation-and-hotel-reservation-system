@@ -61,7 +61,7 @@ public class SceneController {
         return ApiResponse.ok(sceneService.page(new Page<>(pageNum, pageSize)));
     }
 
-    @WebLog(description = "查询评分高的景点分页")
+    @WebLog(description = "查询评分高的所有景点分页")
     @GetMapping("/ratingPage")
     public ApiResponse findRatingPage(@RequestParam Integer pageNum,
                                 @RequestParam Integer pageSize) {
@@ -70,6 +70,12 @@ public class SceneController {
         sceneQueryWrapper.orderByDesc("rating");
         return ApiResponse.ok(sceneService.getBaseMapper().selectPage(new Page<>(pageNum, pageSize), sceneQueryWrapper));
     }
+
+//    @WebLog(description = "根据分类查询的综合推荐景点分页")
+//    @GetMapping("/ratingPage")
+//    public ApiResponse findClassifyPage(){
+//
+//    }
 
 }
 

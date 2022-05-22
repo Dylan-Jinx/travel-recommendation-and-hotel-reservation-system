@@ -1,4 +1,4 @@
-package se.xmut.trahrs.test.GaoDe;
+package se.xmut.trahrs.test.gaoDe;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,11 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.exception.GaoDeException;
-import se.xmut.trahrs.util.GaoDeMapUtils;
+import se.xmut.trahrs.util.MapUtils;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author breeze
@@ -19,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class GaoDeMapUtilsTest {
+public class MapUtilsTest {
 
     @Autowired
-    private GaoDeMapUtils gaoDeMapUtils;
+    private MapUtils mapUtils;
 
     @Test
-    public void getNearbyHotelInfos() throws GaoDeException {
-        List<HotelInfo> list = gaoDeMapUtils.getNearbyInfos(null, "118.06702,24.444695", 1000, 1);
+    public void getNearbyInfos() throws GaoDeException {
+        List<HotelInfo> list = mapUtils.getNearbyInfosByGaoDe(null, "118.06702,24.444695", 1000, 1);
         for (HotelInfo hotelInfo : list){
             System.out.println(hotelInfo);
         }
@@ -34,6 +32,6 @@ public class GaoDeMapUtilsTest {
 
     @Test
     public void getLocationToDistance(){
-        System.out.println(gaoDeMapUtils.locationToDistance(116.368904, 39.923423, 116.387271, 39.922501));
+        System.out.println(mapUtils.locationToDistance(118.06702, 24.444695, 118.062882, 24.572083));
     }
 }
