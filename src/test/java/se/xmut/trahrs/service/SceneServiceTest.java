@@ -1,12 +1,17 @@
 package se.xmut.trahrs.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.model.Scene;
+import se.xmut.trahrs.domain.vo.HotelInfoVo;
 import se.xmut.trahrs.exception.GaoDeException;
+import se.xmut.trahrs.mapper.HotelInfoMapper;
+import se.xmut.trahrs.util.MapUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,10 +28,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class SceneServiceTest {
     @Autowired
     private SceneService sceneService;
+    @Autowired
+    private HotelInfoMapper hotelInfoMapper;
+    @Autowired
+    private MapUtils mapUtils;
 
-    @Test
-    public void getNearestHotel() throws GaoDeException {
-        List<Scene> list = new ArrayList<>();
+    private List<Scene> list = new ArrayList<>();
+    @BeforeEach
+    public void setUp(){
         Scene scene = new Scene();
         scene.setName("皓月园");
         scene.setLocation("118.075936,24.441099");
@@ -75,21 +84,55 @@ class SceneServiceTest {
         Scene scene10 = new Scene();
         scene10.setName("城隍庙");
         scene10.setLocation("118.247520,24.667304");
-        list.add(scene7);
-        List<Object[]> nearestHotel = sceneService.getNearestHotel(list, 1000);
-        for (Object[] objs:nearestHotel) {
-            System.out.println(Arrays.toString(objs));
+        list.add(scene10);
+        System.out.println("——————————hello——————————");
+        System.out.println(list.size());
+    }
+
+    @Test
+    public void getNearestHotel() {
+        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000.0);
+        for (HotelInfoVo objs:nearestHotel) {
+            System.out.println(objs+" "+objs.getSumDistance());
         }
     }
 
     @Test
-    public void testGetNearbyHotelByScene() throws GaoDeException {
+    public void testGetNearbyHotelByScene() {
         Scene scene = new Scene();
         scene.setName("鼓浪屿");
         scene.setLocation("118.06702,24.444695");
-        List<Object[]> list = sceneService.getNearbyHotelByScene(scene, 1000);
-        for (Object[] objs:list) {
-            System.out.println(Arrays.toString(objs));
+        List<HotelInfoVo> list = sceneService.getNearbyHotelByScene(scene, 1000.0);
+        for (HotelInfoVo objs:list) {
+            System.out.println(objs+" "+objs.getSumDistance());
+        }
+
+    }
+
+    @Test
+    public void testSceneNearbyHotelWithComprehensiveRecommendation(){
+        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000.0);
+        List<HotelInfoVo> crHotel = sceneService.getSceneNearbyHotelWithComprehensiveRecommendation(nearestHotel);
+        for (HotelInfoVo objs:crHotel) {
+            System.out.println(objs+" "+objs.getSumDistance()+" "+objs.getComprehensiveRating());
+        }
+    }
+
+    @Test
+    public void testGetNearbyHotelHighestRatingRecommendation(){
+        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000.0);
+        List<HotelInfoVo> hrrHotel = sceneService.getSceneNearbyHotelWithHighestRatingRecommendation(nearestHotel);
+        for (HotelInfoVo objs:hrrHotel) {
+            System.out.println(objs+" "+objs.getSumDistance()+" "+objs.getRating());
+        }
+    }
+
+    @Test
+    public void testGetNearbyHotelLowestRatingRecommendation(){
+        List<HotelInfoVo> nearestHotel = sceneService.getNearestHotel(list, 1000.0);
+        List<HotelInfoVo> hrrHotel = sceneService.getSceneNearbyHotelWithLowestRatingRecommendation(nearestHotel);
+        for (HotelInfoVo objs:hrrHotel) {
+            System.out.println(objs+" "+objs.getSumDistance()+" "+objs.getRating());
         }
     }
 }

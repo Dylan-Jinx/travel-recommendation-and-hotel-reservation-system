@@ -11,18 +11,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import se.xmut.trahrs.domain.model.HotelInfo;
-import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.exception.GaoDeException;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author breeze
  * @date 2022/5/20 20:39
  */
 @Component
-public class GaoDeMapUtils {
+public class MapUtils {
 
     private final static String KEY = YamlUtil.getStringByYaml("GaoDe.key");
     private final static String NEARBY_URL_V5 = "https://restapi.amap.com/v5/place/around?";
@@ -38,7 +36,7 @@ public class GaoDeMapUtils {
      * @return
      * @throws GaoDeException
      */
-    public List<HotelInfo> getNearbyInfos(String types, String location, Integer radius, Integer page_num) throws GaoDeException {
+    public List<HotelInfo> getNearbyInfosByGaoDe(String types, String location, Integer radius, Integer page_num) throws GaoDeException {
         StringBuilder url = new StringBuilder(NEARBY_URL_V5);
         if(types != null && types.length()>0){
             type = types;
@@ -155,5 +153,33 @@ public class GaoDeMapUtils {
         output[0] = xval;
         output[1] = yval;
         return output;
+    }
+
+    /**
+     * @param coordinate 坐标
+     * @param radius 距离
+     * @return String数组 0最大经度 1最小经度 2最大纬度 3最小纬度
+     */
+    public String[] locationToMaxAndMinLngAndLatInString(String coordinate, double radius){
+        double[] location = locationToLngAndLatInDouble(coordinate);
+
+        double lng = location[0];
+        double lat = location[1];
+
+        double maxLng = lng + (radius * 0.00001141);
+        double minLng = lng - (radius * 0.00001141);
+        double maxLat = lat + (radius * 0.00000899);
+        double minLat = lat - (radius * 0.00000899);
+
+        return new String[]{maxLng+"", minLng+"", maxLat+"", minLat+""};
+    }
+
+    /**
+     * @param coordinate 坐标
+     * @return double数组 0经度 1纬度
+     */
+    public double[] locationToLngAndLatInDouble(String coordinate){
+        String[] location = coordinate.split(",");
+        return new double[]{Double.parseDouble(location[0]), Double.parseDouble(location[1])};
     }
 }
