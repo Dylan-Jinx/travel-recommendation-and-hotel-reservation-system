@@ -49,5 +49,5 @@ public class OrderDetail implements Serializable {
     @ApiModelProperty("订单创建时间")
     private LocalDateTime createTime;
 
-
+    private String orderId;
 }
