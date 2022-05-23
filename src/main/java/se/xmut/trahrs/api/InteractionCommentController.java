@@ -164,7 +164,6 @@ public class InteractionCommentController {
         QueryWrapper<InteractionComment> interactionCommentQueryWrapper=new QueryWrapper<>();
         interactionCommentQueryWrapper.eq("report_status",1);
         return ApiResponse.ok(interactionCommentService.page(new Page<>(pageNum, pageSize),interactionCommentQueryWrapper));
-
     }
 }
 
