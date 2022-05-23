@@ -9,14 +9,14 @@
         <result column="content" property="content" />
         <result column="notice_by" property="noticeBy" />
         <result column="notice_type" property="noticeType" />
-        <result column="soft" property="soft" />
+        <result column="sort" property="sort" />
         <result column="notice_status" property="noticeStatus" />
         <result column="create_time" property="createTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        notice_id, notice_title, content, notice_by, notice_type, soft, notice_status, create_time
+        notice_id, notice_title, content, notice_by, notice_type, sort, notice_status, create_time
     </sql>
 
 </mapper>
