@@ -11,11 +11,12 @@
         <result column="order_price" property="orderPrice" />
         <result column="order_status" property="orderStatus" />
         <result column="create_time" property="createTime" />
+        <result column="order_id" property="orderId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, customer_id, order_num, order_content, order_price, order_status, create_time
+        id, customer_id, order_num, order_content, order_price, order_status, create_time,order_id
     </sql>
 
 </mapper>
