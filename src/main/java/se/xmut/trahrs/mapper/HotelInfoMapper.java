@@ -35,4 +35,6 @@ public interface HotelInfoMapper extends BaseMapper<HotelInfo> {
      * @return 返回范围内的均分
      */
     Double findAvgRatingInRange(List<String> nameList);
+
+    List<HotelInfo> findHotelByTypeAndKeyTagAndName(String type,String key_tag,String name_brand);
 }

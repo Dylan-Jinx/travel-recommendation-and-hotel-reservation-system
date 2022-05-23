@@ -34,6 +34,24 @@
     <sql id="Base_Column_List">
         id, hotel_id, `name`, location, `type`, p_name, city_name, ad_name, address, p_code, city_code, ad_code, opentime_week, tel, rec_tag, key_tag, cost, alias, navi_poiid, entr_location, exit_location, grid_code, photos, rating
     </sql>
+    
+    <select id="findHotelByTypeAndKeyTagAndName" parameterType="java.util.List" resultType="se.xmut.trahrs.domain.model.HotelInfo">
+        SELECT * FROM hotel_info
+        <where>
+            <if test="type != null and type != ''">
+                and type like concat('%',#{type},'%')
+            </if>
+            <if test="key_tag != null and key_tag != ''">
+                and key_tag in
+                 <foreach collection="key_tag" item="tag" separator="," index="index" open="(" close=")">
+                     #{tag}
+                 </foreach>
+            </if>
+            <if test="name_brand != null and name_brand !=''">
+                and name like concat('%',#{name_brand},'%')
+            </if>
+        </where>
+    </select>
 
     <sql id="coordinateRange">
         SUBSTRING_INDEX(location,',',1) &lt;= #{maxLng} and
