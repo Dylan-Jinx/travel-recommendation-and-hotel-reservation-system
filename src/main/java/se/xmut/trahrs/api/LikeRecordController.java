@@ -1,5 +1,7 @@
 package se.xmut.trahrs.api;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
+import se.xmut.trahrs.domain.dto.LikeRecordDto;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.LikeRecordService;
 import se.xmut.trahrs.domain.model.LikeRecord;
@@ -28,11 +31,23 @@ public class LikeRecordController {
     final Logger logger = LoggerFactory.getLogger(LikeRecordController.class);
     @Autowired
     private LikeRecordService likeRecordService;
-
+    @Autowired
+    private ModelMapper modelMapper;
     @WebLog(description = "添加点赞记录")
     @PostMapping
-    public ApiResponse save(@RequestBody LikeRecord likeRecord) {
-        return ApiResponse.ok(likeRecordService.saveOrUpdate(likeRecord));
+    public ApiResponse save(@RequestBody LikeRecordDto likeRecordDto) {
+        LikeRecord likeRecord=modelMapper.map(likeRecordDto,LikeRecord.class);
+        QueryWrapper<LikeRecord> likeRecordQueryWrapper=new QueryWrapper<>();
+        likeRecordQueryWrapper.eq("customer_id",likeRecordDto.getCustomerId()).eq("record_id",likeRecordDto.getRecordId());
+        //判断是否点赞过，如果点赞过一次继续点赞则执行删除
+        LikeRecord likeRecord1=likeRecordService.getOne(likeRecordQueryWrapper);
+        if (likeRecord1==null) {
+            return ApiResponse.ok(likeRecordService.saveOrUpdate(likeRecord));
+        }
+        else{
+            return ApiResponse.ok(likeRecordService.remove(likeRecordQueryWrapper));
+        }
+
     }
 
     @WebLog(description = "用id删除点赞记录")
