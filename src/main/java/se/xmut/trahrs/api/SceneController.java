@@ -1,5 +1,6 @@
 package se.xmut.trahrs.api;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.vo.HotelInfoVo;
 import se.xmut.trahrs.log.annotation.WebLog;
+import se.xmut.trahrs.mapper.HotelInfoMapper;
 import se.xmut.trahrs.service.HotelInfoService;
 import se.xmut.trahrs.service.SceneService;
 import se.xmut.trahrs.domain.model.Scene;
@@ -38,6 +40,8 @@ public class SceneController {
     private HotelInfoService hotelInfoService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private HotelInfoMapper hotelInfoMapper;
 
     @WebLog(description = "添加")
     @PostMapping
@@ -91,7 +95,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.addLocationByUUID(scenes);
+        sceneService.BindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithComprehensiveRecommendation(sceneService
@@ -112,7 +116,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.addLocationByUUID(scenes);
+        sceneService.BindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithHighestRatingRecommendation(sceneService
@@ -133,7 +137,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.addLocationByUUID(scenes);
+        sceneService.BindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithLowestRatingRecommendation(sceneService
@@ -148,14 +152,14 @@ public class SceneController {
     @WebLog(description = "通过景点查询附近价格最高酒店分页")
     @GetMapping("/NearbyHighestPriceRecommendationPage")
     public ApiResponse findNearbyHighestPriceRecommendationPage(@RequestParam Integer pageNum,
-                                                                 @RequestParam Integer pageSize,
-                                                                 @RequestBody List<Scene> scenes,
-                                                                 @RequestParam Double radius){
+                                                                @RequestParam Integer pageSize,
+                                                                @RequestBody List<Scene> scenes,
+                                                                @RequestParam Double radius){
         if(radius==null){
             radius = 1000.0;
         }
 
-        sceneService.addLocationByUUID(scenes);
+        sceneService.BindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithHighestPriceRecommendation(sceneService
@@ -170,14 +174,14 @@ public class SceneController {
     @WebLog(description = "通过景点查询附近价格最低酒店分页")
     @GetMapping("/NearbyLowestPriceRecommendationPage")
     public ApiResponse findNearbyLowestPriceRecommendationPage(@RequestParam Integer pageNum,
-                                                                @RequestParam Integer pageSize,
-                                                                @RequestBody List<Scene> scenes,
-                                                                @RequestParam Double radius){
+                                                               @RequestParam Integer pageSize,
+                                                               @RequestBody List<Scene> scenes,
+                                                               @RequestParam Double radius){
         if(radius==null){
             radius = 1000.0;
         }
 
-        sceneService.addLocationByUUID(scenes);
+        sceneService.BindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithLowestPriceRecommendation(sceneService
@@ -186,6 +190,31 @@ public class SceneController {
         Map<String, Object> map = hotelInfoService.HotelInfoVoPage(hotelInfoVoList, pageNum, pageSize);
 
         return ApiResponse.ok(map);
+    }
+
+    /**FIXME 酒店价格暂未导入*/
+    @WebLog(description = "使用价格区间通过附近景点查询附近酒店分页")
+    @GetMapping("/NearbyPriceRangeRecommendationPage")
+    public ApiResponse findNearbyPriceRangeRecommendationPage(@RequestParam Integer pageNum,
+                                                              @RequestParam Integer pageSize,
+                                                              @RequestBody List<Scene> scenes,
+                                                              @RequestParam Double radius,
+                                                              @RequestParam Integer priceBottom,
+                                                              @RequestParam Integer priceTop){
+        if(radius==null){
+            radius = 1000.0;
+        }
+
+        sceneService.BindSceneByUUID(scenes);
+
+        List<HotelInfoVo> hotelInfoVoList = sceneService.getNearestHotel(scenes, radius);
+        List<String> nameList = new ArrayList<>();
+        hotelInfoVoList.forEach(h->nameList.add(h.getName()));
+        QueryWrapper<HotelInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("name", nameList);
+        queryWrapper.between("cost", priceBottom, priceTop);
+
+        return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
 
 //    @WebLog(description = "根据分类查询的综合推荐景点分页")

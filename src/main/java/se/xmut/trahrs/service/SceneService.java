@@ -71,9 +71,9 @@ public interface SceneService extends IService<Scene> {
     public List<HotelInfoVo> getSceneNearbyHotelWithLowestPriceRecommendation(List<HotelInfoVo> nearestHotel);
 
     /**
-     * 通过传来的scene的uuid来查询对应的location并封装进对象中返回
+     * 通过传来的scene的uuid来绑定对应属性并封装进对象中返回
      * @param scenes 景点列表
-     * @return 含有location的景点列表
+     * @return 完整属性的景点列表
      */
-    public List<Scene> addLocationByUUID(List<Scene> scenes);
+    public List<Scene> BindSceneByUUID(List<Scene> scenes);
 }
