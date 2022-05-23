@@ -91,24 +91,100 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        QueryWrapper queryWrapper = new QueryWrapper();
-        for(Scene scene:scenes){
-            queryWrapper.clear();
-            queryWrapper.eq("scene_id", scene.getSceneId());
-            scene.setLocation(sceneService.getOne(queryWrapper).getLocation());
-        }
+        sceneService.addLocationByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithComprehensiveRecommendation(sceneService
                         .getNearestHotel(scenes, radius));
 
-        List<HotelInfoVo> hotelInfoPage =  hotelInfoVoList.subList((pageNum-1)*pageSize, (pageNum-1)*pageSize+pageSize);
-        Map<String, Object> map = new HashMap<>();
-        map.put("records", hotelInfoPage);
-        map.put("total", hotelInfoVoList.size());
-        map.put("size", pageSize);
-        map.put("current", pageNum);
-        map.put("pages", hotelInfoVoList.size()%pageSize==0 ? hotelInfoVoList.size()/pageSize : hotelInfoVoList.size()/pageSize +1);
+        Map<String, Object> map = hotelInfoService.HotelInfoVoPage(hotelInfoVoList, pageNum, pageSize);
+
+        return ApiResponse.ok(map);
+    }
+
+    @WebLog(description = "通过景点查询附近评分最高酒店分页")
+    @GetMapping("/NearbyHighestRatingRecommendationPage")
+    public ApiResponse findNearbyHighestRatingRecommendationPage(@RequestParam Integer pageNum,
+                                                                 @RequestParam Integer pageSize,
+                                                                 @RequestBody List<Scene> scenes,
+                                                                 @RequestParam Double radius){
+        if(radius==null){
+            radius = 1000.0;
+        }
+
+        sceneService.addLocationByUUID(scenes);
+
+        List<HotelInfoVo> hotelInfoVoList = sceneService
+                .getSceneNearbyHotelWithHighestRatingRecommendation(sceneService
+                        .getNearestHotel(scenes, radius));
+
+        Map<String, Object> map = hotelInfoService.HotelInfoVoPage(hotelInfoVoList, pageNum, pageSize);
+
+        return ApiResponse.ok(map);
+    }
+
+    @WebLog(description = "通过景点查询附近评分最低酒店分页")
+    @GetMapping("/NearbyLowestRatingRecommendationPage")
+    public ApiResponse findNearbyLowestRatingRecommendationPage(@RequestParam Integer pageNum,
+                                                                 @RequestParam Integer pageSize,
+                                                                 @RequestBody List<Scene> scenes,
+                                                                 @RequestParam Double radius){
+        if(radius==null){
+            radius = 1000.0;
+        }
+
+        sceneService.addLocationByUUID(scenes);
+
+        List<HotelInfoVo> hotelInfoVoList = sceneService
+                .getSceneNearbyHotelWithLowestRatingRecommendation(sceneService
+                        .getNearestHotel(scenes, radius));
+
+        Map<String, Object> map = hotelInfoService.HotelInfoVoPage(hotelInfoVoList, pageNum, pageSize);
+
+        return ApiResponse.ok(map);
+    }
+
+    /**FIXME 酒店价格暂未导入*/
+    @WebLog(description = "通过景点查询附近价格最高酒店分页")
+    @GetMapping("/NearbyHighestPriceRecommendationPage")
+    public ApiResponse findNearbyHighestPriceRecommendationPage(@RequestParam Integer pageNum,
+                                                                 @RequestParam Integer pageSize,
+                                                                 @RequestBody List<Scene> scenes,
+                                                                 @RequestParam Double radius){
+        if(radius==null){
+            radius = 1000.0;
+        }
+
+        sceneService.addLocationByUUID(scenes);
+
+        List<HotelInfoVo> hotelInfoVoList = sceneService
+                .getSceneNearbyHotelWithHighestPriceRecommendation(sceneService
+                        .getNearestHotel(scenes, radius));
+
+        Map<String, Object> map = hotelInfoService.HotelInfoVoPage(hotelInfoVoList, pageNum, pageSize);
+
+        return ApiResponse.ok(map);
+    }
+
+    /**FIXME 酒店价格暂未导入*/
+    @WebLog(description = "通过景点查询附近价格最低酒店分页")
+    @GetMapping("/NearbyLowestPriceRecommendationPage")
+    public ApiResponse findNearbyLowestPriceRecommendationPage(@RequestParam Integer pageNum,
+                                                                @RequestParam Integer pageSize,
+                                                                @RequestBody List<Scene> scenes,
+                                                                @RequestParam Double radius){
+        if(radius==null){
+            radius = 1000.0;
+        }
+
+        sceneService.addLocationByUUID(scenes);
+
+        List<HotelInfoVo> hotelInfoVoList = sceneService
+                .getSceneNearbyHotelWithLowestPriceRecommendation(sceneService
+                        .getNearestHotel(scenes, radius));
+
+        Map<String, Object> map = hotelInfoService.HotelInfoVoPage(hotelInfoVoList, pageNum, pageSize);
+
         return ApiResponse.ok(map);
     }
 

@@ -1,5 +1,6 @@
 package se.xmut.trahrs.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.xmut.trahrs.domain.model.HotelInfo;
@@ -154,5 +155,16 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     public List<HotelInfoVo> getSceneNearbyHotelWithLowestPriceRecommendation(List<HotelInfoVo> nearestHotel) {
         nearestHotel.sort(Comparator.comparing(HotelInfoVo::getCost, Comparator.nullsLast(Integer::compareTo)));
         return nearestHotel;
+    }
+
+    @Override
+    public List<Scene> addLocationByUUID(List<Scene> scenes) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        for (Scene scene:scenes){
+            queryWrapper.clear();
+            queryWrapper.eq("scene_id", scene.getSceneId());
+            scene.setLocation(this.getOne(queryWrapper).getLocation());
+        }
+        return scenes;
     }
 }
