@@ -29,6 +29,7 @@ public class MapUtils {
     private ModelMapper modelMapper;
 
     /**
+     * 已弃用
      * @param types 默认查周边宾馆酒店，如需查询别的周边信息，传递类型
      * @param location 经纬度
      * @param radius 查询范围

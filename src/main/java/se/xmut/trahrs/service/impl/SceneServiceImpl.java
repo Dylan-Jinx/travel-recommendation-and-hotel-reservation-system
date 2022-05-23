@@ -1,5 +1,7 @@
 package se.xmut.trahrs.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.xmut.trahrs.domain.model.HotelInfo;
@@ -55,15 +57,26 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
             String[] hL = h.getLocation().split(",");
             double hLng = Double.parseDouble(hL[0]);
             double hLat = Double.parseDouble(hL[1]);
-            double len = 0;
+            double len = 0, nearestDis = Integer.MAX_VALUE;
+            Scene nearestScene = null;
             for (Scene scene:list) {
                 String[] location = scene.getLocation().split(",");
                 double lng = Double.parseDouble(location[0]);
                 double lat = Double.parseDouble(location[1]);
-                len += mapUtils.locationToDistance(lng, lat, hLng, hLat);
+                double curLen = mapUtils.locationToDistance(lng, lat, hLng, hLat);
+                len += curLen;
+                if(nearestDis > curLen){
+                    nearestDis = curLen;
+                    nearestScene = scene;
+                }
             }
             HotelInfoVo temp = modelMapper.map(h, HotelInfoVo.class);
             temp.setSumDistance(len);
+            if(nearestDis!=Integer.MAX_VALUE){
+                temp.setNearestDistance(nearestDis);
+                temp.setNearestScene(nearestScene);
+            }
+            temp.setNearestDistance(nearestDis);
             ans.add(temp);
         }
 
@@ -154,5 +167,16 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     public List<HotelInfoVo> getSceneNearbyHotelWithLowestPriceRecommendation(List<HotelInfoVo> nearestHotel) {
         nearestHotel.sort(Comparator.comparing(HotelInfoVo::getCost, Comparator.nullsLast(Integer::compareTo)));
         return nearestHotel;
+    }
+
+    @Override
+    public List<Scene> BindSceneByUUID(List<Scene> scenes) {
+        QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
+        for (Scene scene:scenes){
+            queryWrapper.clear();
+            queryWrapper.eq("scene_id", scene.getSceneId());
+            BeanUtil.copyProperties(this.getOne(queryWrapper), scene);
+        }
+        return scenes;
     }
 }

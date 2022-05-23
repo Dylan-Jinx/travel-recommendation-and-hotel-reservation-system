@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import se.xmut.trahrs.domain.model.Scene;
 
 import java.io.Serializable;
 
@@ -91,7 +92,15 @@ public class HotelInfoVo implements Serializable {
 
     private Double rating;
 
+    @ApiModelProperty("距离和")
     private Double sumDistance;
 
+    @ApiModelProperty("综合评分")
     private Double comprehensiveRating;
+
+    @ApiModelProperty("距离用户选择的景点最近的距离")
+    private Double nearestDistance;
+
+    @ApiModelProperty("距离最近的用户选择的景点")
+    private Scene nearestScene;
 }

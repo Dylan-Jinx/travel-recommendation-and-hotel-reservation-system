@@ -55,7 +55,8 @@ public class HotelInfoController {
 
         QueryWrapper<HotelInfo> hotelInfoQueryWrapper = new QueryWrapper<>();
         hotelInfoQueryWrapper.eq("name", hotelName).eq("tel", tel);
-        if (!ObjectUtil.isNull(hotelInfoService.getOne(hotelInfoQueryWrapper))) {   //根据酒店名和电话查找酒店
+        //根据酒店名和电话查找酒店
+        if (!ObjectUtil.isNull(hotelInfoService.getOne(hotelInfoQueryWrapper))) {
             return ApiResponse.error("已有酒店");
         }
 
@@ -108,7 +109,7 @@ public class HotelInfoController {
         List<HotelInfo> hotelInfoList = hotelInfoService.list(hotelInfoQueryWrapper);
 
         if(hotelInfoList.isEmpty()){
-            return ApiResponse.ok("沒有这个酒店信息");
+            return ApiResponse.error("沒有这个酒店信息");
         }
 
         return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize), hotelInfoQueryWrapper));
