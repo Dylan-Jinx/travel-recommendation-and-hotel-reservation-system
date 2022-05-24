@@ -76,4 +76,5 @@ public interface SceneService extends IService<Scene> {
      * @return 完整属性的景点列表
      */
     public List<Scene> BindSceneByUUID(List<Scene> scenes);
+
 }

@@ -18,6 +18,7 @@ import se.xmut.trahrs.filter.SensitiveFilter;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.HotelCommentService;
 import se.xmut.trahrs.domain.model.HotelComment;
+import se.xmut.trahrs.util.SemanticUtils;
 
 
 /**
@@ -39,6 +40,8 @@ public class HotelCommentController {
     private ModelMapper modelMapper;
     @Autowired
     private SensitiveFilter sensitiveFilter;
+    @Autowired
+    private SemanticUtils semanticUtils;
 
     @WebLog(description = "添加酒店评论")
     @PostMapping
@@ -51,9 +54,13 @@ public class HotelCommentController {
         hotelComment.setReportStatus(0);
 
         String content = hotelComment.getContent();
+        String isSensitive = content;
         if(!StringUtils.isBlank(content)){
             content = sensitiveFilter.filter(content);
             hotelComment.setContent(content);
+            if(isSensitive.equals(content)){
+                hotelComment.setSemantic(semanticUtils.getSemanticAnalysisResult(content));
+            }
         }
 
         return ApiResponse.ok("操作成功",hotelCommentService.save(hotelComment));

@@ -56,5 +56,7 @@ public class SceneComment implements Serializable {
     @ApiModelProperty("图片路径")
     private String img;
 
+    @ApiModelProperty("此评论情感分析")
+    private Double semantic;
 
 }

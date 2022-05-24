@@ -49,7 +49,7 @@ public class Customer implements Serializable {
     private String identity;
 
     @ApiModelProperty("职业")
-    private String professsion;
+    private String profession;
 
     @ApiModelProperty("地区（这里使用区域代码）")
     private String area;
@@ -68,6 +68,9 @@ public class Customer implements Serializable {
 
     @ApiModelProperty("修改标志")
     private Integer removeFlag;
+
+    @ApiModelProperty("用户画像，用于推荐，存JSON")
+    private String customerPortrait;
 
 
 }

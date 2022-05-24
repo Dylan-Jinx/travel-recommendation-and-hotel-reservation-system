@@ -4,7 +4,10 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.net.Ipv4Util;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.crypto.digest.MD5;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -13,10 +16,18 @@ import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.CustomerDto;
+import se.xmut.trahrs.domain.dto.CustomerPortraitDto;
 import se.xmut.trahrs.domain.dto.LoginDto;
 import se.xmut.trahrs.domain.vo.CustomerVo;
 import se.xmut.trahrs.log.annotation.WebLog;
@@ -122,6 +133,29 @@ public class CustomerController {
     public ApiResponse findPage(@RequestParam Integer pageNum,
                                 @RequestParam Integer pageSize) {
         return ApiResponse.ok(customerService.page(new Page<>(pageNum, pageSize)));
+    }
+
+    @WebLog(description = "初始化用户画像")
+    @PostMapping("/customerPortrait")
+    public ApiResponse setCustomerPortrait(@RequestBody CustomerPortraitDto customerPortraitDto,
+                                           @RequestParam String customerId) {
+        Map<String, Object> map = new HashMap<>();
+        Field[] fields = customerPortraitDto.getClass().getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            String first = fields[i].getName().substring(0,1).toUpperCase();
+            StringBuilder getter = new StringBuilder("get")
+                    .append(first).append(fields[i].getName().substring(1));
+            Method method = ReflectUtil.getMethod(CustomerPortraitDto.class, getter.toString());
+            Object val = ReflectUtil.invoke(customerPortraitDto, method, null);
+            map.put(fields[i].getName(), val);
+        }
+        JSONObject jsonObject = JSONUtil.parseObj(map);
+        QueryWrapper<Customer> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("customer_id", customerId);
+        Customer customer = customerService.getOne(queryWrapper);
+        customer.setCustomerPortrait(JSONUtil.toJsonStr(jsonObject));
+        customerService.saveOrUpdate(customer);
+        return ApiResponse.ok("已了解您的喜好");
     }
 }
 
