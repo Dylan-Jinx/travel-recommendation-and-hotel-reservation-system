@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SemanticUtils {
 
-    private final String ROOT_URL = "http://127.0.0.1:5000";
+    private final String ROOT_URL = "http://" +
+            YamlUtil.getStringByYaml("Flask.host") + ":" +
+            YamlUtil.getStringByYaml("Flask.port");
 
     /**
      * 对评论进行情感分析
