@@ -21,6 +21,7 @@ import se.xmut.trahrs.filter.SensitiveFilter;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.SceneCommentService;
 import se.xmut.trahrs.domain.model.SceneComment;
+import se.xmut.trahrs.util.SemanticUtils;
 
 
 /**
@@ -42,6 +43,9 @@ public class SceneCommentController {
     private ModelMapper modelMapper;
     @Autowired
     private SensitiveFilter sensitiveFilter;
+    @Autowired
+    private SemanticUtils semanticUtils;
+
     @WebLog(description = "添加景区评论")
     @PostMapping
     public ApiResponse save(@RequestBody SceneCommentDto sceneCommentDto) {
@@ -52,9 +56,14 @@ public class SceneCommentController {
         sceneComment.setReportStatus(0);
         //敏感词过滤
         String content=sceneComment.getContent();
+        String isSensitive = content;
         if(!StringUtils.isBlank(content)){
             content=sensitiveFilter.filter(content);
             sceneComment.setContent(content);
+            //如果没有敏感词进行情感分析
+            if(isSensitive.equals(content)){
+                sceneComment.setSemantic(semanticUtils.getSemanticAnalysisResult(content));
+            }
         }
         return ApiResponse.ok(sceneCommentService.saveOrUpdate(sceneComment));
     }

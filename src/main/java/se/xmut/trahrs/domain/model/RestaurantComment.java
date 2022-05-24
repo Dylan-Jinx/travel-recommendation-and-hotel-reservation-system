@@ -59,5 +59,7 @@ public class RestaurantComment implements Serializable {
     @ApiModelProperty("编辑状态")
     private Integer editStatus;
 
+    @ApiModelProperty("此评论情感分析")
+    private Double semantic;
 
 }

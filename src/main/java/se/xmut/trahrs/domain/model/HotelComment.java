@@ -56,5 +56,8 @@ public class HotelComment implements Serializable {
     @ApiModelProperty("图片路径")
     private String imgUrl;
 
+    @ApiModelProperty("此评论情感分析")
+    private Double semantic;
+
 
 }

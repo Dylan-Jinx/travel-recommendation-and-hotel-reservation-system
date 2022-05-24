@@ -25,7 +25,7 @@ public class CustomerDto implements Serializable {
     private String identity;
 
     @ApiModelProperty("职业")
-    private String professsion;
+    private String profession;
 
     @ApiModelProperty("地区（这里使用区域代码）")
     private String area;
