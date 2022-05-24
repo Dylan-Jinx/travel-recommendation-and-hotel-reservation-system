@@ -46,5 +46,5 @@ public class HotelInfoDto implements Serializable {
     private String keyTag;
 
     @ApiModelProperty("酒店图片路径")
-        private String photos;
+    private String photos;
 }
