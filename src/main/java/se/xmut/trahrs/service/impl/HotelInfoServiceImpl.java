@@ -1,5 +1,7 @@
+
 package se.xmut.trahrs.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.vo.HotelInfoVo;
 import se.xmut.trahrs.mapper.HotelInfoMapper;
@@ -23,6 +25,9 @@ import java.util.Map;
 @Service
 public class HotelInfoServiceImpl extends ServiceImpl<HotelInfoMapper, HotelInfo> implements HotelInfoService {
 
+    @Autowired
+    HotelInfoMapper hotelInfoMapper;
+
     @Override
     public Map<String, Object> HotelInfoVoPage(List<HotelInfoVo> hotelInfoVoList, Integer pageNum, Integer pageSize) {
 
@@ -37,4 +42,18 @@ public class HotelInfoServiceImpl extends ServiceImpl<HotelInfoMapper, HotelInfo
 
         return map;
     }
+
+    @Override
+    public List<HotelInfo> findHotelByTypeAndKeyTagAndName(String type, String key_tag, String name_brand) {
+        List<HotelInfo> hotelInfoList=hotelInfoMapper.findHotelByTypeAndKeyTagAndName(type,key_tag,name_brand);
+        return hotelInfoList;
+    }
 }
+
+
+
+
+
+
+
+

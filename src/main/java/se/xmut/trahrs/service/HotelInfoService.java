@@ -24,4 +24,5 @@ public interface HotelInfoService extends IService<HotelInfo> {
      * @return 分页完成的map
      */
     public Map<String, Object> HotelInfoVoPage(List<HotelInfoVo> hotelInfoVoList, Integer pageNum, Integer pageSize);
+    List<HotelInfo> findHotelByTypeAndKeyTagAndName(String type, String key_tag, String name_brand);
 }
