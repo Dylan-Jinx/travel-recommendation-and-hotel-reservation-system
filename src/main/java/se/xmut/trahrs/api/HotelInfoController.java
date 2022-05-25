@@ -131,6 +131,25 @@ public class HotelInfoController {
 
     }
 
+    @WebLog(description = "酒店类型查找")
+    @GetMapping("/finByType")
+    public ApiResponse finByType(@RequestBody HotelInfoDto hotelInfoDto){
+        HotelInfo hotelInfo=modelMapper.map(hotelInfoDto,HotelInfo.class);
+
+        String star=hotelInfo.getType();
+        String type=hotelInfo.getKeyTag();
+        String name_brand=hotelInfo.getName();
+
+        List<HotelInfo> hotelInfoList=hotelInfoService.findHotelByTypeAndKeyTagAndName(star,type,name_brand);
+        if (hotelInfoList.isEmpty()){
+            return ApiResponse.error("列表为空");
+        }
+
+        return ApiResponse.ok("查询成功",hotelInfoList);
+
+    }
+
+
 
 }
 

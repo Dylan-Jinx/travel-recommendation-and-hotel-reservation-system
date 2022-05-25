@@ -38,8 +38,10 @@ public class SceneController {
     private SceneService sceneService;
     @Autowired
     private HotelInfoService hotelInfoService;
+
     @Autowired
     private ModelMapper modelMapper;
+
     @Autowired
     private HotelInfoMapper hotelInfoMapper;
 

@@ -113,8 +113,10 @@ public class NoticeController {
         oldNotice.setSort(0);
 
         notice.setCreateTime(LocalDateTimeUtil.now());
-        noticeService.update(notice,noticeQueryWrapper);  // 更新置顶的前几条的公告
-        noticeService.save(oldNotice);          //被顶掉的公告
+        // 更新置顶的前几条的公告
+        noticeService.update(notice,noticeQueryWrapper);
+        //被顶掉的公告
+        noticeService.save(oldNotice);
 
         return ApiResponse.ok("公告更新成功！");
     }
