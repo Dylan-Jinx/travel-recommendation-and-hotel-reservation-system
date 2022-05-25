@@ -2,34 +2,31 @@ package se.xmut.trahrs.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Collections;
 
 @Configuration
-public class CrosConfig {
-
-    private CorsConfiguration buildConfig() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        // 1 设置访问源地址
-        corsConfiguration.addAllowedOrigin("*");
-        // 2 设置访问源请求头
-        corsConfiguration.addAllowedHeader("*");
-        //3 设置访问源请求方法
-        corsConfiguration.addAllowedMethod("*");
-        //4 是否允许用户发送、处理 cookie
-        corsConfiguration.setAllowCredentials(true);
-        return corsConfiguration;
-
-    }
-
+public class CrosConfig implements WebMvcConfigurer {
     @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        //5 对接口配置跨域设置
-        source.registerCorsConfiguration("/**", buildConfig());
-        return new CorsFilter(source);
+    public WebMvcConfigurer corsConfig() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry
+                        .addMapping("/**")
+                        .allowedOriginPatterns("*") // 允许所有域
+                        .allowedMethods("*") // 允许任何方法（post、get等）
+                        .allowedHeaders("*") // 允许任何请求头
+                        .allowCredentials(true) // 允许证书、cookie
+                        .exposedHeaders(HttpHeaders.SET_COOKIE)
+                        .maxAge(3600L); // maxAge(3600)表明在3600秒内，不需要再发送预检验请求，可以缓存该结果
+            }
+        };
     }
 }
