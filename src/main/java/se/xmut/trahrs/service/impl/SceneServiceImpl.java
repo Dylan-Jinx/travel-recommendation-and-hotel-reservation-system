@@ -181,8 +181,4 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         return scenes;
     }
 
-    @Override
-    public List<Scene> userBaseCollaborativeFilteringScene(Customer customer) {
-        return null;
-    }
 }
