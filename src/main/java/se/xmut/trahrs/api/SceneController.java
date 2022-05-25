@@ -97,7 +97,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithComprehensiveRecommendation(sceneService
@@ -118,7 +118,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithHighestRatingRecommendation(sceneService
@@ -139,7 +139,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithLowestRatingRecommendation(sceneService
@@ -161,7 +161,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithHighestPriceRecommendation(sceneService
@@ -183,7 +183,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithLowestPriceRecommendation(sceneService
@@ -207,7 +207,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService.getNearestHotel(scenes, radius);
         List<String> nameList = new ArrayList<>();

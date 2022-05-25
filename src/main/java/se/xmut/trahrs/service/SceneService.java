@@ -1,5 +1,6 @@
 package se.xmut.trahrs.service;
 
+import se.xmut.trahrs.domain.model.Customer;
 import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.model.Scene;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -75,6 +76,13 @@ public interface SceneService extends IService<Scene> {
      * @param scenes 景点列表
      * @return 完整属性的景点列表
      */
-    public List<Scene> BindSceneByUUID(List<Scene> scenes);
+    public List<Scene> bindSceneByUUID(List<Scene> scenes);
+
+    /**
+     * UserCF推荐景点
+     * @param customer
+     * @return
+     */
+    public List<Scene> userBaseCollaborativeFilteringScene(Customer customer);
 
 }
