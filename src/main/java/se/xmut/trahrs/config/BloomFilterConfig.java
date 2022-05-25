@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
-import se.xmut.trahrs.service.BloomFilterRedisService;
+import se.xmut.trahrs.service.impl.BloomFilterRedisServiceImpl;
 import se.xmut.trahrs.util.BloomFilterUtils;
 
 /**
@@ -30,8 +30,8 @@ public class BloomFilterConfig {
      * @return 布隆过滤器
      */
     @Bean
-    public BloomFilterRedisService<String> bloomRedisService(){
-        BloomFilterRedisService<String> bloomFilterRedisService = new BloomFilterRedisService<>();
+    public BloomFilterRedisServiceImpl<String> bloomRedisService(){
+        BloomFilterRedisServiceImpl<String> bloomFilterRedisService = new BloomFilterRedisServiceImpl<>();
         bloomFilterRedisService.setBloomFilterHelper(initBloomFilterHelper());
         bloomFilterRedisService.setRedisTemplate(redisTemplate);
         return bloomFilterRedisService;

@@ -27,18 +27,15 @@ public class ItemBasedCf implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("id标识")
-    private Integer id;
-
     @ApiModelProperty("用户id")
-    private String customerId;
+    private Long customerId;
 
     @ApiModelProperty("景点id")
-    private String sceneId;
+    private Long sceneId;
 
     @ApiModelProperty("推荐值")
     @TableField("`value`")
-    private String value;
+    private Float value;
 
     @ApiModelProperty("时间戳")
     @TableField("`timestamp`")
