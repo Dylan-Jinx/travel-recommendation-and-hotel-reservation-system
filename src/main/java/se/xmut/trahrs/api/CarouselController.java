@@ -1,6 +1,7 @@
 package se.xmut.trahrs.api;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -15,6 +16,9 @@ import se.xmut.trahrs.domain.dto.CarouselDto;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.CarouselService;
 import se.xmut.trahrs.domain.model.Carousel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -36,21 +40,16 @@ public class CarouselController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @WebLog(description = "添加公告轮播图")
+    @WebLog(description = "轮播的添加")
     @PostMapping("/save")
     public ApiResponse save(@RequestBody CarouselDto carouselDto) {
 
         Carousel carousel=modelMapper.map(carouselDto,Carousel.class);
-        
-        Integer  sort=carousel.getSort();
-        String imgUrl=carousel.getImgUrl(); // 获取更新的图片的路径
-        UpdateWrapper<Carousel> updateWrapper=new UpdateWrapper<>();
-        updateWrapper.eq("sort",sort);
 
-        carousel.setImgUrl(imgUrl);
+        carousel.setSort(0);
         carousel.setCreateTime(LocalDateTimeUtil.now());
 
-        carouselService.update(carousel,updateWrapper);
+        carouselService.save(carousel);
 
         return ApiResponse.ok("轮播图插入成功");
 
@@ -80,6 +79,56 @@ public class CarouselController {
                                 @RequestParam Integer pageSize) {
         return ApiResponse.ok(carouselService.page(new Page<>(pageNum, pageSize)));
     }
+
+    @WebLog(description = "根据sort修改轮播图的位置")
+    @PutMapping("/updatePosition")
+    public ApiResponse save_insert(@RequestBody CarouselDto carouselDto) {
+        Carousel carousel=modelMapper.map(carouselDto,Carousel.class);
+        Integer  sort=carousel.getSort();
+
+        UpdateWrapper<Carousel> updateWrapper=new UpdateWrapper<>();
+        updateWrapper.eq("sort",sort);
+
+        //原先的轮播图
+        Carousel originCarousel=carouselService.getOne(updateWrapper);
+        originCarousel.setSort(0);
+        originCarousel.setId(null);
+
+        carousel.setCreateTime(LocalDateTimeUtil.now());
+
+        carouselService.update(carousel,updateWrapper);
+        carouselService.save(originCarousel);
+
+        return ApiResponse.ok("轮播图插入更改成功");
+
+    }
+
+    /***
+     * end 展示多少张轮播图
+     */
+
+    @WebLog(description = "根据sort升序查询轮播图")
+    @GetMapping("/findBySort")
+    public ApiResponse findBySort(@RequestParam Integer end) {
+
+        QueryWrapper<Carousel> carouselQueryWrapper=new QueryWrapper<>();
+        carouselQueryWrapper
+                .ne("sort",0)
+                .orderByAsc("sort");
+
+        String sql="limit 0,"+end;
+        carouselQueryWrapper.last(sql);
+
+
+        List<Carousel> carouselList=carouselService.list(carouselQueryWrapper);
+
+        return ApiResponse.ok("查询成功",carouselList);
+
+    }
+
+
+
+
 
 }
 
