@@ -11,15 +11,25 @@ import java.util.Collections;
 @Configuration
 public class CrosConfig {
 
+    private CorsConfiguration buildConfig() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        // 1 设置访问源地址
+        corsConfiguration.addAllowedOrigin("*");
+        // 2 设置访问源请求头
+        corsConfiguration.addAllowedHeader("*");
+        //3 设置访问源请求方法
+        corsConfiguration.addAllowedMethod("*");
+        //4 是否允许用户发送、处理 cookie
+        corsConfiguration.setAllowCredentials(true);
+        return corsConfiguration;
+
+    }
+
     @Bean
-    CorsFilter corsFilter(){
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("*"));
-        configuration.setAllowedMethods(Collections.singletonList("*"));
-        configuration.setAllowedHeaders(Collections.singletonList("*"));
-        configuration.setAllowCredentials(true);
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        //5 对接口配置跨域设置
+        source.registerCorsConfiguration("/**", buildConfig());
         return new CorsFilter(source);
     }
 }
