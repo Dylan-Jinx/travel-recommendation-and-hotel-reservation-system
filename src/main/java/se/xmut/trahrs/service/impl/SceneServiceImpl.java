@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import se.xmut.trahrs.domain.model.Customer;
 import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.domain.vo.HotelInfoVo;
@@ -170,7 +171,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     }
 
     @Override
-    public List<Scene> BindSceneByUUID(List<Scene> scenes) {
+    public List<Scene> bindSceneByUUID(List<Scene> scenes) {
         QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
         for (Scene scene:scenes){
             queryWrapper.clear();
@@ -178,5 +179,10 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
             BeanUtil.copyProperties(this.getOne(queryWrapper), scene);
         }
         return scenes;
+    }
+
+    @Override
+    public List<Scene> userBaseCollaborativeFilteringScene(Customer customer) {
+        return null;
     }
 }
