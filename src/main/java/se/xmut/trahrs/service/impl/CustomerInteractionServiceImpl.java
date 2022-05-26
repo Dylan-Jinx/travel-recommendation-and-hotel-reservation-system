@@ -1,10 +1,15 @@
 package se.xmut.trahrs.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springframework.beans.factory.annotation.Autowired;
+import se.xmut.trahrs.domain.model.Customer;
 import se.xmut.trahrs.domain.model.CustomerInteraction;
 import se.xmut.trahrs.mapper.CustomerInteractionMapper;
 import se.xmut.trahrs.service.CustomerInteractionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +21,20 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CustomerInteractionServiceImpl extends ServiceImpl<CustomerInteractionMapper, CustomerInteraction> implements CustomerInteractionService {
+   @Autowired CustomerInteractionMapper customerInteractionMapper;
 
+    @Override
+    public IPage<Customer> findCustomerInteraction(IPage<Customer> page) {
+        IPage<Customer> list=customerInteractionMapper.findCustomerInteraction(page);
+        return list;
+    }
+
+    @Override
+    public IPage<Customer> findCustomerInteractionCreateTime(IPage<Customer> page) {
+        IPage<Customer> list=customerInteractionMapper.findCustomerInteractionCreateTime(page);
+        return list;
+    }
 }
+
+
+

@@ -34,8 +34,6 @@ public class CustomerInteraction implements Serializable {
     @ApiModelProperty("用户id")
     private String customerId;
 
-    @ApiModelProperty("主题类型")
-    private Integer titleType;
 
     @ApiModelProperty("具体内容")
     private String content;
@@ -52,7 +50,13 @@ public class CustomerInteraction implements Serializable {
     @ApiModelProperty("ip地址")
     private String ip;
 
-    private Integer flag;
+    @ApiModelProperty("图片")
+    private String img;
+
+    @ApiModelProperty("标题")
+    private String title;
+    @ApiModelProperty("标题id")
+    private String titleId;
 
 
 }
