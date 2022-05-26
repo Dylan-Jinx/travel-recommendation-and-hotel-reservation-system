@@ -52,7 +52,6 @@ public class HotelCommentController {
         hotelComment.setCommentTime(LocalDateTimeUtil.now());
         //0就是没有举报
         hotelComment.setReportStatus(0);
-
         String content = hotelComment.getContent();
         String isSensitive = content;
         if(!StringUtils.isBlank(content)){

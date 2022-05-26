@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>
@@ -19,6 +20,7 @@ import lombok.experimental.Accessors;
  * @author 作者
  * @since 2022-04-29
  */
+
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -32,7 +34,7 @@ public class HotelComment implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty("评论id")
+
     private String commentId;
 
     @ApiModelProperty("用户id")
