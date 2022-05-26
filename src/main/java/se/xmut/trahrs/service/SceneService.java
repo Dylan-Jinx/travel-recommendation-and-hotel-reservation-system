@@ -78,11 +78,4 @@ public interface SceneService extends IService<Scene> {
      */
     public List<Scene> bindSceneByUUID(List<Scene> scenes);
 
-    /**
-     * UserCF推荐景点
-     * @param customer
-     * @return
-     */
-    public List<Scene> userBaseCollaborativeFilteringScene(Customer customer);
-
 }

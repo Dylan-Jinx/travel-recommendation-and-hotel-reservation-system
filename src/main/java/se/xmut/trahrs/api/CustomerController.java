@@ -83,13 +83,18 @@ public class CustomerController {
         String userName = loginDto.getUserName();
         String originPwd = loginDto.getUserPwd();
         String secretPwd = MD5.create().digestHex(originPwd);
-        String requestIPAddress = IPUtils.getIpAddr(request);
-        logger.info("IP地址发起请求："+requestIPAddress);
 
         QueryWrapper<Customer> customerQueryWrapper = new QueryWrapper<>();
         customerQueryWrapper.eq("phone", userName)
                 .eq("customer_pwd", secretPwd);
         Customer customer = customerService.getOne(customerQueryWrapper);
+
+        if(customer==null){
+            return ApiResponse.error("用户名或密码错误");
+        }
+
+        String requestIPAddress = IPUtils.getIpAddr(request);
+        logger.info("IP地址发起请求："+requestIPAddress);
 
         customer.setLastLoginTime(LocalDateTimeUtil.now());
         customer.setLastLoginIp(requestIPAddress);
@@ -101,8 +106,9 @@ public class CustomerController {
 
     @WebLog(description = "用户信息修改")
     @PutMapping
-    public ApiResponse update(Customer customer){
-        String id = customer.getCustomerId();
+    public ApiResponse update(@RequestBody Customer customer){
+        String id = customer.getIdentity();
+        System.out.println(id);
         if(id!=null){
             if(!IdcardUtil.isValidCard(id)){
                 return ApiResponse.error("您的身份证不合法，请重新修改");
