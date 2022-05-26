@@ -4,7 +4,6 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="se.xmut.trahrs.domain.model.ItemBasedCf">
-        <id column="id" property="id" />
         <result column="customer_id" property="customerId" />
         <result column="scene_id" property="sceneId" />
         <result column="value" property="value" />

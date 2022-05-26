@@ -1,15 +1,13 @@
 package se.xmut.trahrs.api;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.LocalDateTimeUtil;
-import cn.hutool.core.net.Ipv4Util;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.*;
 import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.commons.lang3.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import se.xmut.trahrs.common.ApiResponse;
@@ -107,7 +102,15 @@ public class CustomerController {
     @WebLog(description = "用户信息修改")
     @PutMapping
     public ApiResponse update(Customer customer){
-        return ApiResponse.ok("操作成功", customer);
+        String id = customer.getCustomerId();
+        if(id!=null){
+            if(!IdcardUtil.isValidCard(id)){
+                return ApiResponse.error("您的身份证不合法，请重新修改");
+            }
+        }
+        UpdateWrapper<Customer> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("customer_id", customer.getCustomerId());
+        return ApiResponse.ok("操作成功", customerService.update(customer, updateWrapper));
     }
 
     @WebLog(description = "用id删除用户")
@@ -156,6 +159,18 @@ public class CustomerController {
         customer.setCustomerPortrait(JSONUtil.toJsonStr(jsonObject));
         customerService.saveOrUpdate(customer);
         return ApiResponse.ok("已了解您的喜好");
+    }
+
+    @WebLog(description = "年龄处理")
+    @PostMapping("/progressAge")
+    public ApiResponse progressAge(@RequestBody CustomerDto customerDto) {
+        String id = customerDto.getIdentity();
+        int age = IdcardUtil.getAgeByIdCard(id, DateTime.now());
+        Map<String, Object> map = new HashMap<>();
+        map.put("age", age);
+        id = DesensitizedUtil.idCardNum(id, 4, 3);
+        map.put("idCard", id);
+        return ApiResponse.ok(map);
     }
 }
 
