@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 
 import se.xmut.trahrs.common.ApiResponse;
+import se.xmut.trahrs.domain.model.Customer;
 import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.vo.HotelInfoVo;
 import se.xmut.trahrs.log.annotation.WebLog;
@@ -217,6 +218,14 @@ public class SceneController {
         queryWrapper.between("cost", priceBottom, priceTop);
 
         return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize), queryWrapper));
+    }
+
+    @WebLog(description = "猜你喜欢")
+    @GetMapping("/guessYouLike")
+    public ApiResponse guessYouLike(@RequestBody Customer customer){
+
+        return ApiResponse.ok();
+
     }
 
 //    @WebLog(description = "根据分类查询的综合推荐景点分页")

@@ -9,7 +9,6 @@ import se.xmut.trahrs.mapper.ItemBasedCfMapper;
 import se.xmut.trahrs.service.ItemBasedCfService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import se.xmut.trahrs.util.BloomFilterUtils;
 import se.xmut.trahrs.util.CFUtils;
 
 import java.util.ArrayList;
@@ -44,11 +43,11 @@ public class ItemBasedCfServiceImpl extends ServiceImpl<ItemBasedCfMapper, ItemB
 
         System.out.println(list);
 
-        ArrayList<Long> SceneIds = new ArrayList<>();
+        ArrayList<Long> sceneIds = new ArrayList<>();
         for (RecommendedItem item:list) {
-            SceneIds.add(item.getItemID());
+            sceneIds.add(item.getItemID());
         }
-        return SceneIds;
+        return sceneIds;
     }
 
     @Override

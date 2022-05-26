@@ -78,5 +78,4 @@ public interface SceneService extends IService<Scene> {
      */
     public List<Scene> bindSceneByUUID(List<Scene> scenes);
 
-
 }
