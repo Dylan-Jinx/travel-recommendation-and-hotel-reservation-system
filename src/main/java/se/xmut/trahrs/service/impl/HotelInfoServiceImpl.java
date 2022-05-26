@@ -22,11 +22,12 @@ import java.util.Map;
  * @author 作者
  * @since 2022-05-20
  */
+
 @Service
 public class HotelInfoServiceImpl extends ServiceImpl<HotelInfoMapper, HotelInfo> implements HotelInfoService {
 
     @Autowired
-    HotelInfoMapper hotelInfoMapper;
+     private HotelInfoMapper hotelInfoMapper;
 
     @Override
     public Map<String, Object> HotelInfoVoPage(List<HotelInfoVo> hotelInfoVoList, Integer pageNum, Integer pageSize) {

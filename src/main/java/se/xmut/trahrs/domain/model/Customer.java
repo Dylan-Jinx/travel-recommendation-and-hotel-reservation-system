@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -25,7 +27,7 @@ import lombok.experimental.Accessors;
 public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    private List<CustomerInteraction> customerInteractionList;
     @ApiModelProperty("id标识")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
