@@ -16,6 +16,6 @@ import java.util.List;
  * @since 2022-04-29
  */
 public interface CustomerInteractionMapper extends BaseMapper<CustomerInteraction> {
-    IPage<Customer> findCustomerInteraction(IPage<Customer> page);
-    IPage<Customer> findCustomerInteractionCreateTime(IPage<Customer> page);
+    IPage<CustomerInteraction> findCustomerInteraction(IPage<CustomerInteraction> page);
+    IPage<CustomerInteraction> findCustomerInteractionCreateTime(IPage<CustomerInteraction> page);
 }
