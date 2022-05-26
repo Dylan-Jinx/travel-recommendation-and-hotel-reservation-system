@@ -13,12 +13,12 @@
         <result column="ip" property="ip" />
         <result column="img" property="img" />
         <result column="title" property="title" />
-        <result column="title" property="title_id" />
+        <result column="title_id" property="titleId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, customer_id, title, content, report_status, like_count, create_time, ip, img
+        id, customer_id, title, content, report_status, like_count, create_time, ip, img,title_id
     </sql>
     <resultMap id="result" type="se.xmut.trahrs.domain.model.Customer">
         <id column="id" property="id"/>
@@ -30,6 +30,7 @@
             <result column="content" property="content"/>
             <result column="title" property="title"/>
             <result column="like_count" property="likeCount"/>
+            <result column="img" property="img"/>
         </collection>
     </resultMap>
     <select id="findCustomerInteraction"  resultMap="result">
@@ -37,7 +38,7 @@
          order by like_count desc
     </select>
     <select id="findCustomerInteractionCreateTime"  resultMap="result">
-        select c.customer_id,customer_name,avatar,like_count,title,content from customer as c,customer_interaction as ci where c.customer_id=ci.customer_id
+        select c.customer_id,customer_name,avatar,like_count,title,img from customer as c,customer_interaction as ci where c.customer_id=ci.customer_id
          order by ci.create_time desc
     </select>
 </mapper>

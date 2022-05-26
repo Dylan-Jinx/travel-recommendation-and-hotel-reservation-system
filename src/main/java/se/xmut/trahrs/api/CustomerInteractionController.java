@@ -52,7 +52,7 @@ public class CustomerInteractionController {
     @PostMapping
     public ApiResponse save(@RequestBody CustomerInteractionDto customerInteractionDto, HttpServletRequest request) {
         CustomerInteraction customerInteraction= modelMapper.map(customerInteractionDto,CustomerInteraction.class);
-        customerInteraction.setTitle_id(IdUtil.objectId());
+        customerInteraction.setTitleId(IdUtil.objectId());
         customerInteraction.setIp(IPUtils.getIpAddr(request));
         customerInteraction.setCreateTime(LocalDateTime.now());
         customerInteraction.setLikeCount(0);
@@ -169,5 +169,13 @@ public class CustomerInteractionController {
         List<Customer> customers=customerIPage.getRecords();
         return ApiResponse.ok(customers);
     }
+    @WebLog(description = "用户查看自己的游记")
+    @GetMapping("/findCustomerId")
+    public ApiResponse findCustomerId(@RequestParam String customerId){
+        QueryWrapper<CustomerInteraction> customerInteractionQueryWrapper=new QueryWrapper<>();
+        customerInteractionQueryWrapper.eq("customer_id",customerId);
+        return ApiResponse.ok(customerInteractionService.list(customerInteractionQueryWrapper));
+    }
+
 }
 

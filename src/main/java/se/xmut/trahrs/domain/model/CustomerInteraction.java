@@ -56,7 +56,7 @@ public class CustomerInteraction implements Serializable {
     @ApiModelProperty("标题")
     private String title;
     @ApiModelProperty("标题id")
-    private String title_id;
+    private String titleId;
 
 
 }
