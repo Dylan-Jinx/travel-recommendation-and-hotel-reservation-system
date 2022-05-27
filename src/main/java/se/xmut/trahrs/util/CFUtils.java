@@ -1,16 +1,24 @@
 package se.xmut.trahrs.util;
 
+import cn.hutool.core.io.resource.ResourceUtil;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.common.Weighting;
+import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
 import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
 import org.apache.mahout.cf.taste.impl.model.jdbc.ReloadFromJDBCDataModel;
-import org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender;
 import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
+import org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
 import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
+import org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.model.JDBCDataModel;
-import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
+
+import java.io.*;
 
 /**
  * @author breeze
@@ -19,19 +27,31 @@ import org.springframework.stereotype.Component;
 @Component
 public class CFUtils {
 
-    public GenericItemBasedRecommender getItemBasedRecommender() throws TasteException {
-        MysqlConnectionPoolDataSource dataSource = new MysqlConnectionPoolDataSource();
-        dataSource.setUrl(YamlUtil.getStringByYaml("Mysql.url"));
-        dataSource.setUser(YamlUtil.getStringByYaml("Mysql.mysql_user"));
-        dataSource.setPassword(YamlUtil.getStringByYaml("Mysql.mysql_password"));
-        dataSource.setDatabaseName("trahrs");
+    public GenericItemBasedRecommender getPearsonRecommender() throws TasteException, IOException {
 
-        JDBCDataModel model = new MySQLJDBCDataModel(dataSource, "item_based_cf", "customer_id", "scene_id", "value", "timestamp");
-        ReloadFromJDBCDataModel jdbcDataModel = new ReloadFromJDBCDataModel(model);
+        DataModel model = getDataModel();
 
-        ItemSimilarity similarity = new PearsonCorrelationSimilarity(jdbcDataModel);
-        GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(jdbcDataModel, similarity);
+        //引入权重后，统计较多数量时向1.0 或 -1.0偏移，统计较少数量时向均值偏移
+        ItemSimilarity similarity = new PearsonCorrelationSimilarity(model, Weighting.WEIGHTED);
+        GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
+
         return recommender;
+    }
+
+    public GenericItemBasedRecommender getTanimotoRecommender() throws IOException {
+
+        DataModel model = getDataModel();
+
+        ItemSimilarity similarity = new TanimotoCoefficientSimilarity(model);
+        GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
+
+        return  recommender;
+    }
+
+    public DataModel getDataModel() throws IOException {
+        File csv = ResourceUtils.getFile("classpath:CF.csv");
+        DataModel model = new FileDataModel(csv);
+        return model;
     }
 
 }
