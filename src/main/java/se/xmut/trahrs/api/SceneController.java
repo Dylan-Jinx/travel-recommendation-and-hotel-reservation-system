@@ -1,7 +1,12 @@
 package se.xmut.trahrs.api;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.PageUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.*;
 
 import se.xmut.trahrs.common.ApiResponse;
@@ -17,9 +23,12 @@ import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.vo.HotelInfoVo;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.mapper.HotelInfoMapper;
+import se.xmut.trahrs.mapper.SceneMapper;
 import se.xmut.trahrs.service.HotelInfoService;
+import se.xmut.trahrs.service.ItemBasedCfService;
 import se.xmut.trahrs.service.SceneService;
 import se.xmut.trahrs.domain.model.Scene;
+import se.xmut.trahrs.util.CFUtils;
 
 
 /**
@@ -45,6 +54,12 @@ public class SceneController {
 
     @Autowired
     private HotelInfoMapper hotelInfoMapper;
+
+    @Autowired
+    private SceneMapper sceneMapper;
+
+    @Autowired
+    private ItemBasedCfService itemBasedCfService;
 
     @WebLog(description = "添加")
     @PostMapping
@@ -220,11 +235,50 @@ public class SceneController {
         return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
 
-    @WebLog(description = "猜你喜欢")
-    @GetMapping("/guessYouLike")
-    public ApiResponse guessYouLike(@RequestBody Customer customer){
+    /**FIXME 分页信息包装进map返回*/
+    @WebLog(description = "协同过滤推荐")
+    @GetMapping("/getItemBasedCFRecommendation")
+    public ApiResponse getItemBasedCFRecommendation(@RequestBody Customer customer,
+                                    @RequestParam Integer pageNum,
+                                    @RequestParam Integer pageSize) throws IOException, TasteException {
 
-        return ApiResponse.ok();
+        List<Long> recommendItems = new ArrayList<>();
+        boolean cf = itemBasedCfService.isCanCf(customer.getCustomerId());
+        if(cf){
+            recommendItems = itemBasedCfService.getItemBasedCFRecommendation((long) customer.getId(), null);
+        }
+
+        if(cf && !recommendItems.isEmpty()){
+
+            Map<String, Object> map = new HashMap<>();
+            int page = PageUtil.getStart(pageNum-1, pageSize);
+            map.put("recommendItems", recommendItems);
+            map.put("pageStart", page);
+            map.put("pageSize", pageSize);
+            List<Scene> sceneIPage = sceneMapper.getPageByPK(map);
+
+            return ApiResponse.ok(sceneIPage);
+        }else {
+
+            List<String> typeList = new ArrayList<>();
+            JSONObject object = JSONUtil.parseObj(customer.getCustomerPortrait());
+
+            for(Map.Entry<String, Object> entry:object.entrySet()){
+                if(Double.parseDouble(entry.getValue().toString()) > 0.5){
+                    typeList.add(entry.getKey());
+                }
+            }
+
+            int page = PageUtil.getStart(pageNum-1, pageSize);
+            Map<String, Object> map = new HashMap<>();
+            map.put("pageStart", page);
+            map.put("pageSize", pageSize);
+            map.put("typeList", typeList);
+
+            List<Scene> sceneIPage = sceneMapper.getPageByType(map);
+
+            return ApiResponse.ok(sceneIPage);
+        }
 
     }
 

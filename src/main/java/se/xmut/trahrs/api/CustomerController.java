@@ -107,15 +107,19 @@ public class CustomerController {
     @WebLog(description = "用户信息修改")
     @PutMapping
     public ApiResponse update(@RequestBody Customer customer){
+        UpdateWrapper<Customer> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("customer_id", customer.getCustomerId());
         String id = customer.getIdentity();
-        System.out.println(id);
         if(id!=null){
             if(!IdcardUtil.isValidCard(id)){
                 return ApiResponse.error("您的身份证不合法，请重新修改");
             }
         }
-        UpdateWrapper<Customer> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("customer_id", customer.getCustomerId());
+        if(customer.getCustomerPwd()!=null){
+            String originPwd = customer.getCustomerPwd();
+            String secretPwd = MD5.create().digestHex(originPwd);
+            customer.setCustomerPwd(secretPwd);
+        }
         return ApiResponse.ok("操作成功", customerService.update(customer, updateWrapper));
     }
 

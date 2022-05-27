@@ -13,21 +13,21 @@ import lombok.Setter;
 public class CustomerPortraitDto {
 
     @ApiModelProperty("喜欢公园的评分")
-    private Double parkRating;
+    private Double 公园;
 
     @ApiModelProperty("喜欢寺庙的评分")
-    private Double templeRating;
+    private Double 寺庙;
 
     @ApiModelProperty("喜欢大众景点的评分")
-    private Double wellKnownRating;
+    private Double 国家级景点;
 
     @ApiModelProperty("喜欢商场的评分")
-    private Double shoppingCenterRating;
+    private Double 商场;
 
     @ApiModelProperty("喜欢海滩的评分")
-    private Double beachRating;
+    private Double 海滩;
 
     @ApiModelProperty("喜欢动植物园的评分")
-    private Double animalAndPlantRating;
+    private Double 物园;
 
 }
