@@ -32,11 +32,12 @@ public interface ItemBasedCfService extends IService<ItemBasedCf> {
     /**
      * 猜你喜欢，推荐3个用户可能会喜欢的相似景点，点击换一换切换下一个，切换3次回到第一个
      * @param customerId 用户id 不是uuid
-     * @param num 推荐个数 填null默认查出100条
+     * @param num 推荐个数 填null默认查出100条 num要大于guessNum
+     * @param guessNum 猜你喜欢换一换支持条数 填null默认3条
      * @return 布隆过滤后推荐的3个景点id，不是uuid
      * @throws TasteException
      */
-    public List<Long> guessYouLike(Long customerId, Integer num) throws TasteException, IOException;
+    public List<Long> guessYouLike(Long customerId, Integer num, Integer guessNum) throws TasteException, IOException;
 
     /**
      * 写入用户评分情况

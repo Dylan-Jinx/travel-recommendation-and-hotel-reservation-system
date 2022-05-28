@@ -70,7 +70,7 @@ public class ItemBasedCfServiceImpl extends ServiceImpl<ItemBasedCfMapper, ItemB
     }
 
     @Override
-    public List<Long> guessYouLike(Long customerId, Integer num) throws TasteException, IOException {
+    public List<Long> guessYouLike(Long customerId, Integer num, Integer guessNum) throws TasteException, IOException {
 
         if(num==null){
             num = 100;
@@ -90,6 +90,9 @@ public class ItemBasedCfServiceImpl extends ServiceImpl<ItemBasedCfMapper, ItemB
 
         List<Long> ans = new ArrayList<>();
         int cnt = 3;
+        if(guessNum!=null){
+            cnt = guessNum;
+        }
 
         System.out.println(list);
 

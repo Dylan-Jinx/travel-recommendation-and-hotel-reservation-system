@@ -58,7 +58,7 @@ class ItemBasedCfServiceTest {
 
     @Test
     public void guessYouLike() throws TasteException, IOException {
-        System.out.println(itemBasedCfService.guessYouLike(54L, 2));
+        System.out.println(itemBasedCfService.guessYouLike(54L, 2, null));
     }
 
     //暂时变成写入景点数据测试

@@ -10,6 +10,12 @@ import java.io.Serializable;
 @Setter
 public class SceneCommentDto implements Serializable {
 
+    @ApiModelProperty("景点主键id")
+    private Long scenePK;
+
+    @ApiModelProperty("用户主键id")
+    private Long customerPK;
+
     @ApiModelProperty("景点id")
     private String sceneId;
 

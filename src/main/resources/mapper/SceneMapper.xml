@@ -35,21 +35,24 @@
         id, scene_id, `name`, location, `type`, p_name, city_name, ad_name, address, p_code, city_code, ad_code, opentime_week, tel, rec_tag, key_tag, cost, alias, navi_poiid, entr_location, exit_location, grid_code, photos, rating
     </sql>
     
-    <select id="getPageByType" resultType="se.xmut.trahrs.domain.model.Scene" parameterType="java.lang.Object">
+    <select id="getPageByType" resultType="se.xmut.trahrs.domain.model.Scene">
         select * from scene
         order by case when(
             scene_id in
             (select scene_id
              from scene
-            where
-            <trim suffixOverrides="or">
-                <foreach collection="typeList" item="type">
-                    type like concat('%', #{type}, '%') or
-                </foreach>
-            </trim>)
+            where <include refid="foreachType"></include>)
         )then 0 else 1 end, rating desc
         limit #{pageStart}, #{pageSize}
     </select>
+
+    <sql id="foreachType">
+        <trim suffixOverrides="or">
+            <foreach collection="typeList" item="type">
+                type like concat('%', #{type}, '%') or
+            </foreach>
+        </trim>
+    </sql>
 
     <sql id="foreachPK">
         <foreach collection="recommendItems" item="pk" open="(" close=")" separator=",">
@@ -63,6 +66,12 @@
         id in <include refid="foreachPK"></include>
         )then 0 else 1 end, rating desc, field<include refid="foreachPK"></include>
         limit #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="getByType" resultType="se.xmut.trahrs.domain.model.Scene">
+        select * from scene
+        where <include refid="foreachType"></include>
+        order by rating desc
     </select>
 
 </mapper>

@@ -8,9 +8,11 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,6 +21,7 @@ import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.SceneCommentDto;
 import se.xmut.trahrs.filter.SensitiveFilter;
 import se.xmut.trahrs.log.annotation.WebLog;
+import se.xmut.trahrs.service.ItemBasedCfService;
 import se.xmut.trahrs.service.SceneCommentService;
 import se.xmut.trahrs.domain.model.SceneComment;
 import se.xmut.trahrs.util.SemanticUtils;
@@ -45,11 +48,16 @@ public class SceneCommentController {
     private SensitiveFilter sensitiveFilter;
     @Autowired
     private SemanticUtils semanticUtils;
+    @Autowired
+    private ItemBasedCfService itemBasedCfService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @WebLog(description = "添加景区评论")
     @PostMapping
-    public ApiResponse save(@RequestBody SceneCommentDto sceneCommentDto) {
-        SceneComment sceneComment=modelMapper.map(sceneCommentDto,SceneComment.class);
+    public ApiResponse save(@RequestBody SceneCommentDto sceneCommentDto) throws IOException {
+        SceneComment sceneComment = modelMapper.map(sceneCommentDto,SceneComment.class);
         sceneComment.setCommentId(IdUtil.objectId());
         sceneComment.setCommentTime(LocalDateTime.now());
         //默认未举报状态
@@ -64,7 +72,12 @@ public class SceneCommentController {
             if(isSensitive.equals(content)){
                 sceneComment.setSemantic(semanticUtils.getSemanticAnalysisResult(content));
             }
+            //写入cf的csv中，并将redis中这个人的已推荐排除全部重置
+            itemBasedCfService.writeCustomerPreference(sceneCommentDto.getCustomerPK(),
+                    sceneCommentDto.getScenePK(), ((float)sceneCommentDto.getStar() / 2.0F));
+            redisTemplate.delete(sceneCommentDto.getCustomerPK()+"");
         }
+
         return ApiResponse.ok(sceneCommentService.saveOrUpdate(sceneComment));
     }
 

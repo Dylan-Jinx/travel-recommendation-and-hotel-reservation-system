@@ -33,4 +33,11 @@ public interface SceneMapper extends BaseMapper<Scene> {
      * @return 分页后的推荐景点
      */
     public List<Scene> getPageByPK(Map<String, Object> map);
+
+    /**
+     *
+     * @param typeList 用户喜欢的类型列表
+     * @return 不分页的用户画像
+     */
+    public List<Scene> getByType(List<String> typeList);
 }
