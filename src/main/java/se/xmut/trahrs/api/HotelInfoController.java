@@ -151,16 +151,5 @@ public class HotelInfoController {
     }
 
 
-    @WebLog(description = "模糊查询酒店名称不分页版")
-    @GetMapping("/likeName")
-    public ApiResponse findSceneByName(@RequestParam String sceneName){
-        QueryWrapper<HotelInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("name", sceneName);
-
-        return ApiResponse.ok(hotelInfoService.getBaseMapper().selectList(queryWrapper));
-    }
-
-
-
 }
 

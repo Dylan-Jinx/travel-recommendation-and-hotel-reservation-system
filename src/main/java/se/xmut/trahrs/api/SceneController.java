@@ -5,6 +5,7 @@ import cn.hutool.core.util.PageUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.modelmapper.ModelMapper;
@@ -397,14 +398,21 @@ public class SceneController {
         return ApiResponse.ok(sceneMapper.selectList(queryWrapper));
     }
 
-    @WebLog(description = "模糊查询景点名称不分页")
+    @WebLog(description = "模糊查询景点名称")
     @GetMapping("/likeName")
-    public ApiResponse findSceneByName(@RequestParam String sceneName){
+    public ApiResponse findSceneByName(@RequestParam String sceneName,
+                                       @RequestParam Integer pageNum,
+                                       @RequestParam Integer pageSize){
         QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
         queryWrapper.like("name", sceneName);
 
-        return ApiResponse.ok(sceneMapper.selectList(queryWrapper));
+        return ApiResponse.ok(sceneService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
 
+    @WebLog(description = "修改景点信息")
+    @PutMapping("/updateScene")
+    public ApiResponse updateScene(@RequestBody Scene scene){
+        return ApiResponse.ok(sceneService.updateById(scene));
+    }
 }
 
