@@ -50,4 +50,6 @@ public class OrderDetail implements Serializable {
     private LocalDateTime createTime;
 
     private String orderId;
+
+    private int flag;
 }
