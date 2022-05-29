@@ -80,4 +80,27 @@
         </where>
     </select>
 
+<!--    <select id="sortByOrderCount" resultMap="sortByOrderCount">-->
+<!--        -->
+<!--    </select>-->
+
+
+<!--    <resultMap id="sortByOrderCount" type="se.xmut.trahrs.domain.model.HotelInfo">-->
+<!--        <id property="id" column="id"></id>-->
+<!--        <result property="hotelId" column="hotel_id"></result>-->
+<!--        <result property="name" column="name"></result>-->
+<!--        <collection property="orderDetailList" ofType="se.xmut.trahrs.domain.model.OrderDetail">-->
+<!--            <id property="id" column="id"></id>-->
+<!--            <result property="customerId" column="customer_id"></result>-->
+<!--            <result property="orderNum" column="order_num"></result>-->
+<!--            <result property="orderContent" column="order_content"></result>-->
+<!--            <result property="orderPrice" column="order_price"></result>-->
+<!--            <result property="orderStatus" column="order_status"></result>-->
+<!--            <result property="orderId" column="order_id"></result>-->
+<!--            <result property="flag" column="flag"></result>-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+    
+
+
 </mapper>

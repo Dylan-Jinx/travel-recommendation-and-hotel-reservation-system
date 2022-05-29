@@ -8,9 +8,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import se.xmut.trahrs.domain.model.OrderDetail;
 import se.xmut.trahrs.domain.model.Scene;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author breeze
@@ -103,4 +105,7 @@ public class HotelInfoVo implements Serializable {
 
     @ApiModelProperty("距离最近的用户选择的景点")
     private Scene nearestScene;
+
+    @ApiModelProperty("酒店对应的订单")
+    private List<OrderDetail> orderDetailList;
 }

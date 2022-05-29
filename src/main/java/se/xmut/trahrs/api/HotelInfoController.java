@@ -4,22 +4,25 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.HotelInfoDto;
 import org.springframework.web.bind.annotation.*;
-import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.model.HotelInfo;
+import se.xmut.trahrs.domain.vo.HotelInfoVo;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.manager.RedisService;
 import se.xmut.trahrs.manager.cache.annoation.Cacheable;
+import se.xmut.trahrs.mapper.HotelInfoMapper;
 import se.xmut.trahrs.service.HotelInfoService;
 
 
@@ -40,6 +43,8 @@ public class HotelInfoController {
     private HotelInfoService hotelInfoService;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private HotelInfoMapper hotelInfoMapper;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -87,12 +92,7 @@ public class HotelInfoController {
 
     @WebLog(description = "分页")
     @GetMapping("/page")
-//    @Cacheable(
-//
-//            key = "#pageNum+'_'+#pageSize",
-//            cacheName = "hotel_page",
-//            capacity = 100
-//    )
+
     public ApiResponse findPage(@RequestParam Integer pageNum,
                                 @RequestParam Integer pageSize) {
         return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize)));
@@ -149,7 +149,26 @@ public class HotelInfoController {
 
     }
 
+    @WebLog(description = "查询酒店的订单")
+    @GetMapping("/findByOrderDetail")
+    public ApiResponse findByOrderCount(@RequestBody HotelInfoDto hotelInfoDto){
+        List<HotelInfo> hotelInfoList=hotelInfoMapper.findByOrderCount(hotelInfoDto.getHotelId());
+        if (hotelInfoList.size()<=0){
+            return ApiResponse.error("该酒店还没有订单");
+        }
+        return ApiResponse.ok("查询成功",hotelInfoList.get(0).getOrderDetailList());
 
+    }
 
+    @WebLog(description = "查询酒店销量")
+    @GetMapping("/findByHotelCount")
+    public ApiResponse findByHotelCount(@RequestBody HotelInfoDto hotelInfoDto){
+        List<HotelInfo> hotelInfoList=hotelInfoMapper.findByOrderCount(hotelInfoDto.getHotelId());
+        if(hotelInfoList.size()<=0){
+            ApiResponse.error("该酒店还没有销量");
+        }
+        return ApiResponse.ok("查询成功",hotelInfoList.get(0).getOrderDetailList().size());
+
+    }
 }
 

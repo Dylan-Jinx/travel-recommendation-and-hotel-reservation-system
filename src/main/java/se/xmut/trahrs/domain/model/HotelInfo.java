@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -96,5 +98,8 @@ public class HotelInfo implements Serializable {
     private String photos;
 
     private Double rating;
+
+    @ApiModelProperty
+    private List<HotelInfo> orderDetailList;
 
 }
