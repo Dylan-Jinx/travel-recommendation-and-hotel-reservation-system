@@ -17,6 +17,7 @@ import se.xmut.trahrs.domain.dto.HotelInfoDto;
 import org.springframework.web.bind.annotation.*;
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.model.HotelInfo;
+import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.manager.RedisService;
 import se.xmut.trahrs.manager.cache.annoation.Cacheable;
@@ -148,7 +149,6 @@ public class HotelInfoController {
         return ApiResponse.ok("查询成功",hotelInfoList);
 
     }
-
 
 
 }
