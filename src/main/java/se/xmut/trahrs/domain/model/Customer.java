@@ -27,7 +27,7 @@ import lombok.experimental.Accessors;
 public class Customer implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private List<CustomerInteraction> customerInteractionList;
+
     @ApiModelProperty("id标识")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;

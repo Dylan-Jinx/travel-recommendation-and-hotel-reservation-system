@@ -155,18 +155,18 @@ public class CustomerInteractionController {
     @GetMapping("/showTitle")
     public ApiResponse showTitle(@RequestParam Integer pageNum,
                                  @RequestParam Integer pageSize){
-        Page<Customer> page=new Page<>(pageNum,pageSize);
-        IPage<Customer> customerIPage=customerInteractionService.findCustomerInteraction(page);
-        List<Customer> customers=customerIPage.getRecords();
+        Page<CustomerInteraction> page=new Page<>(pageNum,pageSize);
+        IPage<CustomerInteraction> customerIPage=customerInteractionService.findCustomerInteraction(page);
+        List<CustomerInteraction> customers=customerIPage.getRecords();
         return ApiResponse.ok(customers);
     }
     @WebLog(description = "推荐最近时间的游记")
     @GetMapping("/showCreateTime")
     public ApiResponse showCreateTime(@RequestParam Integer pageNum,
                                  @RequestParam Integer pageSize){
-        Page<Customer> page=new Page<>(pageNum,pageSize);
-        IPage<Customer> customerIPage=customerInteractionService.findCustomerInteractionCreateTime(page);
-        List<Customer> customers=customerIPage.getRecords();
+        Page<CustomerInteraction> page=new Page<>(pageNum,pageSize);
+        IPage<CustomerInteraction> customerIPage=customerInteractionService.findCustomerInteractionCreateTime(page);
+        List<CustomerInteraction> customers=customerIPage.getRecords();
         return ApiResponse.ok(customers);
     }
     @WebLog(description = "用户查看自己的游记")
