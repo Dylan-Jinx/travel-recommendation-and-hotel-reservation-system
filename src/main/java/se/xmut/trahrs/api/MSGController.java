@@ -2,6 +2,7 @@ package se.xmut.trahrs.api;
 
 
 import com.aliyun.credentials.utils.StringUtils;
+import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,19 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.xmut.trahrs.service.MSGService;
 import se.xmut.trahrs.util.RandomUtil;
+import se.xmut.trahrs.util.SmsSend;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/JWTTest")
+@RequestMapping("/SMScode")
 public class MSGController {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
     @Autowired
-    private MSGService jwtService;
+    SmsSend smsSend;
 
 
     @GetMapping("/send/{phone}")
@@ -32,19 +34,10 @@ public class MSGController {
         if(!StringUtils.isEmpty(code)) {
             return;
         }
-        // 如果redis获取不到，进行阿里云发送
-        //生成随机数
-        code = RandomUtil.getFourBitRandom();
-        Map map = new HashMap();
-        map.put("code",code);
-        boolean b = jwtService.send(map,phone);
-        if (b){
-            //如果发送成功，就把验证码存到redis里，设置5分钟有效时间
-            redisTemplate.opsForValue().set(phone,code,5, TimeUnit.MINUTES);
-            System.out.println("succeed");
-            System.out.println("验证码为"+code);
-        }else {
-            System.out.println("fail");
+        try {
+            smsSend.send(phone);
+        } catch (TencentCloudSDKException e) {
+            e.printStackTrace();
         }
     }
 }

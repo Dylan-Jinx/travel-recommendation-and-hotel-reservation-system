@@ -9,6 +9,7 @@ import cn.hutool.crypto.digest.MD5;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.CustomerService;
 import se.xmut.trahrs.domain.model.Customer;
 import se.xmut.trahrs.util.IPUtils;
+import se.xmut.trahrs.util.SmsSend;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -58,6 +60,8 @@ public class CustomerController {
     private ModelMapper modelMapper;
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
+    @Autowired
+    SmsSend smsSend;
 
     @WebLog(description = "用户注册")
     @PostMapping
@@ -82,11 +86,14 @@ public class CustomerController {
         customer.setCreateTime(LocalDateTimeUtil.now());
         customer.setRemoveFlag(0);
         String code = redisTemplate.opsForValue().get(phone);
-        if(code.equals(Captcha)) {
+
+        if (code.equals(Captcha)){
             customerService.save(customer);
             return ApiResponse.ok("注册成功");
+
         }else
             return ApiResponse.error("注册失败");
+
     }
 
     @WebLog(description = "用户登录")
