@@ -92,14 +92,15 @@ public class OrderDetailController {
         return ApiResponse.ok(orderDetailService.page(new Page<>(pageNum,pageSize),orderDetailQueryWrapper));
 
     }
-    @WebLog(description = "完成支付订单")
+    @WebLog(description = "修改订单状态")
     @PutMapping
-    public ApiResponse updatestatus( @RequestParam String customerId,@RequestParam String orderNum){
+    public ApiResponse updateStatus(@RequestBody OrderDetail orderDetail){
         QueryWrapper<OrderDetail> orderDetailQueryWrapper=new QueryWrapper<>();
-        orderDetailQueryWrapper.eq("customer_id",customerId).eq("order_num",orderNum);
-        OrderDetail orderDetail=new OrderDetail();
-        orderDetail.setOrderStatus(1);
+        orderDetailQueryWrapper.eq("customer_id",orderDetail.getCustomerId())
+                .eq("order_num",orderDetail.getOrderNum());
+        orderDetail.setOrderStatus(orderDetail.getOrderStatus()+1);
         return ApiResponse.ok(orderDetailService.update(orderDetail,orderDetailQueryWrapper));
     }
+
 }
 

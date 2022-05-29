@@ -388,5 +388,23 @@ public class SceneController {
         return ApiResponse.ok(sceneMapper.getPageByType(map));
     }
 
+    @WebLog(description = "查询最高评分")
+    @GetMapping("/HighestRating")
+    public ApiResponse getBestRatingScene(@RequestParam Integer num){
+        QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("rating").last("limit "+num);
+
+        return ApiResponse.ok(sceneMapper.selectList(queryWrapper));
+    }
+
+    @WebLog(description = "模糊查询景点名称不分页")
+    @GetMapping("/likeName")
+    public ApiResponse findSceneByName(@RequestParam String sceneName){
+        QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("name", sceneName);
+
+        return ApiResponse.ok(sceneMapper.selectList(queryWrapper));
+    }
+
 }
 

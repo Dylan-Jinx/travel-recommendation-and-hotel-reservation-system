@@ -30,7 +30,7 @@ public interface SceneService extends IService<Scene> {
     public List<HotelInfoVo> getNearestHotel(List<Scene> list, Double radius);
 
     /**
-     * 根据景点查询附近酒店
+     * 根据一个景点查询附近酒店
      * @param scene 景点
      * @param radius 范围
      * @return 查询集 Vo中包含可用的距离和属性
@@ -103,5 +103,12 @@ public interface SceneService extends IService<Scene> {
      */
     public void loopCheckBloomFilter(List<Scene> list, List<Scene> res, Customer customer);
 
+    /**
+     * 猜你喜欢返回足量
+     * @param typeList 用户画像中的类型列表
+     * @param recommendItems CF中已经推荐的 没有就传null
+     * @param customer 推荐的用户
+     * @return 返回足量的猜你喜欢
+     */
     public List<Scene> getEnoughGuessByCustomerPortraitAndRating(List<String> typeList, List<Long> recommendItems, Customer customer);
 }

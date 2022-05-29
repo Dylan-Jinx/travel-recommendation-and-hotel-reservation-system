@@ -17,6 +17,7 @@ import se.xmut.trahrs.domain.dto.HotelInfoDto;
 import org.springframework.web.bind.annotation.*;
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.model.HotelInfo;
+import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.manager.RedisService;
 import se.xmut.trahrs.manager.cache.annoation.Cacheable;
@@ -147,6 +148,16 @@ public class HotelInfoController {
 
         return ApiResponse.ok("查询成功",hotelInfoList);
 
+    }
+
+
+    @WebLog(description = "模糊查询酒店名称不分页版")
+    @GetMapping("/likeName")
+    public ApiResponse findSceneByName(@RequestParam String sceneName){
+        QueryWrapper<HotelInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("name", sceneName);
+
+        return ApiResponse.ok(hotelInfoService.getBaseMapper().selectList(queryWrapper));
     }
 
 
