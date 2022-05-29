@@ -118,7 +118,7 @@ public class SceneController {
     }
 
     @WebLog(description = "通过景点查询附近综合推荐酒店分页")
-    @GetMapping("/NearbyComprehensiveRecommendationPage")
+    @PostMapping("/NearbyComprehensiveRecommendationPage")
     public ApiResponse findNearbyComprehensiveRecommendationPage(@RequestParam Integer pageNum,
                                                                  @RequestParam Integer pageSize,
                                                                  @RequestBody List<Scene> scenes,
@@ -140,7 +140,7 @@ public class SceneController {
     }
 
     @WebLog(description = "通过景点查询附近评分最高酒店分页")
-    @GetMapping("/NearbyHighestRatingRecommendationPage")
+    @PostMapping("/NearbyHighestRatingRecommendationPage")
     public ApiResponse findNearbyHighestRatingRecommendationPage(@RequestParam Integer pageNum,
                                                                  @RequestParam Integer pageSize,
                                                                  @RequestBody List<Scene> scenes,
@@ -161,7 +161,7 @@ public class SceneController {
     }
 
     @WebLog(description = "通过景点查询附近评分最低酒店分页")
-    @GetMapping("/NearbyLowestRatingRecommendationPage")
+    @PostMapping("/NearbyLowestRatingRecommendationPage")
     public ApiResponse findNearbyLowestRatingRecommendationPage(@RequestParam Integer pageNum,
                                                                  @RequestParam Integer pageSize,
                                                                  @RequestBody List<Scene> scenes,
@@ -183,7 +183,7 @@ public class SceneController {
 
     /**FIXME 酒店价格暂未导入*/
     @WebLog(description = "通过景点查询附近价格最高酒店分页")
-    @GetMapping("/NearbyHighestPriceRecommendationPage")
+    @PostMapping("/NearbyHighestPriceRecommendationPage")
     public ApiResponse findNearbyHighestPriceRecommendationPage(@RequestParam Integer pageNum,
                                                                 @RequestParam Integer pageSize,
                                                                 @RequestBody List<Scene> scenes,
@@ -205,7 +205,7 @@ public class SceneController {
 
     /**FIXME 酒店价格暂未导入*/
     @WebLog(description = "通过景点查询附近价格最低酒店分页")
-    @GetMapping("/NearbyLowestPriceRecommendationPage")
+    @PostMapping("/NearbyLowestPriceRecommendationPage")
     public ApiResponse findNearbyLowestPriceRecommendationPage(@RequestParam Integer pageNum,
                                                                @RequestParam Integer pageSize,
                                                                @RequestBody List<Scene> scenes,
@@ -227,7 +227,7 @@ public class SceneController {
 
     /**FIXME 酒店价格暂未导入*/
     @WebLog(description = "使用价格区间通过附近景点查询附近酒店分页")
-    @GetMapping("/NearbyPriceRangeRecommendationPage")
+    @PostMapping("/NearbyPriceRangeRecommendationPage")
     public ApiResponse findNearbyPriceRangeRecommendationPage(@RequestParam Integer pageNum,
                                                               @RequestParam Integer pageSize,
                                                               @RequestBody List<Scene> scenes,
@@ -251,13 +251,17 @@ public class SceneController {
     }
 
     @WebLog(description = "协同过滤推荐")
-    @GetMapping("/getItemBasedCFRecommendation")
+    @PostMapping("/getItemBasedCFRecommendation")
     public ApiResponse getItemBasedCFRecommendation(@RequestBody Customer customer,
                                     @RequestParam Integer pageNum,
                                     @RequestParam Integer pageSize) throws IOException, TasteException {
 
         List<Long> recommendItems = new ArrayList<>();
-        boolean cf = itemBasedCfService.isCanCf(customer.getCustomerId());
+        boolean cf = false;
+
+        if(customer!=null){
+            cf = itemBasedCfService.isCanCf(customer.getCustomerId());
+        }
 
         if(cf){
             recommendItems = itemBasedCfService.getItemBasedCFRecommendation((long) customer.getId(), null);
@@ -305,7 +309,7 @@ public class SceneController {
     }
 
     @WebLog(description = "猜你喜欢")
-    @GetMapping("/guessYouLike")
+    @PostMapping("/guessYouLike")
     public ApiResponse guessYouLike(@RequestBody Customer customer) throws IOException, TasteException {
         List<Long> recommendItems = new ArrayList<>();
         boolean cf = itemBasedCfService.isCanCf(customer.getCustomerId());
@@ -365,7 +369,7 @@ public class SceneController {
     }
 
     @WebLog(description = "情感分析值最高评论")
-    @GetMapping("/BestSemantic")
+    @PostMapping("/BestSemantic")
     public ApiResponse getBestSemanticResult(@RequestBody Scene scene){
         QueryWrapper<SceneComment> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("scene_id", scene.getSceneId());
