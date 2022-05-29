@@ -22,6 +22,7 @@ import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.CustomerDto;
 import se.xmut.trahrs.domain.model.Customer;
 import se.xmut.trahrs.domain.model.HotelInfo;
+import se.xmut.trahrs.domain.model.SceneComment;
 import se.xmut.trahrs.domain.vo.HotelInfoVo;
 import se.xmut.trahrs.exception.CFException;
 import se.xmut.trahrs.log.annotation.WebLog;
@@ -29,6 +30,7 @@ import se.xmut.trahrs.mapper.HotelInfoMapper;
 import se.xmut.trahrs.mapper.SceneMapper;
 import se.xmut.trahrs.service.HotelInfoService;
 import se.xmut.trahrs.service.ItemBasedCfService;
+import se.xmut.trahrs.service.SceneCommentService;
 import se.xmut.trahrs.service.SceneService;
 import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.service.impl.BloomFilterRedisServiceImpl;
@@ -68,6 +70,9 @@ public class SceneController {
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
+
+    @Autowired
+    private SceneCommentService sceneCommentService;
 
 
     @WebLog(description = "添加")
@@ -300,7 +305,7 @@ public class SceneController {
 
     @WebLog(description = "猜你喜欢")
     @GetMapping("/guessYouLike")
-    public ApiResponse guessYouLike(@RequestBody Customer customer, @RequestParam Integer guessNum) throws IOException, TasteException {
+    public ApiResponse guessYouLike(@RequestBody Customer customer) throws IOException, TasteException {
         List<Long> recommendItems = new ArrayList<>();
         boolean cf = itemBasedCfService.isCanCf(customer.getCustomerId());
 
@@ -358,11 +363,30 @@ public class SceneController {
         }
     }
 
-//    @WebLog(description = "根据分类查询的综合推荐景点分页")
-//    @GetMapping("/ratingPage")
-//    public ApiResponse findClassifyPage(){
-//
-//    }
+    @WebLog(description = "情感分析值最高评论")
+    @GetMapping("/BestSemantic")
+    public ApiResponse getBestSemanticResult(@RequestBody Scene scene){
+        QueryWrapper<SceneComment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("scene_id", scene.getSceneId());
+        queryWrapper.orderByDesc("semantic");
+        queryWrapper.last("limit 1");
+        return ApiResponse.ok(sceneCommentService.getOne(queryWrapper));
+    }
+
+    @WebLog(description = "根据分类查询的综合推荐景点分页")
+    @GetMapping("/classifyPage")
+    public ApiResponse findClassifyPage(@RequestParam List<String> typeList,
+                                        @RequestParam Integer pageNum,
+                                        @RequestParam Integer pageSize){
+
+        int page = PageUtil.getStart(pageNum-1, pageSize);
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageStart", page);
+        map.put("pageSize", pageSize);
+        map.put("typeList", typeList);
+
+        return ApiResponse.ok(sceneMapper.getPageByType(map));
+    }
 
 }
 
