@@ -17,4 +17,7 @@ public class CustomerVo implements Serializable {
 
     @ApiModelProperty("用户头像")
     private String avatar;
+
+    @ApiModelProperty("id标识")
+    private Integer id;
 }

@@ -1,24 +1,39 @@
 package se.xmut.trahrs.api;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.PageUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.mahout.cf.taste.common.TasteException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.*;
 
 import se.xmut.trahrs.common.ApiResponse;
+import se.xmut.trahrs.domain.dto.CustomerDto;
+import se.xmut.trahrs.domain.model.Customer;
 import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.vo.HotelInfoVo;
+import se.xmut.trahrs.exception.CFException;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.mapper.HotelInfoMapper;
+import se.xmut.trahrs.mapper.SceneMapper;
 import se.xmut.trahrs.service.HotelInfoService;
+import se.xmut.trahrs.service.ItemBasedCfService;
 import se.xmut.trahrs.service.SceneService;
 import se.xmut.trahrs.domain.model.Scene;
+import se.xmut.trahrs.service.impl.BloomFilterRedisServiceImpl;
+import se.xmut.trahrs.util.BloomFilterUtils;
+import se.xmut.trahrs.util.CFUtils;
 
 
 /**
@@ -44,6 +59,16 @@ public class SceneController {
 
     @Autowired
     private HotelInfoMapper hotelInfoMapper;
+
+    @Autowired
+    private SceneMapper sceneMapper;
+
+    @Autowired
+    private ItemBasedCfService itemBasedCfService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
+
 
     @WebLog(description = "添加")
     @PostMapping
@@ -97,7 +122,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithComprehensiveRecommendation(sceneService
@@ -118,7 +143,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithHighestRatingRecommendation(sceneService
@@ -139,7 +164,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithLowestRatingRecommendation(sceneService
@@ -161,7 +186,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithHighestPriceRecommendation(sceneService
@@ -183,7 +208,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService
                 .getSceneNearbyHotelWithLowestPriceRecommendation(sceneService
@@ -207,7 +232,7 @@ public class SceneController {
             radius = 1000.0;
         }
 
-        sceneService.BindSceneByUUID(scenes);
+        sceneService.bindSceneByUUID(scenes);
 
         List<HotelInfoVo> hotelInfoVoList = sceneService.getNearestHotel(scenes, radius);
         List<String> nameList = new ArrayList<>();
@@ -217,6 +242,120 @@ public class SceneController {
         queryWrapper.between("cost", priceBottom, priceTop);
 
         return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize), queryWrapper));
+    }
+
+    @WebLog(description = "协同过滤推荐")
+    @GetMapping("/getItemBasedCFRecommendation")
+    public ApiResponse getItemBasedCFRecommendation(@RequestBody Customer customer,
+                                    @RequestParam Integer pageNum,
+                                    @RequestParam Integer pageSize) throws IOException, TasteException {
+
+        List<Long> recommendItems = new ArrayList<>();
+        boolean cf = itemBasedCfService.isCanCf(customer.getCustomerId());
+
+        if(cf){
+            recommendItems = itemBasedCfService.getItemBasedCFRecommendation((long) customer.getId(), null);
+        }
+
+        Map<String, Object> res = new HashMap<>();
+
+        try{
+
+            if(cf && !recommendItems.isEmpty()){
+
+                Map<String, Object> map = new HashMap<>();
+                int page = PageUtil.getStart(pageNum-1, pageSize);
+                map.put("recommendItems", recommendItems);
+                map.put("pageStart", page);
+                map.put("pageSize", pageSize);
+                List<Scene> sceneIPage = sceneMapper.getPageByPK(map);
+
+                return ApiResponse.ok(sceneService.CFPage(sceneIPage, pageNum, pageSize));
+            }else {
+
+                List<String> typeList = sceneService.getCustomerPortraitTypeList(
+                        JSONUtil.parseObj(customer.getCustomerPortrait()));
+
+                int page = PageUtil.getStart(pageNum-1, pageSize);
+                Map<String, Object> map = new HashMap<>();
+                map.put("pageStart", page);
+                map.put("pageSize", pageSize);
+                map.put("typeList", typeList);
+
+                List<Scene> sceneIPage = sceneMapper.getPageByType(map);
+
+                return ApiResponse.ok(sceneService.CFPage(sceneIPage, pageNum, pageSize));
+            }
+
+            //如果无用户画像或csv文件出错按rating推荐
+        }catch (Exception e){
+            System.err.println(new CFException("推荐失败，请检查csv文件或用户画像"));
+            QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
+            queryWrapper.orderByDesc("rating");
+
+            return ApiResponse.ok(sceneService.page(new Page<>(pageNum, pageSize), queryWrapper));
+        }
+
+    }
+
+    @WebLog(description = "猜你喜欢")
+    @GetMapping("/guessYouLike")
+    public ApiResponse guessYouLike(@RequestBody Customer customer, @RequestParam Integer guessNum) throws IOException, TasteException {
+        List<Long> recommendItems = new ArrayList<>();
+        boolean cf = itemBasedCfService.isCanCf(customer.getCustomerId());
+
+        if(cf){
+            recommendItems = itemBasedCfService.guessYouLike((long) customer.getId(), null, null);
+        }
+
+        QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
+
+        try{
+
+            //cf有结果
+            if(cf && !recommendItems.isEmpty()){
+
+                //如果推荐数不足三个，去按用户画像再查到满足三个出来
+                if(recommendItems.size()<3){
+                    List<String> typeList = sceneService.getCustomerPortraitTypeList(
+                            JSONUtil.parseObj(customer.getCustomerPortrait()));
+
+                    List<Scene> res = sceneService.getEnoughGuessByCustomerPortraitAndRating(typeList, recommendItems, customer);
+
+                    return ApiResponse.ok(res);
+
+                    //cf的直接够用
+                }else {
+                    queryWrapper.in("id", recommendItems);
+                    queryWrapper.orderByDesc("rating");
+
+                    return ApiResponse.ok(sceneMapper.selectList(queryWrapper));
+                }
+
+            //cf无法推荐，直接用用户画像
+            }else {
+                List<String> typeList = sceneService.getCustomerPortraitTypeList(
+                        JSONUtil.parseObj(customer.getCustomerPortrait()));
+
+                List<Scene> res = sceneService.getEnoughGuessByCustomerPortraitAndRating(typeList, null, customer);
+
+                return ApiResponse.ok(res);
+            }
+
+        }catch (Exception e){
+            System.err.println(new CFException("推荐失败，请检查csv文件或用户画像，也有可能是这个用户七天内推荐系统为他推荐的已使用完，查看redis"));
+            queryWrapper = new QueryWrapper<>();
+            queryWrapper.orderByDesc("rating");
+            int pageNum = 1, pageSize = 50;
+            List<Scene> ratingScenes = sceneService.page(new Page<>(pageNum, pageSize), queryWrapper).getRecords();
+            List<Scene> res = new ArrayList<>();
+
+            while(res.size()<3) {
+                sceneService.loopCheckBloomFilter(ratingScenes, res, customer);
+            }
+
+            return ApiResponse.ok(res);
+        }
     }
 
 //    @WebLog(description = "根据分类查询的综合推荐景点分页")

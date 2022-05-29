@@ -1,5 +1,16 @@
 package se.xmut.trahrs.service;
 
+
+import cn.hutool.bloomfilter.BitMapBloomFilter;
+import com.google.common.hash.Hashing;
+import org.apache.mahout.cf.taste.common.TasteException;
+import org.apache.mahout.cf.taste.impl.model.jdbc.MySQLJDBCDataModel;
+import com.mysql.cj.jdbc.MysqlDataSource;
+import org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
+import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
+import org.apache.mahout.cf.taste.model.JDBCDataModel;
+import org.apache.mahout.cf.taste.recommender.RecommendedItem;
+import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -9,12 +20,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.domain.vo.HotelInfoVo;
-import se.xmut.trahrs.exception.GaoDeException;
 import se.xmut.trahrs.mapper.HotelInfoMapper;
 import se.xmut.trahrs.util.MapUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -85,8 +94,6 @@ class SceneServiceTest {
         scene10.setName("城隍庙");
         scene10.setLocation("118.247520,24.667304");
         list.add(scene10);
-        System.out.println("——————————hello——————————");
-        System.out.println(list.size());
     }
 
     @Test
@@ -134,5 +141,27 @@ class SceneServiceTest {
         for (HotelInfoVo objs:hrrHotel) {
             System.out.println(objs+" "+objs.getSumDistance()+" "+objs.getRating());
         }
+    }
+
+    @Test
+    public void testCollaborativeFilteringScene() throws TasteException {
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setServerName("localhost");
+        dataSource.setUser("root");
+        dataSource.setPassword("225579qq");
+        dataSource.setDatabaseName("ItemCF");
+        JDBCDataModel model = new MySQLJDBCDataModel(dataSource, "ItemCF", "user_id", "item_id", "value", "timestamp");
+
+        ItemSimilarity similarity = new PearsonCorrelationSimilarity(model);
+        GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
+
+        System.out.println("——————————物品——————————");
+        List<RecommendedItem> list = recommender.recommendedBecause(2,2,2);
+        list.forEach(System.out::println);
+        System.out.println();
+        System.out.println();
+        list = recommender.recommend(7, 5);
+        list.forEach(System.out::println);
+        System.out.println("——————————物品END——————————");
     }
 }

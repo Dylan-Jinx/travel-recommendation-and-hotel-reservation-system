@@ -21,7 +21,8 @@ import java.util.List;
  */
 @Service
 public class CustomerInteractionServiceImpl extends ServiceImpl<CustomerInteractionMapper, CustomerInteraction> implements CustomerInteractionService {
-   @Autowired CustomerInteractionMapper customerInteractionMapper;
+   @Autowired
+   CustomerInteractionMapper customerInteractionMapper;
 
     @Override
     public IPage<CustomerInteraction> findCustomerInteraction(IPage<CustomerInteraction> page) {
