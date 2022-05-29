@@ -25,14 +25,14 @@ public class CustomerInteractionServiceImpl extends ServiceImpl<CustomerInteract
    CustomerInteractionMapper customerInteractionMapper;
 
     @Override
-    public IPage<Customer> findCustomerInteraction(IPage<Customer> page) {
-        IPage<Customer> list=customerInteractionMapper.findCustomerInteraction(page);
+    public IPage<CustomerInteraction> findCustomerInteraction(IPage<CustomerInteraction> page) {
+        IPage<CustomerInteraction> list=customerInteractionMapper.findCustomerInteraction(page);
         return list;
     }
 
     @Override
-    public IPage<Customer> findCustomerInteractionCreateTime(IPage<Customer> page) {
-        IPage<Customer> list=customerInteractionMapper.findCustomerInteractionCreateTime(page);
+    public IPage<CustomerInteraction> findCustomerInteractionCreateTime(IPage<CustomerInteraction> page) {
+        IPage<CustomerInteraction> list=customerInteractionMapper.findCustomerInteractionCreateTime(page);
         return list;
     }
 }
