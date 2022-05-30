@@ -35,9 +35,25 @@ public interface SceneMapper extends BaseMapper<Scene> {
     public List<Scene> getPageByPK(Map<String, Object> map);
 
     /**
-     *
+     * 返回全部的用户画像来给布隆过滤器查看是否已经推荐过了
      * @param typeList 用户喜欢的类型列表
      * @return 不分页的用户画像
      */
     public List<Scene> getByType(List<String> typeList);
+
+    /**
+     * 最多评论的景点，若不足，返回评分最高的分页
+     * @param pageNum 分页limit第一个数
+     * @param pageSize 分页limit第二个数
+     * @return 最多评论的景点
+     */
+    public List<Scene> getMostCommentElseRating(@Param("pageNum") Integer pageNum,
+                                                @Param("pageSize") Integer pageSize);
+
+    /**
+     * 查询type数量
+     * @param typeList type列表
+     * @return type数量
+     */
+    public Integer countType(List<String> typeList);
 }

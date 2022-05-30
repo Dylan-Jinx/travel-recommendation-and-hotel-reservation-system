@@ -267,8 +267,6 @@ public class SceneController {
             recommendItems = itemBasedCfService.getItemBasedCFRecommendation((long) customer.getId(), null);
         }
 
-        Map<String, Object> res = new HashMap<>();
-
         try{
 
             if(cf && !recommendItems.isEmpty()){
@@ -280,7 +278,7 @@ public class SceneController {
                 map.put("pageSize", pageSize);
                 List<Scene> sceneIPage = sceneMapper.getPageByPK(map);
 
-                return ApiResponse.ok(sceneService.CFPage(sceneIPage, pageNum, pageSize));
+                return ApiResponse.ok(sceneService.myPage(sceneIPage, pageNum, pageSize, null));
             }else {
 
                 List<String> typeList = sceneService.getCustomerPortraitTypeList(
@@ -294,7 +292,7 @@ public class SceneController {
 
                 List<Scene> sceneIPage = sceneMapper.getPageByType(map);
 
-                return ApiResponse.ok(sceneService.CFPage(sceneIPage, pageNum, pageSize));
+                return ApiResponse.ok(sceneService.myPage(sceneIPage, pageNum, pageSize, null));
             }
 
             //如果无用户画像或csv文件出错按rating推荐
@@ -390,7 +388,10 @@ public class SceneController {
         map.put("pageSize", pageSize);
         map.put("typeList", typeList);
 
-        return ApiResponse.ok(sceneMapper.getPageByType(map));
+        List<Scene> scenes = sceneMapper.getPageByType(map);
+        Integer cnt = sceneMapper.countType(typeList);
+
+        return ApiResponse.ok(sceneService.myPage(scenes, pageNum, pageSize, (long)cnt));
     }
 
     @WebLog(description = "查询最高评分")
@@ -417,6 +418,14 @@ public class SceneController {
     @PutMapping("/updateScene")
     public ApiResponse updateScene(@RequestBody Scene scene){
         return ApiResponse.ok(sceneService.updateById(scene));
+    }
+
+    @WebLog(description = "最多评价，评价相同按评分")
+    @GetMapping("/mostCommentElseRating")
+    public ApiResponse mostCommentElseRating(@RequestParam Integer pageNum, @RequestParam Integer pageSize){
+        int page = PageUtil.getStart(pageNum-1, pageSize);
+
+        return ApiResponse.ok(sceneService.myPage(sceneMapper.getMostCommentElseRating(page, pageSize), pageNum, pageSize, null));
     }
 }
 
