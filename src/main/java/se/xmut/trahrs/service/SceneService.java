@@ -30,7 +30,7 @@ public interface SceneService extends IService<Scene> {
     public List<HotelInfoVo> getNearestHotel(List<Scene> list, Double radius);
 
     /**
-     * 根据景点查询附近酒店
+     * 根据一个景点查询附近酒店
      * @param scene 景点
      * @param radius 范围
      * @return 查询集 Vo中包含可用的距离和属性
@@ -80,13 +80,14 @@ public interface SceneService extends IService<Scene> {
     public List<Scene> bindSceneByUUID(List<Scene> scenes);
 
     /**
-     * CF分页Api助手
+     * 自定义分页Api助手
      * @param sceneList 需要被分页的风景列表
      * @param pageNum 当前页码
      * @param pageSize 页码显示条数
+     * @param total 总共条数，填null默认全部景点
      * @return 封装好的分页完成的map
      */
-    public Map<String, Object> CFPage(List<Scene> sceneList, Integer pageNum, Integer pageSize);
+    public Map<String, Object> myPage(List<Scene> sceneList, Integer pageNum, Integer pageSize, Long total);
 
     /**
      * 转换数据库中的用户画像返回用户喜欢的type列表
@@ -97,11 +98,18 @@ public interface SceneService extends IService<Scene> {
 
     /**
      * 封装循环查找是否在布隆过滤器中存在，不存在就添加
-     * @param res 要传递引用地址添加新的推荐景点的列表
      * @param list 被布隆过滤器检查是否已经推荐的列表
+     * @param res 要传递引用地址添加新的推荐景点的列表
      * @param customer 当前用户 需含有id主键
      */
     public void loopCheckBloomFilter(List<Scene> list, List<Scene> res, Customer customer);
 
+    /**
+     * 猜你喜欢返回足量
+     * @param typeList 用户画像中的类型列表
+     * @param recommendItems CF中已经推荐的 没有就传null
+     * @param customer 推荐的用户
+     * @return 返回足量的猜你喜欢
+     */
     public List<Scene> getEnoughGuessByCustomerPortraitAndRating(List<String> typeList, List<Long> recommendItems, Customer customer);
 }

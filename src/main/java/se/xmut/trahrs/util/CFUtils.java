@@ -3,6 +3,7 @@ package se.xmut.trahrs.util;
 import cn.hutool.core.io.resource.ResourceUtil;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 import com.mysql.cj.jdbc.MysqlDataSource;
+import org.apache.commons.io.FileUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.common.Weighting;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
@@ -15,6 +16,10 @@ import org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.model.JDBCDataModel;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
@@ -49,9 +54,11 @@ public class CFUtils {
     }
 
     public DataModel getDataModel() throws IOException {
-        File csv = ResourceUtils.getFile("classpath:CF.csv");
-        DataModel model = new FileDataModel(csv);
-        return model;
+        ClassPathResource classPathResource = new ClassPathResource("CF.csv");
+        InputStream is = classPathResource.getInputStream();
+        File csv = new File("CF.csv");
+        FileUtils.copyInputStreamToFile(is, csv);
+        return new FileDataModel(csv);
     }
 
 }

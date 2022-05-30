@@ -18,9 +18,6 @@ import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.HotelInfoDto;
 import org.springframework.web.bind.annotation.*;
 import se.xmut.trahrs.domain.model.HotelInfo;
-
-
-
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.manager.RedisService;
 import se.xmut.trahrs.manager.cache.annoation.Cacheable;
@@ -160,17 +157,5 @@ public class HotelInfoController {
         }
         return ApiResponse.ok("查询成功",hotelInfoList.get(0).getOrderDetailList());
 
-    }
-
-    @WebLog(description = "查询酒店销量")
-    @PostMapping("/findByHotelCount")
-    public ApiResponse findByHotelCount(@RequestBody HotelInfoDto hotelInfoDto){
-        List<HotelInfo> hotelInfoList=hotelInfoMapper.findByOrderCount(hotelInfoDto.getHotelId());
-        if(hotelInfoList.size()<=0){
-            ApiResponse.error("该酒店还没有销量");
-        }
-        return ApiResponse.ok("查询成功",hotelInfoList.get(0).getOrderDetailList().size());
-
-    }
 }
 

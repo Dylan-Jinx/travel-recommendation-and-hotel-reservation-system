@@ -189,10 +189,12 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     }
 
     @Override
-    public Map<String, Object> CFPage(List<Scene> sceneList, Integer pageNum, Integer pageSize) {
+    public Map<String, Object> myPage(List<Scene> sceneList, Integer pageNum, Integer pageSize, Long total) {
         Map<String, Object> map = new HashMap<>();
 
-        long total = this.count();
+        if(total==null){
+            total = this.count();
+        }
 
         map.put("records", sceneList);
         map.put("total", total);

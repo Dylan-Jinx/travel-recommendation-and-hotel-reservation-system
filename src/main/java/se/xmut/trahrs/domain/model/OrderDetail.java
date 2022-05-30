@@ -52,7 +52,4 @@ public class OrderDetail implements Serializable {
     @ApiModelProperty("酒店id 或 景点id")
     private String orderId;
 
-
-
-
 }

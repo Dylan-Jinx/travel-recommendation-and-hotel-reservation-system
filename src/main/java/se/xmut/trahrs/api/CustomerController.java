@@ -81,8 +81,9 @@ public class CustomerController {
             customerService.save(customer);
             return ApiResponse.ok("注册成功");
 
-        }else
+        }else {
             return ApiResponse.error("验证码错误，注册失败");
+        }
 
     }
     @WebLog(description = "用户登录")
