@@ -107,13 +107,19 @@ public class SceneController {
         return ApiResponse.ok(sceneService.page(new Page<>(pageNum, pageSize)));
     }
 
-    @WebLog(description = "查询评分高的所有景点分页")
+    @WebLog(description = "查询按评分的所有景点分页")
     @GetMapping("/ratingPage")
     public ApiResponse findRatingPage(@RequestParam Integer pageNum,
-                                @RequestParam Integer pageSize) {
+                                      @RequestParam Integer pageSize,
+                                      @RequestParam String ratingStatus) {
         QueryWrapper<Scene> sceneQueryWrapper = new QueryWrapper<>();
         sceneQueryWrapper.isNotNull("rating");
-        sceneQueryWrapper.orderByDesc("rating");
+        if("1".equals(ratingStatus)){
+            sceneQueryWrapper.orderByDesc("rating");
+        }else {
+            sceneQueryWrapper.orderByAsc("rating");
+        }
+
         return ApiResponse.ok(sceneService.getBaseMapper().selectPage(new Page<>(pageNum, pageSize), sceneQueryWrapper));
     }
 
@@ -426,6 +432,21 @@ public class SceneController {
         int page = PageUtil.getStart(pageNum-1, pageSize);
 
         return ApiResponse.ok(sceneService.myPage(sceneMapper.getMostCommentElseRating(page, pageSize), pageNum, pageSize, null));
+    }
+
+    @WebLog(description = "价格分页")
+    @GetMapping("pricePage")
+    public ApiResponse pricePage(@RequestParam Integer pageNum,
+                                 @RequestParam Integer pageSize,
+                                 @RequestParam String priceStatus){
+        QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
+        queryWrapper.isNotNull("cost");
+        if("1".equals(priceStatus)){
+            queryWrapper.orderByDesc("cost");
+        }else {
+            queryWrapper.orderByAsc("cost");
+        }
+        return ApiResponse.ok(sceneService.page(new Page<>(pageNum, pageSize), queryWrapper));
     }
 }
 

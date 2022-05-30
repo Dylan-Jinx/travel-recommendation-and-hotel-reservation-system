@@ -6,21 +6,23 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.beans.BeanUtils;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.OrderDetailDto;
-import se.xmut.trahrs.domain.model.HotelInfo;
-import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.HotelInfoService;
 import se.xmut.trahrs.service.OrderDetailService;
 import se.xmut.trahrs.domain.model.OrderDetail;
-import se.xmut.trahrs.service.SceneService;
 
 
 /**
@@ -42,32 +44,52 @@ public class OrderDetailController {
     private ModelMapper modelMapper;
     @Autowired
     private HotelInfoService hotelInfoService;
+
     @WebLog(description = "添加订单")
     @PostMapping
-    public ApiResponse save(@RequestBody OrderDetailDto orderDetailDto) {
-        String orderId=orderDetailDto.getOrderId();
-        String customerId=orderDetailDto.getCustomerId();
-        OrderDetail orderDetail=modelMapper.map(orderDetailDto,OrderDetail.class);
-        QueryWrapper<OrderDetail> orderDetailQueryWrapper=new QueryWrapper<>();
-        orderDetailQueryWrapper.eq("customer_id",customerId).eq("order_id",orderId).eq("order_status",0);
-        OrderDetail orderDetail1=orderDetailService.getOne(orderDetailQueryWrapper);
-        if(orderDetail1!=null){
-            return ApiResponse.error("您有订单还未支付");
-        }
-        QueryWrapper<HotelInfo> hotelInfoQueryWrapper=new QueryWrapper<>();
-        hotelInfoQueryWrapper.eq("hotel_id",orderDetailDto.getOrderId());
-        HotelInfo hotelInfo=hotelInfoService.getOne(hotelInfoQueryWrapper);
-        if (hotelInfo==null){
-            orderDetail.setFlag(1);
-        }else{
-            orderDetail.setFlag(0);
-        }
-
+    @Transactional(rollbackFor = Exception.class)
+    public ApiResponse save(@RequestBody OrderDetailDto orderDetailDto) throws InvocationTargetException, IllegalAccessException, CloneNotSupportedException {
+        List<String> sceneList = orderDetailDto.getOrderIdList().subList(0, orderDetailDto.getLen());
+        List<String> hotelList = orderDetailDto.getOrderIdList().subList(orderDetailDto.getLen(), orderDetailDto.getOrderIdList().size());
+//        String customerId=orderDetailDto.getCustomerId();
+        OrderDetail orderDetail = modelMapper.map(orderDetailDto, OrderDetail.class);
+//        QueryWrapper<OrderDetail> orderDetailQueryWrapper=new QueryWrapper<>();
+//        orderDetailQueryWrapper.eq("customer_id",customerId).eq("order_id",orderId).eq("order_status",0);
+//        OrderDetail orderDetail1=orderDetailService.getOne(orderDetailQueryWrapper);
+//        if(orderDetail1!=null){
+//            return ApiResponse.error("您有订单还未支付");
+//        }
         orderDetail.setOrderNum(IdUtil.objectId());
         orderDetail.setCreateTime(LocalDateTime.now());
+        StringBuilder sceneBuilder = new StringBuilder();
+        for (int i = 0; i < sceneList.size(); i++) {
+            if (i != sceneList.size()-1){
+                sceneBuilder.append(sceneList.get(i)).append(";");
+            }else {
+                sceneBuilder.append(sceneList.get(i));
+            }
+        }
+        orderDetail.setOrderId(sceneBuilder.toString());
         //默认为0未支付状态
         orderDetail.setOrderStatus(0);
-       return ApiResponse.ok(orderDetailService.saveOrUpdate(orderDetail));
+        //1是景区
+        orderDetail.setFlag(1);
+        orderDetailService.save(orderDetail);
+
+        OrderDetail hotelOrderDetail = orderDetail.clone();
+
+        hotelOrderDetail.setFlag(0);
+        hotelOrderDetail.setId(null);
+        StringBuilder hotelBuilder = new StringBuilder();
+        for (int i = 0; i < hotelList.size(); i++) {
+            if (i != hotelList.size()-1){
+                hotelBuilder.append(hotelList.get(i)).append(";");
+            }else {
+                hotelBuilder.append(hotelList.get(i));
+            }
+        }
+        hotelOrderDetail.setOrderId(hotelBuilder.toString());
+        return ApiResponse.ok(orderDetailService.save(hotelOrderDetail));
     }
 
     @WebLog(description = "用id删除订单")
@@ -99,20 +121,21 @@ public class OrderDetailController {
     @GetMapping("/findCustomer")
     public ApiResponse findCustomer(@RequestParam Integer pageNum,
                                     @RequestParam Integer pageSize,
-                                    @RequestParam String customerId){
-        QueryWrapper<OrderDetail> orderDetailQueryWrapper=new QueryWrapper<>();
-        orderDetailQueryWrapper.eq("customer_id",customerId);
-        return ApiResponse.ok(orderDetailService.page(new Page<>(pageNum,pageSize),orderDetailQueryWrapper));
+                                    @RequestParam String customerId) {
+        QueryWrapper<OrderDetail> orderDetailQueryWrapper = new QueryWrapper<>();
+        orderDetailQueryWrapper.eq("customer_id", customerId);
+        return ApiResponse.ok(orderDetailService.page(new Page<>(pageNum, pageSize), orderDetailQueryWrapper));
 
     }
+
     @WebLog(description = "修改订单状态")
     @PutMapping
-    public ApiResponse updateStatus(@RequestBody OrderDetail orderDetail){
-        QueryWrapper<OrderDetail> orderDetailQueryWrapper=new QueryWrapper<>();
-        orderDetailQueryWrapper.eq("customer_id",orderDetail.getCustomerId())
-                .eq("order_num",orderDetail.getOrderNum());
-        orderDetail.setOrderStatus(orderDetail.getOrderStatus()+1);
-        return ApiResponse.ok(orderDetailService.update(orderDetail,orderDetailQueryWrapper));
+    public ApiResponse updateStatus(@RequestBody OrderDetail orderDetail) {
+        QueryWrapper<OrderDetail> orderDetailQueryWrapper = new QueryWrapper<>();
+        orderDetailQueryWrapper.eq("customer_id", orderDetail.getCustomerId())
+                .eq("order_num", orderDetail.getOrderNum());
+        orderDetail.setOrderStatus(orderDetail.getOrderStatus() + 1);
+        return ApiResponse.ok(orderDetailService.update(orderDetail, orderDetailQueryWrapper));
     }
 
 }

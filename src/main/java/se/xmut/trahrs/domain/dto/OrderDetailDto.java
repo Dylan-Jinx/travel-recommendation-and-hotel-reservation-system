@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
+
 @Getter
 @Setter
 public class OrderDetailDto implements Serializable {
@@ -17,5 +19,9 @@ public class OrderDetailDto implements Serializable {
     @ApiModelProperty("订单数量")
     private Integer orderPrice;
 
-    private String orderId;
+    @ApiModelProperty("酒店景点uuid集合")
+    private List<String> orderIdList;
+
+    @ApiModelProperty("景点的长度")
+    private Integer len;
 }
