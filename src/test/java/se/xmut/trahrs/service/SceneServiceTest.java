@@ -143,25 +143,25 @@ class SceneServiceTest {
         }
     }
 
-    @Test
-    public void testCollaborativeFilteringScene() throws TasteException {
-        MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setServerName("localhost");
-        dataSource.setUser("root");
-        dataSource.setPassword("225579qq");
-        dataSource.setDatabaseName("ItemCF");
-        JDBCDataModel model = new MySQLJDBCDataModel(dataSource, "ItemCF", "user_id", "item_id", "value", "timestamp");
-
-        ItemSimilarity similarity = new PearsonCorrelationSimilarity(model);
-        GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
-
-        System.out.println("——————————物品——————————");
-        List<RecommendedItem> list = recommender.recommendedBecause(2,2,2);
-        list.forEach(System.out::println);
-        System.out.println();
-        System.out.println();
-        list = recommender.recommend(7, 5);
-        list.forEach(System.out::println);
-        System.out.println("——————————物品END——————————");
-    }
+//    @Test
+//    public void testCollaborativeFilteringScene() throws TasteException {
+//        MysqlDataSource dataSource = new MysqlDataSource();
+//        dataSource.setServerName("localhost");
+//        dataSource.setUser("root");
+//        dataSource.setPassword("225579qq");
+//        dataSource.setDatabaseName("ItemCF");
+//        JDBCDataModel model = new MySQLJDBCDataModel(dataSource, "ItemCF", "user_id", "item_id", "value", "timestamp");
+//
+//        ItemSimilarity similarity = new PearsonCorrelationSimilarity(model);
+//        GenericItemBasedRecommender recommender = new GenericItemBasedRecommender(model, similarity);
+//
+//        System.out.println("——————————物品——————————");
+//        List<RecommendedItem> list = recommender.recommendedBecause(2,2,2);
+//        list.forEach(System.out::println);
+//        System.out.println();
+//        System.out.println();
+//        list = recommender.recommend(7, 5);
+//        list.forEach(System.out::println);
+//        System.out.println("——————————物品END——————————");
+//    }
 }
