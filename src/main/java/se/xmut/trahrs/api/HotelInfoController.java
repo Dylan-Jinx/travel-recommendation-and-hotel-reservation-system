@@ -161,18 +161,5 @@ public class HotelInfoController {
         return ApiResponse.ok("查询成功",hotelInfoList.get(0).getOrderDetailList());
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
