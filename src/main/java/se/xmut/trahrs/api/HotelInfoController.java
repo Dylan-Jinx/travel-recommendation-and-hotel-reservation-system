@@ -173,15 +173,6 @@ public class HotelInfoController {
 
 
 
-//    @WebLog(description = "查询酒店销量")
-//    @PostMapping("/findByHotelCount")
-//    public ApiResponse findByHotelCount(@RequestBody HotelInfoDto hotelInfoDto){
-//        List<HotelInfo> hotelInfoList=hotelInfoMapper.findByOrderCount(hotelInfoDto.getHotelId());
-//        if(hotelInfoList.size()<=0){
-//            ApiResponse.error("该酒店还没有销量");
-//        }
-//        return ApiResponse.ok("查询成功",hotelInfoList.get(0).getOrderDetailList().size());
-//
-//    }
+
 }
 
