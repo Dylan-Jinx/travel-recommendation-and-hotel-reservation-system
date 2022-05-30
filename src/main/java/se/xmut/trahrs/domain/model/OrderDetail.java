@@ -53,8 +53,5 @@ public class OrderDetail implements Serializable {
     private String orderId;
 
 
-    @ApiModelProperty("0表示酒店的订单 1表示景点订单")
-    private Integer flag;
-
 
 }

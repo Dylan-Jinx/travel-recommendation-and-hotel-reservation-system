@@ -132,7 +132,7 @@ public class HotelInfoController {
     }
 
     @WebLog(description = "酒店类型查找")
-    @GetMapping("/finByType")
+    @PostMapping("/finByType")
     public ApiResponse finByType(@RequestBody HotelInfoDto hotelInfoDto){
         HotelInfo hotelInfo=modelMapper.map(hotelInfoDto,HotelInfo.class);
 
@@ -150,7 +150,7 @@ public class HotelInfoController {
     }
 
     @WebLog(description = "查询酒店的订单")
-    @GetMapping("/findByOrderDetail")
+    @PostMapping("/findByOrderDetail")
     public ApiResponse findByOrderCount(@RequestBody HotelInfoDto hotelInfoDto){
         List<HotelInfo> hotelInfoList=hotelInfoMapper.findByOrderCount(hotelInfoDto.getHotelId());
         if (hotelInfoList.size()<=0){
@@ -161,7 +161,7 @@ public class HotelInfoController {
     }
 
     @WebLog(description = "查询酒店销量")
-    @GetMapping("/findByHotelCount")
+    @PostMapping("/findByHotelCount")
     public ApiResponse findByHotelCount(@RequestBody HotelInfoDto hotelInfoDto){
         List<HotelInfo> hotelInfoList=hotelInfoMapper.findByOrderCount(hotelInfoDto.getHotelId());
         if(hotelInfoList.size()<=0){
