@@ -5,6 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="se.xmut.trahrs.domain.model.OrderDetail">
         <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
         <result column="customer_id" property="customerId" />
         <result column="order_num" property="orderNum" />
         <result column="order_content" property="orderContent" />

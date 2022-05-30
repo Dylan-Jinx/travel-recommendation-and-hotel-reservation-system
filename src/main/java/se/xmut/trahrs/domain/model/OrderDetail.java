@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -24,7 +26,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("order_detail")
 @ApiModel(value = "OrderDetail对象", description = "订单")
-public class OrderDetail implements Serializable {
+public class OrderDetail implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 1L;
 
@@ -49,7 +51,13 @@ public class OrderDetail implements Serializable {
     @ApiModelProperty("订单创建时间")
     private LocalDateTime createTime;
 
+    @ApiModelProperty("酒店景点uuid集合")
     private String orderId;
 
     private int flag;
+
+    @Override
+    public OrderDetail clone() throws CloneNotSupportedException {
+        return (OrderDetail) super.clone();
+    }
 }
