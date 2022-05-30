@@ -15,6 +15,8 @@ import org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
 import org.apache.mahout.cf.taste.model.DataModel;
 import org.apache.mahout.cf.taste.model.JDBCDataModel;
 import org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
@@ -49,7 +51,8 @@ public class CFUtils {
     }
 
     public DataModel getDataModel() throws IOException {
-        File csv = ResourceUtils.getFile("classpath:CF.csv");
+        ClassPathResource classPathResource = new ClassPathResource("CF.csv");
+        File csv = classPathResource.getFile();
         DataModel model = new FileDataModel(csv);
         return model;
     }
