@@ -14,8 +14,10 @@ import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.OrderDetailDto;
+import se.xmut.trahrs.domain.model.HotelInfo;
 import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.log.annotation.WebLog;
+import se.xmut.trahrs.service.HotelInfoService;
 import se.xmut.trahrs.service.OrderDetailService;
 import se.xmut.trahrs.domain.model.OrderDetail;
 import se.xmut.trahrs.service.SceneService;
@@ -38,18 +40,29 @@ public class OrderDetailController {
     private OrderDetailService orderDetailService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private HotelInfoService hotelInfoService;
     @WebLog(description = "添加订单")
     @PostMapping
     public ApiResponse save(@RequestBody OrderDetailDto orderDetailDto) {
         String orderId=orderDetailDto.getOrderId();
         String customerId=orderDetailDto.getCustomerId();
+        OrderDetail orderDetail=modelMapper.map(orderDetailDto,OrderDetail.class);
         QueryWrapper<OrderDetail> orderDetailQueryWrapper=new QueryWrapper<>();
         orderDetailQueryWrapper.eq("customer_id",customerId).eq("order_id",orderId).eq("order_status",0);
         OrderDetail orderDetail1=orderDetailService.getOne(orderDetailQueryWrapper);
         if(orderDetail1!=null){
             return ApiResponse.error("您有订单还未支付");
         }
-        OrderDetail orderDetail=modelMapper.map(orderDetailDto,OrderDetail.class);
+        QueryWrapper<HotelInfo> hotelInfoQueryWrapper=new QueryWrapper<>();
+        hotelInfoQueryWrapper.eq("hotel_id",orderDetailDto.getOrderId());
+        HotelInfo hotelInfo=hotelInfoService.getOne(hotelInfoQueryWrapper);
+        if (hotelInfo==null){
+            orderDetail.setFlag(1);
+        }else{
+            orderDetail.setFlag(0);
+        }
+
         orderDetail.setOrderNum(IdUtil.objectId());
         orderDetail.setCreateTime(LocalDateTime.now());
         //默认为0未支付状态
@@ -92,14 +105,15 @@ public class OrderDetailController {
         return ApiResponse.ok(orderDetailService.page(new Page<>(pageNum,pageSize),orderDetailQueryWrapper));
 
     }
-    @WebLog(description = "完成支付订单")
+    @WebLog(description = "修改订单状态")
     @PutMapping
-    public ApiResponse updatestatus( @RequestParam String customerId,@RequestParam String orderNum){
+    public ApiResponse updateStatus(@RequestBody OrderDetail orderDetail){
         QueryWrapper<OrderDetail> orderDetailQueryWrapper=new QueryWrapper<>();
-        orderDetailQueryWrapper.eq("customer_id",customerId).eq("order_num",orderNum);
-        OrderDetail orderDetail=new OrderDetail();
-        orderDetail.setOrderStatus(1);
+        orderDetailQueryWrapper.eq("customer_id",orderDetail.getCustomerId())
+                .eq("order_num",orderDetail.getOrderNum());
+        orderDetail.setOrderStatus(orderDetail.getOrderStatus()+1);
         return ApiResponse.ok(orderDetailService.update(orderDetail,orderDetailQueryWrapper));
     }
+
 }
 

@@ -53,6 +53,4 @@ public class OrderDetail implements Serializable {
     private String orderId;
 
 
-
-
 }

@@ -20,4 +20,7 @@ public class CustomerVo implements Serializable {
 
     @ApiModelProperty("id标识")
     private Integer id;
+
+    @ApiModelProperty("用户画像，用于推荐，存JSON")
+    private String customerPortrait;
 }
