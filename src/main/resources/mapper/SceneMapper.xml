@@ -74,4 +74,18 @@
         order by rating desc
     </select>
 
+    <select id="getMostCommentElseRating" resultType="se.xmut.trahrs.domain.model.Scene">
+        select *
+        from scene, scene_comment
+        where scene.scene_id = scene_comment.scene_id
+        GROUP BY scene.scene_id
+        order by COUNT(scene.scene_id) desc, rating desc
+        limit #{pageNum}, #{pageSize}
+    </select>
+
+    <select id="countType" resultType="int">
+        select count(*)
+        from scene
+        where <include refid="foreachType"></include>
+    </select>
 </mapper>
