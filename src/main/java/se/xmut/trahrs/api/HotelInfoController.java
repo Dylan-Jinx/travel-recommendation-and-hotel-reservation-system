@@ -150,6 +150,35 @@ public class HotelInfoController {
 
     }
 
+    @WebLog(description = "酒店评分分页")
+    @GetMapping("/ratingPage")
+    public ApiResponse ratingPage(@RequestParam Integer pageNum,
+                                  @RequestParam Integer pageSize,
+                                  @RequestParam String ratingStatus){
+        QueryWrapper<HotelInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.isNotNull("rating");
+        if("1".equals(ratingStatus)){
+            queryWrapper.orderByDesc("rating");
+        }else {
+            queryWrapper.orderByAsc("rating");
+        }
 
+        return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize), queryWrapper));
+    }
+
+    @WebLog(description = "价格分页")
+    @GetMapping("pricePage")
+    public ApiResponse pricePage(@RequestParam Integer pageNum,
+                                 @RequestParam Integer pageSize,
+                                 @RequestParam String priceStatus){
+        QueryWrapper<HotelInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.isNotNull("cost");
+        if("1".equals(priceStatus)){
+            queryWrapper.orderByDesc("cost");
+        }else {
+            queryWrapper.orderByAsc("cost");
+        }
+        return ApiResponse.ok(hotelInfoService.page(new Page<>(pageNum, pageSize), queryWrapper));
+    }
 }
 
