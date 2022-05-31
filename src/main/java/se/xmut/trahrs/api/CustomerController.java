@@ -56,7 +56,7 @@ public class CustomerController {
 
     @WebLog(description = "用户注册")
     @PostMapping
-    public ApiResponse save(@RequestBody CustomerDto customerDto) {
+    public ApiResponse save(@RequestBody CustomerDto customerDto, @RequestParam String Captcha) {
 
         Customer customer = modelMapper.map(customerDto, Customer.class);
 
@@ -76,11 +76,11 @@ public class CustomerController {
         customer.setCreateTime(LocalDateTimeUtil.now());
         customer.setRemoveFlag(0);
         String code = redisTemplate.opsForValue().get(phone);
-
-        customerService.save(customer);
-        return ApiResponse.ok("注册成功");
-
-
+        if (code.equals(Captcha)){
+            customerService.save(customer);
+            return ApiResponse.ok("注册成功");
+        }else
+            return ApiResponse.error("验证码错误，注册失败");
     }
     @WebLog(description = "用户登录")
     @PostMapping("/login")
