@@ -24,6 +24,7 @@ import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.ItemBasedCfService;
 import se.xmut.trahrs.service.SceneCommentService;
 import se.xmut.trahrs.domain.model.SceneComment;
+import se.xmut.trahrs.util.AiAudio;
 import se.xmut.trahrs.util.SemanticUtils;
 
 
@@ -46,6 +47,8 @@ public class SceneCommentController {
     private ModelMapper modelMapper;
     @Autowired
     private SensitiveFilter sensitiveFilter;
+    @Autowired
+    private AiAudio aiAudio;
     @Autowired
     private SemanticUtils semanticUtils;
     @Autowired
@@ -132,6 +135,11 @@ public class SceneCommentController {
         QueryWrapper<SceneComment> sceneCommentQueryWrapper=new QueryWrapper<>();
         sceneCommentQueryWrapper.eq("report_status",1);
         return ApiResponse.ok(sceneCommentService.page(new Page<>(pageNum,pageSize),sceneCommentQueryWrapper));
+    }
+    @WebLog(description = "语音识别")
+    @GetMapping("/audio")
+    public ApiResponse Aiaudio(){
+        return ApiResponse.ok(aiAudio.getAudioText());
     }
 }
 

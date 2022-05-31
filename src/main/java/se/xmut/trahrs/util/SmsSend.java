@@ -22,6 +22,9 @@ public class SmsSend {
     private RedisTemplate<String,String> redisTemplate;
     @Autowired
     SmsClient smsClient;
+    private final String TemplateId=YamlUtil.getStringByYaml("SMS.TemplateId");
+    private final String AppId=YamlUtil.getStringByYaml("SMS.AppId");
+
 
     public HashMap<String,Object> send(String tel) throws TencentCloudSDKException {
         HashMap<String,Object> map = new HashMap<String,Object>();
@@ -31,11 +34,11 @@ public class SmsSend {
         String[] phone = {tel};
         req.setPhoneNumberSet(phone);
         //个人短信模板模板Id
-        req.setTemplateId("1419758");
+        req.setTemplateId(TemplateId);
         //个人短信发送SDK
-        req.setSmsSdkAppId("1400685052");
+        req.setSmsSdkAppId(AppId);
         //个人短信签名
-        req.setSignName("小胖纸z公众号");
+        req.setSignName("窝窝旅游公众号");
         //短信验证码
         String code=RandomUtil.getFourBitRandom();
         String[] p = {code};
