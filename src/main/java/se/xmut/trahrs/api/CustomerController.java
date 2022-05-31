@@ -70,7 +70,6 @@ public class CustomerController {
 
         String originPwd = customerDto.getCustomerPwd();
         String secretPwd = MD5.create().digestHex(originPwd);
-
         customer.setCustomerPwd(secretPwd);
         customer.setCustomerId(IdUtil.objectId());
         customer.setCreateTime(LocalDateTimeUtil.now());
@@ -79,8 +78,9 @@ public class CustomerController {
         if (code.equals(Captcha)){
             customerService.save(customer);
             return ApiResponse.ok("注册成功");
-        }else
+        }else {
             return ApiResponse.error("验证码错误，注册失败");
+        }
     }
     @WebLog(description = "用户登录")
     @PostMapping("/login")
