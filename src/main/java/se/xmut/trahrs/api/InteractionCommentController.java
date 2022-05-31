@@ -24,6 +24,7 @@ import se.xmut.trahrs.service.InteractionCommentService;
 import se.xmut.trahrs.domain.model.InteractionComment;
 import se.xmut.trahrs.service.SceneCommentService;
 import se.xmut.trahrs.service.SceneService;
+import se.xmut.trahrs.util.AiAudio;
 import se.xmut.trahrs.util.IPUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,8 @@ public class InteractionCommentController {
     private SensitiveFilter sensitiveFilter;
     @Autowired
     private SceneService sceneService;
+    @Autowired
+    private AiAudio aiAudio;
     @WebLog(description = "添加交流评论")
     @PostMapping
     public ApiResponse save(@RequestBody InteractionCommentDto interactionCommentDto,
@@ -164,6 +167,11 @@ public class InteractionCommentController {
         QueryWrapper<InteractionComment> interactionCommentQueryWrapper=new QueryWrapper<>();
         interactionCommentQueryWrapper.eq("report_status",1);
         return ApiResponse.ok(interactionCommentService.page(new Page<>(pageNum, pageSize),interactionCommentQueryWrapper));
+    }
+    @WebLog(description = "语音识别")
+    @GetMapping("/audio")
+    public ApiResponse Aiaudio(){
+        return ApiResponse.ok(aiAudio.getAudioText());
     }
 }
 

@@ -11,21 +11,23 @@ import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import se.xmut.trahrs.service.MSGService;
+import se.xmut.trahrs.util.YamlUtil;
 
 import java.util.Map;
 
 @Service
 public class MSGServiceImpl implements MSGService {
-
+    private final String KeyId= YamlUtil.getStringByYaml("MSG.KeyId");
+    private final String KeySecret=YamlUtil.getStringByYaml("MSG.KeySecret");
     @Override
     public boolean send(Map map, String phone) {
         if(StringUtils.isEmpty(phone)) return false;
 
         Config config = new Config()
                 // 您的AccessKey ID
-                .setAccessKeyId("LTAI5tCAoANFA7m8EGHbsyeE")
+                .setAccessKeyId(KeyId)
                 // 您的AccessKey Secret	（这两个还不知道的去我前两次关于阿里云的有教程哪里找）
-                .setAccessKeySecret("N6wzCOdQFW2YSbvVCJ0MWebB2dzQS3");
+                .setAccessKeySecret(KeySecret);
         // 访问的域名（这个不用变都是这个）
         config.endpoint = "dysmsapi.aliyuncs.com";
         Client client = null;

@@ -18,6 +18,7 @@ import se.xmut.trahrs.filter.SensitiveFilter;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.HotelCommentService;
 import se.xmut.trahrs.domain.model.HotelComment;
+import se.xmut.trahrs.util.AiAudio;
 import se.xmut.trahrs.util.SemanticUtils;
 
 
@@ -42,6 +43,8 @@ public class HotelCommentController {
     private SensitiveFilter sensitiveFilter;
     @Autowired
     private SemanticUtils semanticUtils;
+    @Autowired
+    private AiAudio aiAudio;
 
     @WebLog(description = "添加酒店评论")
     @PostMapping
@@ -119,6 +122,11 @@ public class HotelCommentController {
         QueryWrapper<HotelComment> hotelCommentQueryWrapper=new QueryWrapper<>();
         hotelCommentQueryWrapper.like("content",content);
         return ApiResponse.ok(hotelCommentService.page(new Page<>(pageNum, pageSize),hotelCommentQueryWrapper));
+    }
+    @WebLog(description = "语音识别")
+    @GetMapping("/audio")
+    public ApiResponse Aiaudio(){
+        return ApiResponse.ok(aiAudio.getAudioText());
     }
 }
 
