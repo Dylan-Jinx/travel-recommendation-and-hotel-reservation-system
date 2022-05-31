@@ -20,6 +20,7 @@ import java.util.List;
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.OrderDetailDto;
 import se.xmut.trahrs.log.annotation.WebLog;
+import se.xmut.trahrs.mapper.OrderDetailMapper;
 import se.xmut.trahrs.service.HotelInfoService;
 import se.xmut.trahrs.service.OrderDetailService;
 import se.xmut.trahrs.domain.model.OrderDetail;
@@ -44,6 +45,9 @@ public class OrderDetailController {
     private ModelMapper modelMapper;
     @Autowired
     private HotelInfoService hotelInfoService;
+
+    @Autowired
+    private OrderDetailMapper orderDetailMapper;
 
     @WebLog(description = "添加订单")
     @PostMapping
@@ -138,5 +142,46 @@ public class OrderDetailController {
         return ApiResponse.ok(orderDetailService.update(orderDetail, orderDetailQueryWrapper));
     }
 
+    @WebLog(description = "周订单销售金额")
+    @GetMapping("weekSale")
+    public ApiResponse weekTotalSale(){
+
+        return ApiResponse.ok(orderDetailMapper.weekSale(LocalDateTime.now().minusWeeks(1)));
+    }
+
+    @WebLog(description = "周订单每天销售金额")
+    @GetMapping("weekSaleEachDay")
+    public ApiResponse weekSaleEachDay(){
+
+        return  ApiResponse.ok(orderDetailMapper.weekSaleEachDay());
+    }
+
+    @WebLog(description = "周酒店每天销售量")
+    @GetMapping("weekHotelSaleEachDay")
+    public ApiResponse weekHotelSaleEachDay(){
+
+        return ApiResponse.ok(orderDetailMapper.weekHotelSaleEachDay());
+    }
+
+    @WebLog(description = "周景点每天销售量")
+    @GetMapping("weekSceneSaleEachDay")
+    public ApiResponse weekSceneSaleEachDay(){
+
+        return ApiResponse.ok(orderDetailMapper.weekSceneSaleEachDay());
+    }
+
+    @WebLog(description = "周酒店总销量")
+    @GetMapping("weekHotelSale")
+    public ApiResponse weekHotelSale(){
+
+        return ApiResponse.ok(orderDetailMapper.weekHotelSale(LocalDateTime.now().minusWeeks(1)));
+    }
+
+    @WebLog(description = "周景点总销量")
+    @GetMapping("weekSceneSale")
+    public ApiResponse weekSceneSale(){
+
+        return ApiResponse.ok(orderDetailMapper.weekSceneSale(LocalDateTime.now().minusWeeks(1)));
+    }
 }
 
