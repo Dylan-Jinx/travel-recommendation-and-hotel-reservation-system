@@ -13,6 +13,7 @@ public class InteractionCommentDto implements Serializable {
     private String customerId;
 
     private String content;
+    private String interactionId;
 
 
 }

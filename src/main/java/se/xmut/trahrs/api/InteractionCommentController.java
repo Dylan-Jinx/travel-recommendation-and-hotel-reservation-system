@@ -18,6 +18,7 @@ import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.InteractionCommentDto;
 import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.domain.model.SceneComment;
+import se.xmut.trahrs.domain.vo.InteractionCommentVo;
 import se.xmut.trahrs.filter.SensitiveFilter;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.InteractionCommentService;
@@ -58,7 +59,7 @@ public class InteractionCommentController {
     @WebLog(description = "添加交流评论")
     @PostMapping
     public ApiResponse save(@RequestBody InteractionCommentDto interactionCommentDto,
-                            @RequestParam String sid, HttpServletRequest request) {
+                            HttpServletRequest request) {
         InteractionComment interactionComment=modelMapper.map(interactionCommentDto,InteractionComment.class);
         interactionComment.setCommentId(IdUtil.objectId());
         interactionComment.setCreateTime(LocalDateTime.now());
@@ -66,14 +67,14 @@ public class InteractionCommentController {
         interactionComment.setIp(IPUtils.getIpAddr(request));
         QueryWrapper<Scene> sceneQueryWrapper=new QueryWrapper<>();
         //判断是不是景点的评论
-        sceneQueryWrapper.eq("scene_id",sid);
+        sceneQueryWrapper.eq("scene_id",interactionCommentDto.getInteractionId());
         Scene scene=sceneService.getOne(sceneQueryWrapper);
         //0表示酒店交流评论，1表示景点交流评论
         if (scene ==null){
-          interactionComment.setHotelId(sid);
+
          interactionComment.setFlag(1);
         }else{
-            interactionComment.setSceneId(sid);
+
             interactionComment.setFlag(0);
         }
         String content=interactionComment.getContent();
@@ -160,7 +161,7 @@ public class InteractionCommentController {
 
     }
     @WebLog(description = "被举报交流评论")
-    @GetMapping("findreportContent")
+    @GetMapping("/findreportContent")
     public ApiResponse findreportContent(@RequestParam Integer pageNum,
                                      @RequestParam Integer pageSize
                                      ){
@@ -172,6 +173,12 @@ public class InteractionCommentController {
     @GetMapping("/audio")
     public ApiResponse Aiaudio(){
         return ApiResponse.ok(aiAudio.getAudioText());
+    }
+    @WebLog(description = "交流评论")
+    @GetMapping("/findInteractionComment")
+    public ApiResponse findInterComment(@RequestParam String interactionId){
+        List<InteractionCommentVo> interactionCommentVos=interactionCommentService.findIntercomment(interactionId);
+        return ApiResponse.ok(interactionCommentVos);
     }
 }
 

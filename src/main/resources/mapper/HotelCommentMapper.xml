@@ -13,11 +13,45 @@
         <result column="comment_time" property="commentTime" />
         <result column="report_status" property="reportStatus" />
         <result column="img_url" property="imgUrl" />
-    </resultMap>
 
+    </resultMap>
+    <resultMap id="result" type="se.xmut.trahrs.domain.vo.HotelCommentVo">
+
+        <result column="comment_id" property="commentId" />
+        <result column="customer_id" property="customerId" />
+        <result column="hotel_id" property="hotelId" />
+        <result column="content" property="content" />
+        <result column="star" property="star" />
+        <result column="comment_time" property="commentTime" />
+        <result column="report_status" property="reportStatus" />
+        <result column="img_url" property="imgUrl" />
+        <association property="customer" javaType="se.xmut.trahrs.domain.model.Customer">
+            <id column="id" property="id" />
+            <result column="customer_id" property="customerId" />
+            <result column="customer_name" property="customerName" />
+            <result column="phone" property="phone" />
+            <result column="customer_pwd" property="customerPwd" />
+            <result column="gender" property="gender" />
+            <result column="identity" property="identity" />
+            <result column="profession" property="profession" />
+            <result column="area" property="area" />
+            <result column="avatar" property="avatar" />
+            <result column="create_time" property="createTime" />
+            <result column="last_login_time" property="lastLoginTime" />
+            <result column="last_login_ip" property="lastLoginIp" />
+            <result column="remove_flag" property="removeFlag" />
+            <result column="customer_portrait" property="customerPortrait"/>
+        </association>
+
+    </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, comment_id, customer_id, hotel_id, content, star, comment_time, report_status, img_url
     </sql>
+    <select id="findHotelcomment" resultMap="result">
+        select  c.*,h.*  from customer as c,hotel_comment as h
+        where c.customer_id=h.customer_id
+        order by comment_time desc
+    </select>
 
 </mapper>
