@@ -28,11 +28,16 @@
         <result column="grid_code" property="gridCode" />
         <result column="photos" property="photos" />
         <result column="rating" property="rating" />
+        <result column="scene_adult_price" property="sceneAdultPrice"/>
+        <result column="scene_child_price" property="sceneChildPrice"/>
+        <result column="scene_elder_price" property="sceneElderPrice"/>
+        <result column="intro" property="intro"/>
+
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, scene_id, `name`, location, `type`, p_name, city_name, ad_name, address, p_code, city_code, ad_code, opentime_week, tel, rec_tag, key_tag, cost, alias, navi_poiid, entr_location, exit_location, grid_code, photos, rating
+        id, scene_id, `name`, location, `type`, p_name, city_name, ad_name, address, p_code, city_code, ad_code, opentime_week, tel, rec_tag, key_tag, cost, alias, navi_poiid, entr_location, exit_location, grid_code, photos, rating, scene_adult_price, scene_child_price, scene_elder_price, intro
     </sql>
     
     <select id="getPageByType" resultType="se.xmut.trahrs.domain.model.Scene">
