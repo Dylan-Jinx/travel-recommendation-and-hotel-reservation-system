@@ -97,5 +97,13 @@ public class Scene implements Serializable {
 
     private Double rating;
 
+    private Integer sceneAdultPrice;
+
+    private Integer sceneChildPrice;
+
+    private Integer sceneElderPrice;
+
+    private String intro;
+
 
 }
