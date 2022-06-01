@@ -50,7 +50,7 @@
     </sql>
     <select id="findHotelcomment" resultMap="result">
         select  c.*,h.*  from customer as c,hotel_comment as h
-        where c.customer_id=h.customer_id
+        where c.customer_id=h.customer_id and hotel_id=#{hotelId}
         order by comment_time desc
     </select>
 

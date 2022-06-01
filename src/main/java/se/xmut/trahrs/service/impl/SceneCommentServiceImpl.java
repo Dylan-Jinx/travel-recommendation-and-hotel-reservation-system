@@ -23,8 +23,8 @@ public class SceneCommentServiceImpl extends ServiceImpl<SceneCommentMapper, Sce
 @Autowired
     private SceneCommentMapper sceneCommentMapper;
     @Override
-    public IPage<SceneCommentVo> findScenecomment(IPage<SceneCommentVo> page) {
-        IPage<SceneCommentVo> sceneCommentVoIPage=sceneCommentMapper.findScenecomment(page);
+    public IPage<SceneCommentVo> findScenecomment(IPage<SceneCommentVo> page,String sceneId) {
+        IPage<SceneCommentVo> sceneCommentVoIPage=sceneCommentMapper.findScenecomment(page,sceneId);
         return sceneCommentVoIPage;
     }
 }

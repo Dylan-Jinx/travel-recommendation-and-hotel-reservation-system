@@ -16,6 +16,6 @@ import se.xmut.trahrs.domain.vo.HotelCommentVo;
  */
 
 public interface HotelCommentMapper extends BaseMapper<HotelComment> {
-    IPage<HotelCommentVo> findHotelcomment(IPage<HotelCommentVo> page);
+    IPage<HotelCommentVo> findHotelcomment(IPage<HotelCommentVo> page,String hotelId);
 
 }
