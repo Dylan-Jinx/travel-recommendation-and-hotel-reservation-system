@@ -20,4 +20,94 @@
         id, customer_id, order_num, order_content, order_price, order_status, create_time,order_id
     </sql>
 
+    <select id="weekSale" resultType="double">
+        select sum(order_price)
+        from order_detail
+        where create_time &gt;= #{time}
+    </select>
+
+    <sql id="ifNullWithDate1">
+        SELECT a.date,IFNULL(b.value,0) AS value
+
+        FROM (
+
+            SELECT CURDATE() AS date
+
+            UNION ALL
+
+            SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY) AS date
+
+            UNION ALL
+
+            SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY) AS date
+
+            UNION ALL
+
+            SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY) AS date
+
+            UNION ALL
+
+            SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY) AS date
+
+            UNION ALL
+
+            SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY) AS date
+
+            UNION ALL
+
+            SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY) AS date
+
+            ) a LEFT JOIN (
+
+            SELECT DATE(create_time) AS date,
+
+    </sql>
+    <sql id="ifNullWithDate2">
+        AS value
+
+            FROM order_detail
+    </sql>
+    <sql id="ifNullWithDate3">
+        GROUP BY DATE(create_time)
+
+            ) b ON a.date = b.date;
+    </sql>
+
+    <select id="weekSaleEachDay" resultType="se.xmut.trahrs.domain.vo.OrderDetailSaleVo">
+        <include refid="ifNullWithDate1"></include>
+        sum(order_price)
+        <include refid="ifNullWithDate2"></include>
+        <include refid="ifNullWithDate3"></include>
+    </select>
+    
+    <select id="weekHotelSaleEachDay" resultType="se.xmut.trahrs.domain.vo.OrderDetailSaleVo">
+        <include refid="ifNullWithDate1"></include>
+        count(order_status)
+        <include refid="ifNullWithDate2"></include>
+        WHERE order_status = 0
+        <include refid="ifNullWithDate3"></include>
+    </select>
+
+    <select id="weekSceneSaleEachDay" resultType="se.xmut.trahrs.domain.vo.OrderDetailSaleVo">
+        <include refid="ifNullWithDate1"></include>
+        count(order_status)
+        <include refid="ifNullWithDate2"></include>
+        WHERE order_status = 1
+        <include refid="ifNullWithDate3"></include>
+    </select>
+
+    <sql id="weekSceneOrHotelSale">
+        select count(*)
+        from order_detail
+        where create_time &gt;= #{time} and order_status =
+    </sql>
+
+    <select id="weekHotelSale" resultType="java.lang.Double">
+        <include refid="weekSceneOrHotelSale"></include> 0
+    </select>
+
+    <select id="weekSceneSale" resultType="java.lang.Double">
+        <include refid="weekSceneOrHotelSale"></include> 1
+    </select>
+
 </mapper>
