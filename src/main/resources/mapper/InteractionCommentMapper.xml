@@ -47,7 +47,7 @@
         select  c.*,h.*  from customer as c,interaction_comment as h
         where c.customer_id=h.customer_id
         <if test="interactionId !=null and interactionId !=''">
-          and interaction_id=#{interactionId}
+          and h.id=#{interactionId}
         </if>
 
         order by h.create_time desc
