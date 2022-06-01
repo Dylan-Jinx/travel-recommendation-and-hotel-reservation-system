@@ -1,6 +1,9 @@
 package se.xmut.trahrs.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springframework.beans.factory.annotation.Autowired;
 import se.xmut.trahrs.domain.model.HotelComment;
+import se.xmut.trahrs.domain.vo.HotelCommentVo;
 import se.xmut.trahrs.mapper.HotelCommentMapper;
 import se.xmut.trahrs.service.HotelCommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,5 +19,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class HotelCommentServiceImpl extends ServiceImpl<HotelCommentMapper, HotelComment> implements HotelCommentService {
-
+@Autowired
+HotelCommentMapper hotelCommentMapper;
+    @Override
+    public IPage<HotelCommentVo> findHotelcomment(IPage<HotelCommentVo> page) {
+        IPage<HotelCommentVo> list=hotelCommentMapper.findHotelcomment(page);
+        return list;
+    }
 }

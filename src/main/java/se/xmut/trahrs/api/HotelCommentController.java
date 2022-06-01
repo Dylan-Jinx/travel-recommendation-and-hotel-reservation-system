@@ -3,6 +3,7 @@ package se.xmut.trahrs.api;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.HotelCommentDto;
+import se.xmut.trahrs.domain.vo.HotelCommentVo;
 import se.xmut.trahrs.filter.SensitiveFilter;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.HotelCommentService;
@@ -127,6 +129,15 @@ public class HotelCommentController {
     @GetMapping("/audio")
     public ApiResponse Aiaudio(){
         return ApiResponse.ok(aiAudio.getAudioText());
+    }
+    @WebLog(description = "显示评论")
+    @GetMapping("/findHotelComment")
+    public ApiResponse findHotelComment(@RequestParam Integer pageNum,
+                                        @RequestParam Integer pageSize){
+        Page<HotelCommentVo> page=new Page<>(pageNum,pageSize);
+        IPage<HotelCommentVo> hotelCommentVoIPage=hotelCommentService.findHotelcomment(page);
+        List<HotelCommentVo> hotelCommentVoList=hotelCommentVoIPage.getRecords();
+        return ApiResponse.ok(hotelCommentVoList);
     }
 }
 

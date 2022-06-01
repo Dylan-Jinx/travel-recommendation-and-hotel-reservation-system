@@ -1,7 +1,10 @@
 package se.xmut.trahrs.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import se.xmut.trahrs.domain.model.SceneComment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import se.xmut.trahrs.domain.vo.HotelCommentVo;
+import se.xmut.trahrs.domain.vo.SceneCommentVo;
 
 /**
  * <p>
@@ -12,5 +15,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2022-04-29
  */
 public interface SceneCommentMapper extends BaseMapper<SceneComment> {
+    IPage<SceneCommentVo> findScenecomment(IPage<SceneCommentVo> page);
 
 }

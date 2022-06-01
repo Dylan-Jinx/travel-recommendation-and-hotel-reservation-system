@@ -2,6 +2,7 @@ package se.xmut.trahrs.api;
 
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,8 @@ import java.util.List;
 import oshi.util.StringUtil;
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.SceneCommentDto;
+import se.xmut.trahrs.domain.vo.HotelCommentVo;
+import se.xmut.trahrs.domain.vo.SceneCommentVo;
 import se.xmut.trahrs.filter.SensitiveFilter;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.service.ItemBasedCfService;
@@ -140,6 +143,15 @@ public class SceneCommentController {
     @GetMapping("/audio")
     public ApiResponse Aiaudio(){
         return ApiResponse.ok(aiAudio.getAudioText());
+    }
+    @WebLog(description = "显示评论")
+    @GetMapping("/findSceneComment")
+    public ApiResponse findSceneComment(@RequestParam Integer pageNum,
+                                        @RequestParam Integer pageSize){
+        Page<SceneCommentVo> page=new Page<>(pageNum,pageSize);
+        IPage<SceneCommentVo> hotelCommentVoIPage=sceneCommentService.findScenecomment(page);
+        List<SceneCommentVo> hotelCommentVoList=hotelCommentVoIPage.getRecords();
+        return ApiResponse.ok(hotelCommentVoList);
     }
 }
 
