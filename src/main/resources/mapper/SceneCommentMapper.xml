@@ -44,7 +44,7 @@
     </resultMap>
     <select id="findScenecomment" resultMap="result">
         select  c.*,s.*  from customer as c,scene_comment as s
-        where c.customer_id=s.customer_id
+        where c.customer_id=s.customer_id and scene_id=#{sceneId}
         order by comment_time desc
     </select>
     <!-- 通用查询结果列 -->

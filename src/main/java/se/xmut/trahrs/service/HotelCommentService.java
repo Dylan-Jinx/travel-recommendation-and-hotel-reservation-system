@@ -14,5 +14,5 @@ import se.xmut.trahrs.domain.vo.HotelCommentVo;
  * @since 2022-04-29
  */
 public interface HotelCommentService extends IService<HotelComment> {
-    IPage<HotelCommentVo> findHotelcomment(IPage<HotelCommentVo> page);
+    IPage<HotelCommentVo> findHotelcomment(IPage<HotelCommentVo> page,String hotelId);
 }

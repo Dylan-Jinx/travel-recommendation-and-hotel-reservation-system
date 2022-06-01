@@ -147,9 +147,10 @@ public class SceneCommentController {
     @WebLog(description = "显示评论")
     @GetMapping("/findSceneComment")
     public ApiResponse findSceneComment(@RequestParam Integer pageNum,
-                                        @RequestParam Integer pageSize){
+                                        @RequestParam Integer pageSize,
+                                        @RequestParam String sceneId){
         Page<SceneCommentVo> page=new Page<>(pageNum,pageSize);
-        IPage<SceneCommentVo> hotelCommentVoIPage=sceneCommentService.findScenecomment(page);
+        IPage<SceneCommentVo> hotelCommentVoIPage=sceneCommentService.findScenecomment(page,sceneId);
         List<SceneCommentVo> hotelCommentVoList=hotelCommentVoIPage.getRecords();
         return ApiResponse.ok(hotelCommentVoList);
     }

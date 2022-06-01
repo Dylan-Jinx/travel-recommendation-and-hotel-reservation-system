@@ -133,9 +133,10 @@ public class HotelCommentController {
     @WebLog(description = "显示评论")
     @GetMapping("/findHotelComment")
     public ApiResponse findHotelComment(@RequestParam Integer pageNum,
-                                        @RequestParam Integer pageSize){
+                                        @RequestParam Integer pageSize,
+                                        @RequestParam String hotelId){
         Page<HotelCommentVo> page=new Page<>(pageNum,pageSize);
-        IPage<HotelCommentVo> hotelCommentVoIPage=hotelCommentService.findHotelcomment(page);
+        IPage<HotelCommentVo> hotelCommentVoIPage=hotelCommentService.findHotelcomment(page,hotelId);
         List<HotelCommentVo> hotelCommentVoList=hotelCommentVoIPage.getRecords();
         return ApiResponse.ok(hotelCommentVoList);
     }

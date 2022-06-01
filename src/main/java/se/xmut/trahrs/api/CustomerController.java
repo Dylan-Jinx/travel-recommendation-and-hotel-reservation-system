@@ -140,7 +140,13 @@ public class CustomerController {
     public ApiResponse findAll() {
         return ApiResponse.ok(customerService.list());
     }
-
+    @WebLog(description = "根据phone查询")
+    @GetMapping("/findCustomerPhone")
+    public ApiResponse findPhone(@RequestParam String phone){
+        QueryWrapper<Customer> customerQueryWrapper=new QueryWrapper<>();
+        customerQueryWrapper.eq("phone",phone);
+        return ApiResponse.ok(customerService.getOne(customerQueryWrapper));
+    }
     @WebLog(description = "用id查找用户")
     @GetMapping("/{id}")
     public ApiResponse findOne(@PathVariable Integer id) {

@@ -15,6 +15,6 @@ import se.xmut.trahrs.domain.vo.SceneCommentVo;
  * @since 2022-04-29
  */
 public interface SceneCommentMapper extends BaseMapper<SceneComment> {
-    IPage<SceneCommentVo> findScenecomment(IPage<SceneCommentVo> page);
+    IPage<SceneCommentVo> findScenecomment(IPage<SceneCommentVo> page,String sceneId);
 
 }

@@ -22,8 +22,8 @@ public class HotelCommentServiceImpl extends ServiceImpl<HotelCommentMapper, Hot
 @Autowired
 HotelCommentMapper hotelCommentMapper;
     @Override
-    public IPage<HotelCommentVo> findHotelcomment(IPage<HotelCommentVo> page) {
-        IPage<HotelCommentVo> list=hotelCommentMapper.findHotelcomment(page);
+    public IPage<HotelCommentVo> findHotelcomment(IPage<HotelCommentVo> page,String hotelId) {
+        IPage<HotelCommentVo> list=hotelCommentMapper.findHotelcomment(page,hotelId);
         return list;
     }
 }
