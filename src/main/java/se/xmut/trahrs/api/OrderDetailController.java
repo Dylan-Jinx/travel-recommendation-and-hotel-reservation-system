@@ -134,12 +134,17 @@ public class OrderDetailController {
 
     @WebLog(description = "修改订单状态")
     @PutMapping
+    @Transactional(rollbackFor = Exception.class)
     public ApiResponse updateStatus(@RequestBody OrderDetail orderDetail) {
         QueryWrapper<OrderDetail> orderDetailQueryWrapper = new QueryWrapper<>();
         orderDetailQueryWrapper.eq("customer_id", orderDetail.getCustomerId())
                 .eq("order_num", orderDetail.getOrderNum());
-        orderDetail.setOrderStatus(orderDetail.getOrderStatus() + 1);
-        return ApiResponse.ok(orderDetailService.update(orderDetail, orderDetailQueryWrapper));
+        List<OrderDetail> orderDetails = orderDetailService.list(orderDetailQueryWrapper);
+        for (OrderDetail od:orderDetails) {
+            od.setOrderStatus(od.getOrderStatus() + 1);
+            orderDetailService.updateById(od);
+        }
+        return ApiResponse.ok(orderDetails);
     }
 
     @WebLog(description = "周订单销售金额")
