@@ -110,4 +110,27 @@
         <include refid="weekSceneOrHotelSale"></include> 1
     </select>
 
+    <sql id="sumUUID">
+        <foreach collection="list"
+                 separator=","
+                 close=")"
+                 open="(" item="id">
+            #{id}
+        </foreach>
+    </sql>
+
+    <select id="sumScenePrice" resultType="java.lang.Integer">
+        select sum(cost)
+        from scene
+        where scene_id in
+        <include refid="sumUUID"></include>
+    </select>
+
+    <select id="sumHotelPrice" resultType="java.lang.Integer">
+        select sum(cost)
+        from hotel_info
+        where hotel_id in
+        <include refid="sumUUID"></include>
+    </select>
+
 </mapper>
