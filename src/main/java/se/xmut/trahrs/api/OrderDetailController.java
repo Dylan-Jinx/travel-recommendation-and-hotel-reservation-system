@@ -19,6 +19,7 @@ import java.util.List;
 
 import se.xmut.trahrs.common.ApiResponse;
 import se.xmut.trahrs.domain.dto.OrderDetailDto;
+import se.xmut.trahrs.domain.model.Scene;
 import se.xmut.trahrs.log.annotation.WebLog;
 import se.xmut.trahrs.mapper.OrderDetailMapper;
 import se.xmut.trahrs.service.HotelInfoService;
@@ -73,6 +74,8 @@ public class OrderDetailController {
                 sceneBuilder.append(sceneList.get(i));
             }
         }
+        Integer cost = orderDetailMapper.sumScenePrice(sceneList);
+        orderDetail.setOrderPrice(cost);
         orderDetail.setOrderId(sceneBuilder.toString());
         //默认为0未支付状态
         orderDetail.setOrderStatus(0);
@@ -84,6 +87,8 @@ public class OrderDetailController {
 
         hotelOrderDetail.setFlag(0);
         hotelOrderDetail.setId(null);
+        cost = orderDetailMapper.sumHotelPrice(hotelList);
+        hotelOrderDetail.setOrderPrice(cost);
         StringBuilder hotelBuilder = new StringBuilder();
         for (int i = 0; i < hotelList.size(); i++) {
             if (i != hotelList.size()-1){

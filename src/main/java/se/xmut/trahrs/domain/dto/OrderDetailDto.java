@@ -16,7 +16,7 @@ public class OrderDetailDto implements Serializable {
     @ApiModelProperty("订单信息")
     private String orderContent;
 
-    @ApiModelProperty("订单数量")
+    @ApiModelProperty("订单价格")
     private Integer orderPrice;
 
     @ApiModelProperty("酒店景点uuid集合")

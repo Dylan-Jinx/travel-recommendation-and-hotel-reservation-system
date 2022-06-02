@@ -58,4 +58,18 @@ public interface OrderDetailMapper extends BaseMapper<OrderDetail> {
      * @return 景点周销量
      */
     public Double weekSceneSale(@Param("time")LocalDateTime time);
+
+    /**
+     * 求下单景区价格和
+     * @param uuid 景区uuid
+     * @return 价格和
+     */
+    public Integer sumScenePrice(List<String> uuid);
+
+    /**
+     * 求下单酒店价格和
+     * @param uuid 酒店uuid
+     * @return 价格和
+     */
+    public Integer sumHotelPrice(List<String> uuid);
 }
