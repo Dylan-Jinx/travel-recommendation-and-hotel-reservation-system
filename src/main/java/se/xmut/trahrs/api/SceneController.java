@@ -187,7 +187,6 @@ public class SceneController {
         return ApiResponse.ok(map);
     }
 
-    /**FIXME 酒店价格暂未导入*/
     @WebLog(description = "通过景点查询附近价格最高酒店分页")
     @PostMapping("/NearbyHighestPriceRecommendationPage")
     public ApiResponse findNearbyHighestPriceRecommendationPage(@RequestParam Integer pageNum,
@@ -209,7 +208,6 @@ public class SceneController {
         return ApiResponse.ok(map);
     }
 
-    /**FIXME 酒店价格暂未导入*/
     @WebLog(description = "通过景点查询附近价格最低酒店分页")
     @PostMapping("/NearbyLowestPriceRecommendationPage")
     public ApiResponse findNearbyLowestPriceRecommendationPage(@RequestParam Integer pageNum,
@@ -231,7 +229,6 @@ public class SceneController {
         return ApiResponse.ok(map);
     }
 
-    /**FIXME 酒店价格暂未导入*/
     @WebLog(description = "使用价格区间通过附近景点查询附近酒店分页")
     @PostMapping("/NearbyPriceRangeRecommendationPage")
     public ApiResponse findNearbyPriceRangeRecommendationPage(@RequestParam Integer pageNum,
@@ -263,19 +260,19 @@ public class SceneController {
                                     @RequestParam Integer pageSize) throws IOException, TasteException {
 
         List<Long> recommendItems = new ArrayList<>();
-        boolean cf = false;
+//        boolean cf = false;
 
-        if(customer!=null){
-            cf = itemBasedCfService.isCanCf(customer.getCustomerId());
-        }
+//        if(customer!=null){
+//            cf = itemBasedCfService.isCanCf(customer.getCustomerId());
+//        }
 
-        if(cf){
+//        if(cf){
             recommendItems = itemBasedCfService.getItemBasedCFRecommendation((long) customer.getId(), null);
-        }
+//        }
 
         try{
 
-            if(cf && !recommendItems.isEmpty()){
+            if(!recommendItems.isEmpty()){
 
                 Map<String, Object> map = new HashMap<>();
                 int page = PageUtil.getStart(pageNum-1, pageSize);
@@ -316,18 +313,19 @@ public class SceneController {
     @PostMapping("/guessYouLike")
     public ApiResponse guessYouLike(@RequestBody Customer customer) throws IOException, TasteException {
         List<Long> recommendItems = new ArrayList<>();
-        boolean cf = itemBasedCfService.isCanCf(customer.getCustomerId());
+//        boolean cf = itemBasedCfService.isCanCf(customer.getCustomerId());
 
-        if(cf){
+//        if(cf){
             recommendItems = itemBasedCfService.guessYouLike((long) customer.getId(), null, null);
-        }
+            System.out.println(recommendItems);
+//        }
 
         QueryWrapper<Scene> queryWrapper = new QueryWrapper<>();
 
         try{
 
             //cf有结果
-            if(cf && !recommendItems.isEmpty()){
+            if(!recommendItems.isEmpty()){
 
                 //如果推荐数不足三个，去按用户画像再查到满足三个出来
                 if(recommendItems.size()<3){
@@ -357,6 +355,7 @@ public class SceneController {
             }
 
         }catch (Exception e){
+            e.printStackTrace();
             System.err.println(new CFException("推荐失败，请检查csv文件或用户画像，也有可能是这个用户七天内推荐系统为他推荐的已使用完，查看redis"));
             queryWrapper = new QueryWrapper<>();
             queryWrapper.orderByDesc("rating");

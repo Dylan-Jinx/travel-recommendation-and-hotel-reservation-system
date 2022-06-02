@@ -172,6 +172,9 @@ public class CustomerController {
                     .append(first).append(fields[i].getName().substring(1));
             Method method = ReflectUtil.getMethod(CustomerPortraitDto.class, getter.toString());
             Object val = ReflectUtil.invoke(customerPortraitDto, method, null);
+            if(val==null){
+                val = 0;
+            }
             map.put(fields[i].getName(), val);
         }
         JSONObject jsonObject = JSONUtil.parseObj(map);
